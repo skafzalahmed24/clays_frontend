@@ -1,0 +1,37 @@
+name: Deploy mershai Frontend
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install & Build
+        run: |
+          npm ci --legacy-peer-deps
+          npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_REDUX_PERSIST_KEY: ${{ secrets.VITE_REDUX_PERSIST_KEY }}
+          VITE_DEFAULT_PUBLIC_TOKEN: ${{ secrets.VITE_DEFAULT_PUBLIC_TOKEN }}
+
+      - name: Sync to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "dist/**"
+          target: "/var/www/mershai/frontend"
+          strip_components: 1
+          overwrite: true

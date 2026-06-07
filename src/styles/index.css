@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Abril+Fatface&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #b56a0d;
+    --color-primary-rgb: 212, 175, 55;
+    --color-dark: #050505;
+    --color-light: #E5E5E5;
+    --color-body-bg: #050505;
+    --color-text-main: #E5E5E5;
+    --color-accent: #b56a0d;
+  }
+
+  body {
+    @apply font-body transition-colors duration-300 overflow-x-hidden;
+    background-color: var(--color-body-bg);
+    color: var(--color-text-main);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-accent transition-colors duration-300;
+  }
+}
+
+@layer utilities {
+  input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+  }
+
+  /* Autofill Override for Dark Theme */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active{
+      -webkit-box-shadow: 0 0 0 30px #050505 inset !important;
+      -webkit-text-fill-color: #E5E5E5 !important;
+      caret-color: #E5E5E5 !important;
+      transition: background-color 5000s ease-in-out 0s;
+  }
+
+  input, textarea {
+    caret-color: var(--color-text-main);
+  }
+}
+
+button, input, optgroup, select, textarea {
+    font-family: initial;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.315);
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* React Quill Dark Mode Overrides */
+.quill-editor-container .ql-toolbar.ql-snow {
+    border-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.02);
+    border-top-left-radius: 0.125rem;
+    border-top-right-radius: 0.125rem;
+}
+
+.quill-editor-container .ql-container.ql-snow {
+    border-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: 0.125rem;
+    border-bottom-right-radius: 0.125rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    min-height: 300px;
+}
+
+.quill-editor-container .ql-snow .ql-stroke {
+    stroke: rgba(255, 255, 255, 0.6);
+}
+
+.quill-editor-container .ql-snow .ql-fill {
+    fill: rgba(255, 255, 255, 0.6);
+}
+
+.quill-editor-container .ql-snow .ql-picker {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.quill-editor-container .ql-snow .ql-picker-options {
+    background-color: #1a1a1a;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.quill-editor-container .ql-editor {
+    color: var(--color-light);
+    min-height: 300px;
+}
+
+.quill-editor-container .ql-snow.ql-toolbar button:hover .ql-stroke,
+.quill-editor-container .ql-snow.ql-toolbar button:focus .ql-stroke,
+.quill-editor-container .ql-snow.ql-toolbar button.ql-active .ql-stroke {
+    stroke: var(--color-primary);
+}
+
+.quill-editor-container .ql-snow.ql-toolbar button:hover .ql-fill,
+.quill-editor-container .ql-snow.ql-toolbar button:focus .ql-fill,
+.quill-editor-container .ql-snow.ql-toolbar button.ql-active .ql-fill {
+    fill: var(--color-primary);
+}
