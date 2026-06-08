@@ -12,7 +12,7 @@ const SocialFeed = ({ title, followLink }) => {
     if (loading) return null;
     if (!socialFeed || !Array.isArray(socialFeed) || socialFeed.length === 0) return null;
 
-    const displayTitle = title || "@MershaiOfficial";
+    const displayTitle = title || "@ClarysaysOfficial";
     const followUrl = followLink || "https://www.instagram.com";
 
     return (

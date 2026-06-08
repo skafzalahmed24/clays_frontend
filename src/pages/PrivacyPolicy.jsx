@@ -13,7 +13,7 @@ const PrivacyPolicy = () => {
     const sections = data.sections || [
         {
             title: "1. Introduction",
-            content: "Mershai (\"we\", \"our\", \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website."
+            content: "Clarysays (\"we\", \"our\", \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website."
         },
         {
             title: "2. Information We Collect",

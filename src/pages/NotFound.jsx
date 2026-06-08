@@ -6,7 +6,7 @@ const NotFound = () => {
     return (
         <>
             <Helmet>
-                <title>404 - Page Not Found | Mershai</title>
+                <title>404 - Page Not Found | Clarysays</title>
             </Helmet>
             <div className="min-h-screen flex flex-col items-center justify-center text-center px-6">
                 <h1 className="text-9xl font-heading text-primary/20 select-none">404</h1>

@@ -14,7 +14,7 @@ const ShippingReturns = () => {
     const sections = data.sections || [
         {
             title: "Shipping Policy",
-            content: "At Mershai, we ensure that your jewellery reaches you in perfect condition. We offer free secure shipping on all orders within India.\n\n• All orders are shipped via insured couriers.\n• Standard delivery time is 5-7 business days.\n• Express delivery options are available at checkout for select PIN codes.\n• You will receive a tracking number via email once your order is dispatched.\n• We require a signature upon delivery for security purposes."
+            content: "At Clarysays, we ensure that your jewellery reaches you in perfect condition. We offer free secure shipping on all orders within India.\n\n• All orders are shipped via insured couriers.\n• Standard delivery time is 5-7 business days.\n• Express delivery options are available at checkout for select PIN codes.\n• You will receive a tracking number via email once your order is dispatched.\n• We require a signature upon delivery for security purposes."
         },
         {
             title: "Return & Exchange Policy",

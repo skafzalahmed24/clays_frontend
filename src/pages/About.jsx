@@ -60,7 +60,7 @@ function About() {
                         <div className="w-24 h-0.5 bg-primary/50 mb-8"></div>
                         <p className="text-white/70 text-lg font-light leading-relaxed mb-6 whitespace-pre-wrap">
                             {aboutData.story?.content ||
-                                "Mershai was born from a simple yet profound desire: to create jewellery that transcends time. For over three decades, we have been the custodians of an ancient craft, reinterpreting traditional motifs for the modern connoisseur.\n\nEvery piece that leaves our atelier is a testament to patience, passion, and perfection. We believe that true luxury lies not just in the rarity of the materials, but in the soul poured into its creation."
+                                "Clarysays was born from a simple yet profound desire: to create jewellery that transcends time. For over three decades, we have been the custodians of an ancient craft, reinterpreting traditional motifs for the modern connoisseur.\n\nEvery piece that leaves our atelier is a testament to patience, passion, and perfection. We believe that true luxury lies not just in the rarity of the materials, but in the soul poured into its creation."
                             }
                         </p>
                     </div>

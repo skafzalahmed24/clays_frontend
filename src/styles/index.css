@@ -6,13 +6,23 @@
 
 @layer base {
   :root {
-    --color-primary: #b56a0d;
-    --color-primary-rgb: 212, 175, 55;
-    --color-dark: #050505;
-    --color-light: #E5E5E5;
-    --color-body-bg: #050505;
-    --color-text-main: #E5E5E5;
-    --color-accent: #b56a0d;
+    --color-primary: #285430;
+    /* Herbal Leaf Green */
+    --color-primary-rgb: 40, 84, 48;
+    --color-dark: #2C1814;
+    /* Dark Cocoa Brown Background */
+    --color-light: #FAF5EF;
+    /* Soft Cream/Ivory Text */
+    --color-body-bg: #FAF5EF;
+    /* Soft Cream Biscuit Background */
+    --color-text-main: #2C1814;
+    /* Dark Cocoa Brown Text */
+    --color-text-muted: rgba(44, 24, 20, 0.4);
+    --color-accent: #285430;
+    /* Herbal Leaf Green Accent */
+    --color-input-bg: #FFFFFF;
+    /* Pure White Inputs */
+    --color-input-border: rgba(40, 84, 48, 0.2);
   }
 
   body {
@@ -20,107 +30,247 @@
     background-color: var(--color-body-bg);
     color: var(--color-text-main);
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading text-accent transition-colors duration-300;
+  }
+
+  /* Global input/select/textarea overrides to ensure they adapt to theme */
+  input,
+  select,
+  textarea {
+    background-color: var(--color-input-bg, rgba(255, 255, 255, 0.05)) !important;
+    border-color: var(--color-input-border, rgba(255, 255, 255, 0.1)) !important;
+    color: var(--color-text-main) !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-text-muted, rgba(255, 255, 255, 0.4)) !important;
+  }
+
+  option {
+    background-color: var(--color-body-bg) !important;
+    color: var(--color-text-main) !important;
+  }
+
+  /* Redirect hardcoded dark-theme background pages to the theme-adaptive variables */
+  .bg-\[\#050505\] {
+    background-color: var(--color-body-bg) !important;
+    color: var(--color-text-main) !important;
+  }
+
+  .bg-\[\#050505\] h1,
+  .bg-\[\#050505\] h2,
+  .bg-\[\#050505\] h3,
+  .bg-\[\#050505\] h4,
+  .bg-\[\#050505\] h5,
+  .bg-\[\#050505\] h6,
+  .bg-\[\#050505\] p,
+  .bg-\[\#050505\] span,
+  .bg-\[\#050505\] label,
+  .bg-\[\#050505\] li,
+  .bg-\[\#050505\] a {
+    color: inherit;
+  }
+
+  .bg-\[\#050505\] h1,
+  .bg-\[\#050505\] h2,
+  .bg-\[\#050505\] h3,
+  .bg-\[\#050505\] h4 {
+    color: var(--color-primary) !important;
+  }
+
+  .bg-\[\#050505\] .text-white,
+  .bg-\[\#050505\] .text-white\/80,
+  .bg-\[\#050505\] .text-white\/70,
+  .bg-\[\#050505\] .text-white\/60,
+  .bg-\[\#050505\] .text-white\/50,
+  .bg-\[\#050505\] .text-light\/50 {
+    color: var(--color-text-main) !important;
+  }
+
+  /* Restore white/light text for buttons inside the dark page wrapper */
+  .bg-\[\#050505\] button,
+  .bg-\[\#050505\] button *,
+  .bg-\[\#050505\] a.bg-primary,
+  .bg-\[\#050505\] a.bg-primary *,
+  .bg-\[\#050505\] a.bg-dark,
+  .bg-\[\#050505\] a.bg-dark * {
+    color: var(--color-light) !important;
+  }
+
+  /* Fix background of card boxes inside pages */
+  .bg-\[\#050505\] .bg-white\/5 {
+    background-color: var(--color-input-bg) !important;
+    border-color: var(--color-input-border) !important;
+  }
+
+  /* Override hover:text-dark to use rich biscuit cream color on hover */
+  .hover\:text-dark:hover {
+    color: #B8936C !important;
+  }
+
+  /* Header and Footer Background Override (Leaf Green) */
+  nav.bg-dark,
+  footer.bg-dark {
+    background-color: #285430 !important;
+  }
+
+  /* Force announcement bar and other primary dark text to be cream on green */
+  .bg-primary.text-dark {
+    color: var(--color-light) !important;
+  }
+
+  /* Override bg-primary text-dark on hover globally to guarantee high-contrast legibility */
+  .bg-primary.text-dark:hover {
+    background-color: var(--color-light) !important;
+    color: var(--color-primary) !important;
+  }
+
+  /* Ensure nav and footer hover states are legible on green background */
+  nav.bg-dark a:hover,
+  nav.bg-dark button:hover,
+  nav.bg-dark svg:hover,
+  nav.bg-dark .hover\:text-primary:hover,
+  footer.bg-dark a:hover {
+    color: #FFFFFF !important;
+  }
+
+  /* Ensure category links in the header are visible and hover correctly */
+  nav.bg-dark ul.text-primary,
+  nav.bg-dark ul.text-primary a {
+    color: var(--color-light) !important;
+  }
+  nav.bg-dark ul.text-primary a:hover {
+    color: #FFFFFF !important;
+  }
+
+  /* Decorative repeating borders using high-fidelity inline SVGs - Intricate Symmetrical Scroll & Diamond Sawtooth design */
+  .border-decor-left {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='90' viewBox='0 0 60 90'%3E%3Crect width='60' height='90' fill='%23285430'/%3E%3Cpath d='M 0,0 L 5,4.5 L 0,9 L 5,13.5 L 0,18 L 5,22.5 L 0,27 L 5,31.5 L 0,36 L 5,40.5 L 0,45 L 5,49.5 L 0,54 L 5,58.5 L 0,63 L 5,67.5 L 0,72 L 5,76.5 L 0,81 L 5,85.5 L 0,90 Z' fill='%23FAF5EF'/%3E%3Cpath d='M 60,0 L 55,4.5 L 60,9 L 55,13.5 L 60,18 L 55,22.5 L 60,27 L 55,31.5 L 60,36 L 55,40.5 L 60,45 L 55,49.5 L 60,54 L 55,58.5 L 60,63 L 55,67.5 L 60,72 L 55,76.5 L 60,81 L 55,85.5 L 60,90 Z' fill='%23FAF5EF'/%3E%3Cline x1='8' y1='0' x2='8' y2='90' stroke='%23FAF5EF' stroke-width='1.5'/%3E%3Cline x1='11' y1='0' x2='11' y2='90' stroke='%23FAF5EF' stroke-width='0.75'/%3E%3Cline x1='49' y1='0' x2='49' y2='90' stroke='%23FAF5EF' stroke-width='0.75'/%3E%3Cline x1='52' y1='0' x2='52' y2='90' stroke='%23FAF5EF' stroke-width='1.5'/%3E%3Cpath d='M 30,5 C 20,5 15,15 22,22 C 28,28 28,38 22,40 C 16,42 16,33 22,33' fill='none' stroke='%23FAF5EF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M 30,5 C 40,5 45,15 38,22 C 32,28 32,38 38,40 C 44,42 44,33 38,33' fill='none' stroke='%23FAF5EF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M 30,85 C 20,85 15,75 22,68 C 28,62 28,52 22,50 C 16,48 16,57 22,57' fill='none' stroke='%23FAF5EF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M 30,85 C 40,85 45,75 38,68 C 32,62 32,52 38,50 C 44,48 44,57 38,57' fill='none' stroke='%23FAF5EF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M 11,25 C 15,25 22,18 30,18 C 38,18 45,25 49,25' fill='none' stroke='%23FAF5EF' stroke-width='2.5'/%3E%3Cpath d='M 11,65 C 15,65 22,72 30,72 C 38,72 45,65 49,65' fill='none' stroke='%23FAF5EF' stroke-width='2.5'/%3E%3Crect x='28' y='14' width='4' height='8' rx='2' fill='%23FAF5EF'/%3E%3Crect x='28' y='68' width='4' height='8' rx='2' fill='%23FAF5EF'/%3E%3Cpolygon points='30,37 35,45 30,53 25,45' fill='none' stroke='%23FAF5EF' stroke-width='2.5'/%3E%3Ccircle cx='30' cy='45' r='2' fill='%23FAF5EF'/%3E%3Cpath d='M 30,18 L 30,26 M 30,18 L 26,22 M 30,18 L 34,22' stroke='%23FAF5EF' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M 30,72 L 30,64 M 30,72 L 26,68 M 30,72 L 34,68' stroke='%23FAF5EF' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: repeat-y;
+    background-position: center;
+  }
+
+  .border-decor-right {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='90' viewBox='0 0 60 90'%3E%3Crect width='60' height='90' fill='%23285430'/%3E%3Cpath d='M 0,0 L 5,4.5 L 0,9 L 5,13.5 L 0,18 L 5,22.5 L 0,27 L 5,31.5 L 0,36 L 5,40.5 L 0,45 L 5,49.5 L 0,54 L 5,58.5 L 0,63 L 5,67.5 L 0,72 L 5,76.5 L 0,81 L 5,85.5 L 0,90 Z' fill='%23FAF5EF'/%3E%3Cpath d='M 60,0 L 55,4.5 L 60,9 L 55,13.5 L 60,18 L 55,22.5 L 60,27 L 55,31.5 L 60,36 L 55,40.5 L 60,45 L 55,49.5 L 60,54 L 55,58.5 L 60,63 L 55,67.5 L 60,72 L 55,76.5 L 60,81 L 55,85.5 L 60,90 Z' fill='%23FAF5EF'/%3E%3Cline x1='8' y1='0' x2='8' y2='90' stroke='%23FAF5EF' stroke-width='1.5'/%3E%3Cline x1='11' y1='0' x2='11' y2='90' stroke='%23FAF5EF' stroke-width='0.75'/%3E%3Cline x1='49' y1='0' x2='49' y2='90' stroke='%23FAF5EF' stroke-width='0.75'/%3E%3Cline x1='52' y1='0' x2='52' y2='90' stroke='%23FAF5EF' stroke-width='1.5'/%3E%3Cpath d='M 30,5 C 20,5 15,15 22,22 C 28,28 28,38 22,40 C 16,42 16,33 22,33' fill='none' stroke='%23FAF5EF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M 30,5 C 40,5 45,15 38,22 C 32,28 32,38 38,40 C 44,42 44,33 38,33' fill='none' stroke='%23FAF5EF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M 30,85 C 20,85 15,75 22,68 C 28,62 28,52 22,50 C 16,48 16,57 22,57' fill='none' stroke='%23FAF5EF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M 30,85 C 40,85 45,75 38,68 C 32,62 32,52 38,50 C 44,48 44,57 38,57' fill='none' stroke='%23FAF5EF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M 11,25 C 15,25 22,18 30,18 C 38,18 45,25 49,25' fill='none' stroke='%23FAF5EF' stroke-width='2.5'/%3E%3Cpath d='M 11,65 C 15,65 22,72 30,72 C 38,72 45,65 49,65' fill='none' stroke='%23FAF5EF' stroke-width='2.5'/%3E%3Crect x='28' y='14' width='4' height='8' rx='2' fill='%23FAF5EF'/%3E%3Crect x='28' y='68' width='4' height='8' rx='2' fill='%23FAF5EF'/%3E%3Cpolygon points='30,37 35,45 30,53 25,45' fill='none' stroke='%23FAF5EF' stroke-width='2.5'/%3E%3Ccircle cx='30' cy='45' r='2' fill='%23FAF5EF'/%3E%3Cpath d='M 30,18 L 30,26 M 30,18 L 26,22 M 30,18 L 34,22' stroke='%23FAF5EF' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M 30,72 L 30,64 M 30,72 L 26,68 M 30,72 L 34,68' stroke='%23FAF5EF' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: repeat-y;
+    background-position: center;
   }
 }
 
 @layer utilities {
   input[type="date"]::-webkit-calendar-picker-indicator {
-      filter: invert(1);
-      cursor: pointer;
+    filter: invert(1);
+    cursor: pointer;
   }
 
   /* Autofill Override for Dark Theme */
   input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus, 
-  input:-webkit-autofill:active{
-      -webkit-box-shadow: 0 0 0 30px #050505 inset !important;
-      -webkit-text-fill-color: #E5E5E5 !important;
-      caret-color: #E5E5E5 !important;
-      transition: background-color 5000s ease-in-out 0s;
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #050505 inset !important;
+    -webkit-text-fill-color: #E5E5E5 !important;
+    caret-color: #E5E5E5 !important;
+    transition: background-color 5000s ease-in-out 0s;
   }
 
-  input, textarea {
+  input,
+  textarea {
     caret-color: var(--color-text-main);
   }
 }
 
-button, input, optgroup, select, textarea {
-    font-family: initial;
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: initial;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar:horizontal {
-    height: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.315);
-    border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.315);
+  border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* React Quill Dark Mode Overrides */
 .quill-editor-container .ql-toolbar.ql-snow {
-    border-color: rgba(255, 255, 255, 0.1);
-    background-color: rgba(255, 255, 255, 0.02);
-    border-top-left-radius: 0.125rem;
-    border-top-right-radius: 0.125rem;
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.02);
+  border-top-left-radius: 0.125rem;
+  border-top-right-radius: 0.125rem;
 }
 
 .quill-editor-container .ql-container.ql-snow {
-    border-color: rgba(255, 255, 255, 0.1);
-    background-color: rgba(0, 0, 0, 0.2);
-    border-bottom-left-radius: 0.125rem;
-    border-bottom-right-radius: 0.125rem;
-    font-family: inherit;
-    font-size: 0.875rem;
-    min-height: 300px;
+  border-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom-left-radius: 0.125rem;
+  border-bottom-right-radius: 0.125rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  min-height: 300px;
 }
 
 .quill-editor-container .ql-snow .ql-stroke {
-    stroke: rgba(255, 255, 255, 0.6);
+  stroke: rgba(255, 255, 255, 0.6);
 }
 
 .quill-editor-container .ql-snow .ql-fill {
-    fill: rgba(255, 255, 255, 0.6);
+  fill: rgba(255, 255, 255, 0.6);
 }
 
 .quill-editor-container .ql-snow .ql-picker {
-    color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .quill-editor-container .ql-snow .ql-picker-options {
-    background-color: #1a1a1a;
-    border-color: rgba(255, 255, 255, 0.1);
+  background-color: #1a1a1a;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .quill-editor-container .ql-editor {
-    color: var(--color-light);
-    min-height: 300px;
+  color: var(--color-light);
+  min-height: 300px;
 }
 
 .quill-editor-container .ql-snow.ql-toolbar button:hover .ql-stroke,
 .quill-editor-container .ql-snow.ql-toolbar button:focus .ql-stroke,
 .quill-editor-container .ql-snow.ql-toolbar button.ql-active .ql-stroke {
-    stroke: var(--color-primary);
+  stroke: var(--color-primary);
 }
 
 .quill-editor-container .ql-snow.ql-toolbar button:hover .ql-fill,
 .quill-editor-container .ql-snow.ql-toolbar button:focus .ql-fill,
 .quill-editor-container .ql-snow.ql-toolbar button.ql-active .ql-fill {
-    fill: var(--color-primary);
+  fill: var(--color-primary);
+}
+
+/* Hero section light theme gradient overlay */
+.hero-gradient-overlay {
+  background: linear-gradient(to right, var(--color-body-bg) 0%, rgba(250, 245, 239, 0.85) 40%, rgba(250, 245, 239, 0.4) 75%, transparent 100%) !important;
 }

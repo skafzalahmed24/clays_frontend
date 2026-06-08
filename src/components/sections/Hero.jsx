@@ -16,20 +16,20 @@ const Hero = () => {
         return () => clearInterval(timer);
     }, [heroSlides]);
 
-    if (loading) return <div className="h-screen bg-dark flex items-center justify-center text-light">Loading...</div>;
+    if (loading) return <div className="h-screen bg-body flex items-center justify-center text-primary">Loading...</div>;
 
     if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
         return (
-            <section className="relative h-screen flex items-center justify-center overflow-hidden bg-dark">
+            <section className="relative h-screen flex items-center justify-center overflow-hidden bg-body">
                 <div className="text-center">
-                    <h1 className="text-4xl text-light font-heading">Welcome to Mershai</h1>
+                    <h1 className="text-4xl text-primary font-heading">Welcome to Clarysays</h1>
                 </div>
             </section>
         )
     }
 
     return (
-        <section className="relative h-screen flex items-center justify-center overflow-hidden bg-dark">
+        <section className="relative h-screen flex items-center justify-center overflow-hidden bg-body">
             {heroSlides.map((slide, index) => (
                 <div
                     key={slide._id}
@@ -48,7 +48,7 @@ const Hero = () => {
                     ) : (
                         <img src={getMediaUrl(slide.media)} alt={slide.title} className="w-full h-full object-cover opacity-60" />
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/60 to-transparent"></div>
+                    <div className="absolute inset-0 hero-gradient-overlay"></div>
                 </div>
             ))}
 
@@ -62,7 +62,7 @@ const Hero = () => {
                                     <h1 className="text-5xl md:text-7xl font-heading font-bold text-primary mb-6 leading-tight drop-shadow-lg">
                                         {slide.title}
                                     </h1>
-                                    <p className="text-xl md:text-2xl text-light/80 mb-10 max-w-lg font-light drop-shadow-md">
+                                    <p className="text-xl md:text-2xl text-text-main/80 mb-10 max-w-lg font-light drop-shadow-md">
                                         {slide.subtitle}
                                     </p>
                                     <Link to={slide.link || "/shop"}>
@@ -83,7 +83,7 @@ const Hero = () => {
                     <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-primary w-8' : 'bg-light/30 hover:bg-light'}`}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-primary w-8' : 'bg-primary/30 hover:bg-primary'}`}
                     />
                 ))}
             </div>

@@ -212,7 +212,7 @@ const ProductDetails = () => {
         <div className="min-h-screen bg-body text-text-main pt-[80px]">
             <SEO
                 title={product.name}
-                description={product.description ? product.description.substring(0, 150) : 'Luxury Jewelry from Mershai'}
+                description={product.description ? product.description.substring(0, 150) : 'Luxury Jewelry from Clarysays'}
                 image={getImageUrl(product.img)}
                 url={window.location.href}
             />

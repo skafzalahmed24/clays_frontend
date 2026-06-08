@@ -1,6 +1,6 @@
-# Mershai
+# Clarysays
 
-Mershai is a modern web application built with **React** and **Vite**, styled with **TailwindCSS**. This project aims to provide a fast and responsive user experience.
+Clarysays is a modern web application built with **React** and **Vite**, styled with **TailwindCSS**. This project aims to provide a fast and responsive user experience.
 
 ## 🚀 Tech Stack
 
@@ -23,7 +23,7 @@ Ensure you have Node.js installed on your machine.
 1. Clone the repository:
    ```bash
    git clone <repository_url>
-   cd mershai
+   cd Clarysays
    ```
 
 2. Install dependencies:

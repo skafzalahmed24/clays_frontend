@@ -43,7 +43,7 @@ const VerifyOTP = () => {
             channel.close();
 
             dispatch(setCredentials({ user: userData, token: userData.token }));
-            navigate('/account', { state: { message: 'Email verified! Welcome to Mershai.' } });
+            navigate('/account', { state: { message: 'Email verified! Welcome to Clarysays.' } });
         } catch (err) {
             console.error('Verification failed', err);
         }

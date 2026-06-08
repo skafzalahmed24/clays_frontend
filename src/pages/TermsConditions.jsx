@@ -13,7 +13,7 @@ const TermsConditions = () => {
     const sections = data.sections || [
         {
             title: "1. Introduction",
-            content: "Welcome to Mershai. These Terms and Conditions govern your use of our website and services. By accessing or using our site, you agree to be bound by these terms."
+            content: "Welcome to Clarysays. These Terms and Conditions govern your use of our website and services. By accessing or using our site, you agree to be bound by these terms."
         },
         {
             title: "2. Intellectual Property",
@@ -21,7 +21,7 @@ const TermsConditions = () => {
         },
         {
             title: "3. Use License",
-            content: "Permission is granted to temporarily download one copy of the materials (information or software) on Mershai's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title."
+            content: "Permission is granted to temporarily download one copy of the materials (information or software) on Clarysays's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title."
         }
     ];
 

@@ -5,10 +5,10 @@ import { BRAND_CONFIG } from '../../utils/config';
 const SEO = ({ title, description, image, url }) => {
     // const { data: settings } = useGetSettingsQuery(); // No longer needed for SEO
 
-    const siteTitle = BRAND_CONFIG.meta.title || "Mershai";
-    const defaultDescription = BRAND_CONFIG.meta.description || "Mershai offers a curated collection of dark luxury jewelry, crafted for moments of elegance.";
-    const defaultImage = BRAND_CONFIG.meta.image || "https://mershai.com/og-image.jpg";
-    const siteUrl = BRAND_CONFIG.meta.url || "https://mershai.com";
+    const siteTitle = BRAND_CONFIG.meta.title || "Clarysays";
+    const defaultDescription = BRAND_CONFIG.meta.description || "Clarysays offers a curated collection of dark luxury jewelry, crafted for moments of elegance.";
+    const defaultImage = BRAND_CONFIG.meta.image || "https://Clarysays.com/og-image.jpg";
+    const siteUrl = BRAND_CONFIG.meta.url || "https://Clarysays.com";
 
     const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
 

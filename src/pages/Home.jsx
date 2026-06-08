@@ -30,7 +30,7 @@ const Home = () => {
         <>
             <SEO
                 title={pageData?.seo?.title || "Home"}
-                description={pageData?.seo?.description || "Mershai offers a curated collection of dark luxury jewelry, crafted for moments of elegance."}
+                description={pageData?.seo?.description || "Clarysays offers a curated collection of dark luxury jewelry, crafted for moments of elegance."}
             />
             <div id="hero"><Hero /></div>
             <div id="trustbadges"><TrustBarriers /></div>

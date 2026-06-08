@@ -3,13 +3,13 @@ import packageJson from '../../package.json';
 
 export const BRAND_CONFIG = {
   version: packageJson.version,
-  brandName: "Mershai", 
+  brandName: "Clarysays", 
   logo: logo,
   meta: {
-    title: "Mershai",
-    description: "Redefining luxury with a fusion of heritage and modernity.",
-    image: "https://mershai.com/og-image.jpg",
-    url: "https://mershai.com"
+    title: "Clarysays",
+    description: "Premium herbal hair care products crafted with natural ingredients for healthy, beautiful hair.",
+    image: "https://Clarysays.com/og-image.jpg",
+    url: "https://Clarysays.com"
   },
   payment: {
     currency: "INR",

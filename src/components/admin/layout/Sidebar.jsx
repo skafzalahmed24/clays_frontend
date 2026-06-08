@@ -43,7 +43,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
 
                 <Link to="/" className="flex flex-col items-center">
                     {/* Simplified Logo for Admin */}
-                    <span className="font-script font-bold text-primary text-2xl tracking-widest">MERSHAI</span>
+                    <span className="font-script font-bold text-primary text-2xl tracking-widest">Clarysays</span>
                     <span className="text-[0.6rem] uppercase tracking-[0.3em] text-light/50 mt-1">Admin Panel</span>
                 </Link>
             </div>

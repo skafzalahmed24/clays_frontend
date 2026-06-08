@@ -16,7 +16,7 @@ const Journal = () => {
 
     const header = pageData?.modules?.header || {
         title: "Stories & Style",
-        eyebrow: "The Mershai Journal",
+        eyebrow: "The Clarysays Journal",
         bannerImage: heroImg
     };
 

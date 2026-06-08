@@ -95,7 +95,7 @@ const Header = ({
     return (
         <div className={isGhost
             ? "relative w-full opacity-0 pointer-events-none -z-10"
-            : "fixed top-0 w-full z-50 transition-all duration-300"
+            : "fixed top-0 left-0 right-0 xl:left-[60px] xl:right-[60px] w-full xl:w-[calc(100%-120px)] z-50 transition-all duration-300"
         }>
             {/* Search Overlay */}
             <SearchOverlay
@@ -132,7 +132,7 @@ const Header = ({
                         <div className="flex-shrink-0 flex items-center">
                             <Link to="/" className={`cursor-pointer flex items-center transition-all duration-300 ${isScrolled ? 'flex-row gap-2' : 'flex-row md:flex-col gap-2 md:gap-0'}`}>
                                 <Image
-                                    className={`w-auto drop-shadow-[0_0_8px_rgba(212,175,55,0.8)] transition-all duration-300 hover:drop-shadow-[0_0_16px_rgba(212,175,55,0.8)] ${isScrolled ? 'h-16 py-1' : 'h-16 md:h-24 py-1 md:py-0'}`}
+                                    className={`w-auto drop-shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] transition-all duration-300 hover:drop-shadow-[0_0_16px_rgba(var(--color-primary-rgb),0.8)] ${isScrolled ? 'h-16 py-1' : 'h-16 md:h-24 py-1 md:py-0'}`}
                                     src={settings?.identity?.logo || BRAND_CONFIG.logo}
                                     alt={`${settings?.identity?.brandName || BRAND_CONFIG.brandName} Logo`}
                                     isStatic={!settings?.identity?.logo}

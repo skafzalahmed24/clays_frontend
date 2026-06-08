@@ -17,7 +17,7 @@ const AdminSettings = () => {
 
     // Form State
     const [formData, setFormData] = useState({
-        storeName: 'Mershai',
+        storeName: 'Clarysays',
         supportEmail: '',
         contactPhone: '',
         addresses: [],
