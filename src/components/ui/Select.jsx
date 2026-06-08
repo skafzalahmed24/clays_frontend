@@ -9,7 +9,7 @@ const Select = ({ label = "", name = "", value, onChange, options = [], disabled
                 <select
                     name={name}
                     id={name}
-                    value={value}
+                    value={value ?? ""}
                     onChange={onChange}
                     disabled={disabled}
                     required={required}

@@ -19,6 +19,8 @@ import { getMediaUrl } from '../../utils/apiConfig';
 import { useConfirm } from '../../context/ConfirmContext';
 import Textarea from '../../components/ui/Textarea';
 import Select from '../../components/ui/Select';
+import Input from '../../components/ui/Input';
+import PreviewableImage from '../../components/ui/PreviewableImage';
 import { REGEX } from '../../utils/regex';
 
 const AdminContent = () => {
