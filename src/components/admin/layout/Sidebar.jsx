@@ -28,7 +28,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
     };
     const linkClass = (path) => `flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ${isActive(path)
         ? 'bg-primary text-dark font-medium'
-        : 'text-light/60 hover:text-light hover:bg-white/5'}`;
+        : 'text-[#ffffff]'}`;
 
     return (
         <aside className={`fixed left-0 top-0 h-screen w-64 bg-dark-paper border-r border-white/10 z-50 flex flex-col transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>

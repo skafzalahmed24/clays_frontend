@@ -87,7 +87,7 @@ const AdminProducts = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
                 <h1 className="font-heading text-3xl text-light">Products</h1>
-                <Link to="/admin/products/new" className="flex items-center gap-2 bg-primary text-dark px-6 py-2 rounded-sm font-medium hover:bg-white transition-colors">
+                <Link to="/admin/products/new" className="flex items-center gap-2 bg-primary text-dark px-6 py-2 rounded-sm font-medium">
                     <Icons.Plus />
                     <span>Add Product</span>
                 </Link>
@@ -189,16 +189,16 @@ const AdminProducts = () => {
                                             </span>
                                         </td>
                                         <td className="p-4 text-right">
-                                            <div className="flex items-center justify-end gap-2 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center justify-end gap-2 opacity-100 transition-opacity">
                                                 <Link
                                                     to={`/admin/products/edit/${product._id}`}
-                                                    className="p-2 text-light/60 hover:text-primary hover:bg-white/5 rounded-md transition-colors"
+                                                    className="admin-product-action p-2 rounded-md transition-colors"
                                                     title="Edit"
                                                 >
                                                     <Icons.Edit />
                                                 </Link>
                                                 <button
-                                                    className="p-2 text-light/60 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
+                                                    className="admin-product-action p-2 rounded-md transition-colors"
                                                     title="Delete"
                                                     onClick={() => handleDelete(product._id)}
                                                 >

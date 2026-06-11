@@ -16,11 +16,11 @@ const Hero = () => {
         return () => clearInterval(timer);
     }, [heroSlides]);
 
-    if (loading) return <div className="h-screen bg-body flex items-center justify-center text-primary">Loading...</div>;
+    if (loading) return <div className="h-[380px] md:h-[500px] bg-body flex items-center justify-center text-primary">Loading...</div>;
 
     if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
         return (
-            <section className="relative h-screen flex items-center justify-center overflow-hidden bg-body">
+            <section className="relative h-[380px] md:h-[500px] flex items-center justify-center overflow-hidden bg-body">
                 <div className="text-center">
                     <h1 className="text-4xl text-primary font-heading">Welcome to Clarysays</h1>
                 </div>
@@ -29,7 +29,7 @@ const Hero = () => {
     }
 
     return (
-        <section className="relative h-screen flex items-center justify-center overflow-hidden bg-body">
+        <section className="relative h-[380px] md:h-[500px] flex items-center justify-center overflow-hidden bg-body">
             {heroSlides.map((slide, index) => (
                 <div
                     key={slide._id}
@@ -53,9 +53,9 @@ const Hero = () => {
             ))}
 
             {/* Content */}
-            <div className="relative z-10 w-full px-6 md:px-12 mt-16">
+            <div className="relative z-10 w-full px-6 md:px-12 mt-8">
                 <div className="lg:w-2/3">
-                    <div className="min-h-[300px] flex flex-col justify-center">
+                    <div className="min-h-[180px] flex flex-col justify-center">
                         {heroSlides.map((slide, index) => (
                             index === currentSlide && (
                                 <div key={slide._id} className="animate-fade-in-up">

@@ -18,7 +18,7 @@ const AdminLayout = () => {
     }
 
     return (
-        <div className="min-h-screen bg-body text-text-main flex font-body">
+        <div className="min-h-screen bg-body text-text-main flex font-body admin-layout">
             {/* Overlay for mobile sidebar */}
             {sidebarOpen && (
                 <div

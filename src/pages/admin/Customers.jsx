@@ -104,7 +104,7 @@ const AdminCustomers = () => {
                                         <td className="p-4 text-right">
                                             <Link
                                                 to={`/admin/customers/${customer._id}`}
-                                                className="text-primary hover:underline text-sm opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity"
+                                                className="text-primary hover:underline text-sm opacity-100 transition-opacity"
                                             >
                                                 View Details
                                             </Link>

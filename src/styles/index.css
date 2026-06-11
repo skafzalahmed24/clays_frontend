@@ -6,9 +6,9 @@
 
 @layer base {
   :root {
-    --color-primary: #285430;
+    --color-primary: #005b30;
     /* Herbal Leaf Green */
-    --color-primary-rgb: 40, 84, 48;
+    --color-primary-rgb: 0, 91, 48;
     --color-dark: #2C1814;
     /* Dark Cocoa Brown Background */
     --color-light: #FAF5EF;
@@ -23,6 +23,758 @@
     --color-input-bg: #FFFFFF;
     /* Pure White Inputs */
     --color-input-border: rgba(40, 84, 48, 0.2);
+  }
+
+  /* Admin panel layout styles to optimize color scheme readability and hover states */
+  /* Admin panel layout styles to optimize color scheme readability and hover states */
+  .admin-layout {
+    --color-body-bg: #ffffff;
+    --color-text-main: #003e20;
+    --color-text-muted: #00592f;
+    --color-input-bg: #ffffff;
+    --color-input-border: rgba(0, 91, 48, 0.25);
+  }
+
+  /* Backoffice main content uses white surfaces with dark green text. */
+  .admin-layout .text-dark,
+  .admin-layout .text-black,
+  .admin-layout .hover\:text-dark:hover,
+  .admin-layout .hover\:text-black:hover {
+    color: #003e20 !important;
+  }
+
+  .admin-layout.bg-body,
+  .admin-layout .bg-body,
+  .admin-layout .bg-body\/95,
+  .admin-layout .bg-body\/30,
+  .admin-layout .bg-body\/20,
+  .admin-layout .bg-light,
+  .admin-layout .hover\:bg-light:hover {
+    background-color: #ffffff !important;
+  }
+
+  .admin-layout .bg-black {
+    background-color: #000000 !important;
+  }
+
+  .admin-layout .bg-black\/20 {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .admin-layout .bg-black\/50 {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .admin-layout .bg-black\/60 {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .admin-layout .bg-black\/80 {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+  }
+
+  .admin-layout .bg-white,
+  .admin-layout .hover\:bg-white:hover,
+  .admin-layout .bg-white\/5,
+  .admin-layout .hover\:bg-white\/5:hover,
+  .admin-layout .bg-white\/10,
+  .admin-layout .hover\:bg-white\/10:hover,
+  .admin-layout .bg-white\/20,
+  .admin-layout .bg-white\/30 {
+    background-color: #f4faf6 !important;
+  }
+
+  .admin-layout .border-white\/5,
+  .admin-layout .border-white\/10,
+  .admin-layout .border-white\/20,
+  .admin-layout .hover\:border-white\/20:hover,
+  .admin-layout .hover\:border-white\/30:hover {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  /* Resolve inherited light/white text utilities to dark green in the main admin area. */
+  .admin-layout .text-light,
+  .admin-layout .text-white {
+    color: #003e20 !important;
+  }
+
+  .admin-layout .text-light\/90,
+  .admin-layout .text-white\/90 {
+    color: #004725 !important;
+  }
+
+  .admin-layout .text-light\/80,
+  .admin-layout .text-white\/80 {
+    color: #00502a !important;
+  }
+
+  .admin-layout .text-light\/70,
+  .admin-layout .text-white\/70 {
+    color: #00592f !important;
+  }
+
+  .admin-layout .text-light\/60,
+  .admin-layout .text-white\/60 {
+    color: #006234 !important;
+  }
+
+  .admin-layout .text-light\/50,
+  .admin-layout .text-white\/50 {
+    color: #006b39 !important;
+  }
+
+  .admin-layout .text-white\/40 {
+    color: #00743e !important;
+  }
+
+  .admin-layout .text-white\/30 {
+    color: #007d43 !important;
+  }
+
+  .admin-layout .text-white\/20 {
+    color: #008648 !important;
+  }
+
+  /* Restore light/white text inside dark containers in admin layout (sidebar, dark components, modals, form sections) */
+  .admin-layout aside,
+  .admin-layout .bg-dark-paper,
+  .admin-layout .bg-black\/80,
+  .admin-layout .bg-dark,
+  .admin-layout .bg-dark\/50,
+  .admin-layout .bg-dark\/40,
+  .admin-layout .bg-dark\/30,
+  .admin-layout .bg-dark\/20,
+  .admin-layout .bg-dark\/10,
+  .admin-layout .bg-primary {
+    --color-text-main: #ded6cc;
+    --color-text-muted: rgba(222, 214, 204, 0.65);
+  }
+
+  .admin-layout aside {
+    --color-light: #ded6cc;
+  }
+
+  .admin-layout aside th,
+  .admin-layout aside td,
+  .admin-layout aside p,
+  .admin-layout aside span,
+  .admin-layout aside h1,
+  .admin-layout aside h2,
+  .admin-layout aside h3,
+  .admin-layout aside h4,
+  .admin-layout aside h5,
+  .admin-layout aside h6,
+  .admin-layout .bg-dark-paper th,
+  .admin-layout .bg-dark-paper td,
+  .admin-layout .bg-dark-paper p,
+  .admin-layout .bg-dark-paper span,
+  .admin-layout .bg-dark-paper h1,
+  .admin-layout .bg-dark-paper h2,
+  .admin-layout .bg-dark-paper h3,
+  .admin-layout .bg-dark-paper h4,
+  .admin-layout .bg-dark-paper h5,
+  .admin-layout .bg-dark-paper h6,
+  .admin-layout .bg-black\/80 th,
+  .admin-layout .bg-black\/80 td,
+  .admin-layout .bg-black\/80 p,
+  .admin-layout .bg-black\/80 span,
+  .admin-layout .bg-black\/80 h1,
+  .admin-layout .bg-black\/80 h2,
+  .admin-layout .bg-black\/80 h3,
+  .admin-layout .bg-black\/80 h4,
+  .admin-layout .bg-black\/80 h5,
+  .admin-layout .bg-black\/80 h6,
+  .admin-layout .bg-dark th,
+  .admin-layout .bg-dark td,
+  .admin-layout .bg-dark p,
+  .admin-layout .bg-dark span,
+  .admin-layout .bg-dark h1,
+  .admin-layout .bg-dark h2,
+  .admin-layout .bg-dark h3,
+  .admin-layout .bg-dark h4,
+  .admin-layout .bg-dark h5,
+  .admin-layout .bg-dark h6,
+  .admin-layout .bg-dark\/50 th,
+  .admin-layout .bg-dark\/50 td,
+  .admin-layout .bg-dark\/50 p,
+  .admin-layout .bg-dark\/50 span,
+  .admin-layout .bg-dark\/50 h1,
+  .admin-layout .bg-dark\/50 h2,
+  .admin-layout .bg-dark\/50 h3,
+  .admin-layout .bg-dark\/50 h4,
+  .admin-layout .bg-dark\/50 h5,
+  .admin-layout .bg-dark\/50 h6,
+  .admin-layout .bg-primary th,
+  .admin-layout .bg-primary td,
+  .admin-layout .bg-primary p,
+  .admin-layout .bg-primary span,
+  .admin-layout .bg-primary h1,
+  .admin-layout .bg-primary h2,
+  .admin-layout .bg-primary h3,
+  .admin-layout .bg-primary h4,
+  .admin-layout .bg-primary h5,
+  .admin-layout .bg-primary h6 {
+    color: #ded6cc !important;
+  }
+
+  .admin-layout aside .text-light,
+  .admin-layout .bg-dark-paper .text-light,
+  .admin-layout .bg-black\/80 .text-light,
+  .admin-layout .bg-dark .text-light,
+  .admin-layout .bg-dark\/50 .text-light,
+  .admin-layout .bg-primary .text-light {
+    color: var(--color-light) !important;
+  }
+
+  .admin-layout aside .text-light\/90,
+  .admin-layout .bg-dark-paper .text-light\/90,
+  .admin-layout .bg-black\/80 .text-light\/90,
+  .admin-layout .bg-dark .text-light\/90,
+  .admin-layout .bg-dark\/50 .text-light\/90,
+  .admin-layout .bg-primary .text-light\/90 {
+    color: rgba(222, 214, 204, 0.9) !important;
+  }
+
+  .admin-layout aside .text-light\/80,
+  .admin-layout .bg-dark-paper .text-light\/80,
+  .admin-layout .bg-black\/80 .text-light\/80,
+  .admin-layout .bg-dark .text-light\/80,
+  .admin-layout .bg-dark\/50 .text-light\/80,
+  .admin-layout .bg-primary .text-light\/80 {
+    color: rgba(222, 214, 204, 0.8) !important;
+  }
+
+  .admin-layout aside .text-light\/70,
+  .admin-layout .bg-dark-paper .text-light\/70,
+  .admin-layout .bg-black\/80 .text-light\/70,
+  .admin-layout .bg-dark .text-light\/70,
+  .admin-layout .bg-dark\/50 .text-light\/70,
+  .admin-layout .bg-primary .text-light\/70 {
+    color: rgba(222, 214, 204, 0.7) !important;
+  }
+
+  .admin-layout aside .text-light\/60,
+  .admin-layout .bg-dark-paper .text-light\/60,
+  .admin-layout .bg-black\/80 .text-light\/60,
+  .admin-layout .bg-dark .text-light\/60,
+  .admin-layout .bg-dark\/50 .text-light\/60,
+  .admin-layout .bg-primary .text-light\/60 {
+    color: rgba(222, 214, 204, 0.6) !important;
+  }
+
+  .admin-layout aside .text-light\/50,
+  .admin-layout .bg-dark-paper .text-light\/50,
+  .admin-layout .bg-black\/80 .text-light\/50,
+  .admin-layout .bg-dark .text-light\/50,
+  .admin-layout .bg-dark\/50 .text-light\/50,
+  .admin-layout .bg-primary .text-light\/50 {
+    color: rgba(222, 214, 204, 0.5) !important;
+  }
+
+  .admin-layout aside .text-white,
+  .admin-layout .bg-dark-paper .text-white,
+  .admin-layout .bg-black\/80 .text-white,
+  .admin-layout .bg-dark .text-white,
+  .admin-layout .bg-dark\/50 .text-white,
+  .admin-layout .bg-primary .text-white {
+    color: #ded6cc !important;
+  }
+
+  .admin-layout aside .text-white\/90,
+  .admin-layout .bg-dark-paper .text-white\/90,
+  .admin-layout .bg-black\/80 .text-white\/90,
+  .admin-layout .bg-dark .text-white\/90,
+  .admin-layout .bg-dark\/50 .text-white\/90,
+  .admin-layout .bg-primary .text-white\/90 {
+    color: rgba(222, 214, 204, 0.9) !important;
+  }
+
+  .admin-layout aside .text-white\/80,
+  .admin-layout .bg-dark-paper .text-white\/80,
+  .admin-layout .bg-black\/80 .text-white\/80,
+  .admin-layout .bg-dark .text-white\/80,
+  .admin-layout .bg-dark\/50 .text-white\/80,
+  .admin-layout .bg-primary .text-white\/80 {
+    color: rgba(222, 214, 204, 0.8) !important;
+  }
+
+  .admin-layout aside .text-white\/70,
+  .admin-layout .bg-dark-paper .text-white\/70,
+  .admin-layout .bg-black\/80 .text-white\/70,
+  .admin-layout .bg-dark .text-white\/70,
+  .admin-layout .bg-dark\/50 .text-white\/70,
+  .admin-layout .bg-primary .text-white\/70 {
+    color: rgba(222, 214, 204, 0.7) !important;
+  }
+
+  .admin-layout aside .text-white\/60,
+  .admin-layout .bg-dark-paper .text-white\/60,
+  .admin-layout .bg-black\/80 .text-white\/60,
+  .admin-layout .bg-dark .text-white\/60,
+  .admin-layout .bg-dark\/50 .text-white\/60,
+  .admin-layout .bg-primary .text-white\/60 {
+    color: rgba(222, 214, 204, 0.6) !important;
+  }
+
+  .admin-layout aside .text-white\/50,
+  .admin-layout .bg-dark-paper .text-white\/50,
+  .admin-layout .bg-black\/80 .text-white\/50,
+  .admin-layout .bg-dark .text-white\/50,
+  .admin-layout .bg-dark\/50 .text-white\/50,
+  .admin-layout .bg-primary .text-white\/50 {
+    color: rgba(222, 214, 204, 0.5) !important;
+  }
+
+  .admin-layout aside .text-white\/40,
+  .admin-layout .bg-dark-paper .text-white\/40,
+  .admin-layout .bg-black\/80 .text-white\/40,
+  .admin-layout .bg-dark .text-white\/40,
+  .admin-layout .bg-dark\/50 .text-white\/40,
+  .admin-layout .bg-primary .text-white\/40 {
+    color: rgba(222, 214, 204, 0.4) !important;
+  }
+
+  .admin-layout aside .text-white\/30,
+  .admin-layout .bg-dark-paper .text-white\/30,
+  .admin-layout .bg-black\/80 .text-white\/30,
+  .admin-layout .bg-dark .text-white\/30,
+  .admin-layout .bg-dark\/50 .text-white\/30,
+  .admin-layout .bg-primary .text-white\/30 {
+    color: rgba(222, 214, 204, 0.3) !important;
+  }
+
+  .admin-layout aside nav a:hover {
+    background-color: transparent !important;
+  }
+
+  /* Text stroke on sidebar nav options */
+  .admin-layout aside nav a span {
+    -webkit-text-stroke: 0.6px rgba(2, 31, 15, 0.6);
+    paint-order: stroke fill;
+  }
+
+  .admin-layout aside nav a.text-light\/60:hover,
+  .admin-layout aside nav a.text-light\/60:hover * {
+    color: rgba(222, 214, 204, 0.6) !important;
+  }
+
+  .admin-layout aside nav a.bg-primary:hover {
+    background-color: var(--color-primary) !important;
+    color: var(--color-light) !important;
+  }
+
+  .admin-layout aside nav a.bg-primary:hover * {
+    color: var(--color-light) !important;
+  }
+
+  .admin-layout main .bg-dark-paper,
+  .admin-layout main .bg-dark,
+  .admin-layout main .bg-dark\/50,
+  .admin-layout main .bg-dark\/40,
+  .admin-layout main .bg-dark\/30,
+  .admin-layout main .bg-dark\/20,
+  .admin-layout main .bg-dark\/10 {
+    --color-text-main: #003e20;
+    --color-text-muted: #00592f;
+    background-color: #ffffff !important;
+    color: #003e20 !important;
+  }
+
+  .admin-layout main,
+  .admin-layout main th,
+  .admin-layout main td,
+  .admin-layout main p,
+  .admin-layout main span,
+  .admin-layout main label,
+  .admin-layout main h1,
+  .admin-layout main h2,
+  .admin-layout main h3,
+  .admin-layout main h4,
+  .admin-layout main h5,
+  .admin-layout main h6,
+  .admin-layout main li,
+  .admin-layout main a,
+  .admin-layout main .bg-dark-paper th,
+  .admin-layout main .bg-dark-paper td,
+  .admin-layout main .bg-dark-paper p,
+  .admin-layout main .bg-dark-paper span,
+  .admin-layout main .bg-dark-paper label,
+  .admin-layout main .bg-dark-paper h1,
+  .admin-layout main .bg-dark-paper h2,
+  .admin-layout main .bg-dark-paper h3,
+  .admin-layout main .bg-dark-paper h4,
+  .admin-layout main .bg-dark-paper h5,
+  .admin-layout main .bg-dark-paper h6,
+  .admin-layout main .bg-dark-paper li,
+  .admin-layout main .bg-dark-paper a {
+    color: #003e20 !important;
+  }
+
+  .admin-layout main .bg-dark-paper *,
+  .admin-layout main .bg-dark *,
+  .admin-layout main .bg-dark\/50 *,
+  .admin-layout main .bg-dark\/40 *,
+  .admin-layout main .bg-dark\/30 *,
+  .admin-layout main .bg-dark\/20 *,
+  .admin-layout main .bg-dark\/10 * {
+    color: inherit;
+  }
+
+  .admin-layout main .border-white\/5,
+  .admin-layout main .border-white\/10,
+  .admin-layout main .border-white\/20,
+  .admin-layout main .border-light\/5,
+  .admin-layout main .border-light\/10,
+  .admin-layout main .border-light\/20,
+  .admin-layout main .border-b,
+  .admin-layout main .border-t,
+  .admin-layout main .border-r,
+  .admin-layout main .border-l,
+  .admin-layout main .border,
+  .admin-layout main .hover\:border-white\/20:hover,
+  .admin-layout main .hover\:border-white\/30:hover,
+  .admin-layout main table,
+  .admin-layout main tr,
+  .admin-layout main th,
+  .admin-layout main td {
+    border-color: rgba(0, 91, 48, 0.35) !important;
+  }
+
+  .admin-layout main .divide-white\/5> :not([hidden])~ :not([hidden]),
+  .admin-layout main .divide-white\/10> :not([hidden])~ :not([hidden]),
+  .admin-layout main .divide-light\/5> :not([hidden])~ :not([hidden]),
+  .admin-layout main .divide-light\/10> :not([hidden])~ :not([hidden]) {
+    border-color: rgba(0, 91, 48, 0.28) !important;
+  }
+
+  .admin-layout main .admin-blog-table-header,
+  .admin-layout main .admin-blog-table-header th {
+    color: #00502a !important;
+  }
+
+  .admin-layout main .admin-product-action,
+  .admin-layout main .admin-product-action * {
+    color: #16a34a !important;
+    background-color: transparent !important;
+  }
+
+  .admin-layout main .admin-product-action:hover,
+  .admin-layout main .admin-product-action:hover * {
+    color: #15803d !important;
+    background-color: rgba(22, 163, 74, 0.12) !important;
+  }
+
+  /* ── Toggle Switch Fixes (ProductForm / Settings) ────────────────────────── */
+  /* Unchecked track: visible grey on white admin background */
+  .admin-layout main label .peer~div,
+  .admin-layout .bg-dark-paper label .peer~div {
+    background-color: #cbd5e1 !important;
+    /* slate-300 */
+  }
+
+  /* Checked track: primary green */
+  .admin-layout main label .peer:checked~div,
+  .admin-layout .bg-dark-paper label .peer:checked~div {
+    background-color: #16a34a !important;
+  }
+
+  /* Knob: always white and visible */
+  .admin-layout main label .peer~div::after,
+  .admin-layout .bg-dark-paper label .peer~div::after {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+  }
+
+  .admin-layout main .bg-dark-paper .text-light,
+  .admin-layout main .bg-dark-paper .text-white,
+  .admin-layout main .bg-dark .text-light,
+  .admin-layout main .bg-dark .text-white,
+  .admin-layout main .bg-dark\/50 .text-light,
+  .admin-layout main .bg-dark\/50 .text-white {
+    color: #003e20 !important;
+  }
+
+  .admin-layout main .text-light\/90,
+  .admin-layout main .text-white\/90,
+  .admin-layout main .bg-dark-paper .text-light\/90,
+  .admin-layout main .bg-dark-paper .text-white\/90,
+  .admin-layout main .bg-dark .text-light\/90,
+  .admin-layout main .bg-dark .text-white\/90,
+  .admin-layout main .bg-dark\/50 .text-light\/90,
+  .admin-layout main .bg-dark\/50 .text-white\/90 {
+    color: #004725 !important;
+  }
+
+  .admin-layout main .text-light\/80,
+  .admin-layout main .text-white\/80,
+  .admin-layout main .bg-dark-paper .text-light\/80,
+  .admin-layout main .bg-dark-paper .text-white\/80,
+  .admin-layout main .bg-dark .text-light\/80,
+  .admin-layout main .bg-dark .text-white\/80,
+  .admin-layout main .bg-dark\/50 .text-light\/80,
+  .admin-layout main .bg-dark\/50 .text-white\/80 {
+    color: #00502a !important;
+  }
+
+  .admin-layout main .bg-dark-paper .text-light\/70,
+  .admin-layout main .text-light\/70,
+  .admin-layout main .text-white\/70,
+  .admin-layout main .bg-dark-paper .text-white\/70,
+  .admin-layout main .bg-dark .text-light\/70,
+  .admin-layout main .bg-dark .text-white\/70,
+  .admin-layout main .bg-dark\/50 .text-light\/70,
+  .admin-layout main .bg-dark\/50 .text-white\/70 {
+    color: #00592f !important;
+  }
+
+  .admin-layout main .bg-dark-paper .text-light\/60,
+  .admin-layout main .text-light\/60,
+  .admin-layout main .text-white\/60,
+  .admin-layout main .bg-dark-paper .text-white\/60,
+  .admin-layout main .bg-dark .text-light\/60,
+  .admin-layout main .bg-dark .text-white\/60,
+  .admin-layout main .bg-dark\/50 .text-light\/60,
+  .admin-layout main .bg-dark\/50 .text-white\/60 {
+    color: #006234 !important;
+  }
+
+  .admin-layout main .bg-dark-paper .text-light\/50,
+  .admin-layout main .text-light\/50,
+  .admin-layout main .text-white\/50,
+  .admin-layout main .bg-dark-paper .text-white\/50,
+  .admin-layout main .bg-dark .text-light\/50,
+  .admin-layout main .bg-dark .text-white\/50,
+  .admin-layout main .bg-dark\/50 .text-light\/50,
+  .admin-layout main .bg-dark\/50 .text-white\/50 {
+    color: #006b39 !important;
+  }
+
+  /* Ensure button texts are legible inside the admin panel */
+  .admin-layout .bg-primary,
+  .admin-layout .bg-primary *,
+  .admin-layout .bg-dark,
+  .admin-layout .bg-dark * {
+    color: var(--color-light) !important;
+  }
+
+  .admin-layout .bg-primary:hover,
+  .admin-layout .bg-primary:hover *,
+  .admin-layout .bg-dark:hover,
+  .admin-layout .bg-dark:hover * {
+    color: #ffffff !important;
+    background-color: #006b39 !important;
+  }
+
+  /* Global input/select/textarea overrides inside the admin layout */
+  .admin-layout input,
+  .admin-layout select,
+  .admin-layout textarea {
+    background-color: #ffffff !important;
+    border-color: rgba(0, 91, 48, 0.25) !important;
+    color: #003e20 !important;
+  }
+
+  .admin-layout input::placeholder,
+  .admin-layout textarea::placeholder {
+    color: #006234 !important;
+  }
+
+  .admin-layout select option {
+    background-color: #ffffff !important;
+    color: #003e20 !important;
+  }
+
+  /* Restore light styles for inputs/selects inside dark green containers (sidebar, cards, tables, modals) */
+  .admin-layout aside input,
+  .admin-layout aside select,
+  .admin-layout aside textarea,
+  .admin-layout .bg-dark-paper input,
+  .admin-layout .bg-dark-paper select,
+  .admin-layout .bg-dark-paper textarea,
+  .admin-layout .bg-black\/80 input,
+  .admin-layout .bg-black\/80 select,
+  .admin-layout .bg-black\/80 textarea,
+  .admin-layout .bg-dark input,
+  .admin-layout .bg-dark select,
+  .admin-layout .bg-dark textarea,
+  .admin-layout .bg-dark\/50 input,
+  .admin-layout .bg-dark\/50 select,
+  .admin-layout .bg-dark\/50 textarea,
+  .admin-layout .bg-primary input,
+  .admin-layout .bg-primary select,
+  .admin-layout .bg-primary textarea {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #FAF5EF !important;
+  }
+
+  .admin-layout aside input::placeholder,
+  .admin-layout aside textarea::placeholder,
+  .admin-layout .bg-dark-paper input::placeholder,
+  .admin-layout .bg-dark-paper textarea::placeholder,
+  .admin-layout .bg-black\/80 input::placeholder,
+  .admin-layout .bg-black\/80 textarea::placeholder,
+  .admin-layout .bg-dark input::placeholder,
+  .admin-layout .bg-dark textarea::placeholder,
+  .admin-layout .bg-dark\/50 input::placeholder,
+  .admin-layout .bg-dark\/50 textarea::placeholder,
+  .admin-layout .bg-primary input::placeholder,
+  .admin-layout .bg-primary textarea::placeholder {
+    color: rgba(250, 245, 239, 0.4) !important;
+  }
+
+  .admin-layout aside select option,
+  .admin-layout .bg-dark-paper select option,
+  .admin-layout .bg-black\/80 select option,
+  .admin-layout .bg-dark select option,
+  .admin-layout .bg-dark\/50 select option,
+  .admin-layout .bg-primary select option {
+    background-color: #003e20 !important;
+    color: #FAF5EF !important;
+  }
+
+  .admin-layout main input,
+  .admin-layout main select,
+  .admin-layout main textarea,
+  .admin-layout main .bg-dark-paper input,
+  .admin-layout main .bg-dark-paper select,
+  .admin-layout main .bg-dark-paper textarea,
+  .admin-layout main .bg-dark input,
+  .admin-layout main .bg-dark select,
+  .admin-layout main .bg-dark textarea,
+  .admin-layout main .bg-dark\/50 input,
+  .admin-layout main .bg-dark\/50 select,
+  .admin-layout main .bg-dark\/50 textarea,
+  .admin-layout main .bg-primary input,
+  .admin-layout main .bg-primary select,
+  .admin-layout main .bg-primary textarea {
+    background-color: #ffffff !important;
+    border-color: rgba(0, 91, 48, 0.25) !important;
+    color: #003e20 !important;
+  }
+
+  .admin-layout main input::placeholder,
+  .admin-layout main textarea::placeholder,
+  .admin-layout main .bg-dark-paper input::placeholder,
+  .admin-layout main .bg-dark-paper textarea::placeholder,
+  .admin-layout main .bg-dark input::placeholder,
+  .admin-layout main .bg-dark textarea::placeholder,
+  .admin-layout main .bg-dark\/50 input::placeholder,
+  .admin-layout main .bg-dark\/50 textarea::placeholder,
+  .admin-layout main .bg-primary input::placeholder,
+  .admin-layout main .bg-primary textarea::placeholder {
+    color: #006234 !important;
+  }
+
+  .admin-layout main select option,
+  .admin-layout main .bg-dark-paper select option,
+  .admin-layout main .bg-dark select option,
+  .admin-layout main .bg-dark\/50 select option,
+  .admin-layout main .bg-primary select option {
+    background-color: #ffffff !important;
+    color: #003e20 !important;
+  }
+
+  /* Optimize status and indicator colors on dark green backgrounds */
+  .admin-layout .bg-dark-paper .text-green-400,
+  .admin-layout .bg-dark-paper .text-green-400 *,
+  .admin-layout .bg-dark-paper .bg-green-400 {
+    color: #083911 !important;
+  }
+
+  .admin-layout .bg-dark-paper .text-red-400,
+  .admin-layout .bg-dark-paper .text-red-400 *,
+  .admin-layout .bg-dark-paper .bg-red-400 {
+    color: #fca5a5 !important;
+  }
+
+  .admin-layout .bg-dark-paper .text-orange-400,
+  .admin-layout .bg-dark-paper .text-orange-400 * {
+    color: #083911 !important;
+  }
+
+  .admin-layout .bg-dark-paper .text-yellow-400,
+  .admin-layout .bg-dark-paper .text-yellow-400 * {
+    color: #083911 !important;
+  }
+
+  .admin-layout .bg-dark-paper .text-blue-400,
+  .admin-layout .bg-dark-paper .text-blue-400 * {
+    color: #083911 !important;
+  }
+
+  .admin-layout .bg-dark-paper .text-cyan-400,
+  .admin-layout .bg-dark-paper .text-cyan-400 * {
+    color: #083911 !important;
+  }
+
+  .admin-layout .bg-dark-paper .text-purple-400,
+  .admin-layout .bg-dark-paper .text-purple-400 * {
+    color: #083911 !important;
+  }
+
+  /* Define background of sidebar and other dark containers in the admin panel */
+  .bg-dark-paper {
+    background-color: #003e20 !important;
+    /* Premium dark forest green */
+  }
+
+  /* Sidebar gradient — premium emerald green */
+  .admin-layout aside.bg-dark-paper {
+    background: linear-gradient(160deg, #021f0f 0%, #0a4a28 40%, #0f6b3a 75%, #083d22 100%) !important;
+    background-color: unset !important;
+  }
+
+  /* Toast Notification Overrides for High Contrast (legibility on light theme) */
+  .bg-green-500\/20 {
+    background-color: #e6f4ea !important;
+    border-color: #abdbb9 !important;
+  }
+
+  .text-green-200 {
+    color: #137333 !important;
+  }
+
+  .bg-red-500\/20 {
+    background-color: #fce8e6 !important;
+    border-color: #fad2cf !important;
+  }
+
+  .text-red-200 {
+    color: #c5221f !important;
+  }
+
+  .bg-primary\/20 {
+    background-color: rgba(0, 91, 48, 0.1) !important;
+    border-color: rgba(0, 91, 48, 0.3) !important;
+  }
+
+  /* Alert / Message Block Overrides for High Contrast */
+  .bg-red-500\/10 {
+    background-color: #fce8e6 !important;
+    border-color: #fad2cf !important;
+  }
+
+  .text-red-400 {
+    color: #c5221f !important;
+  }
+
+  .bg-green-500\/10 {
+    background-color: #e6f4ea !important;
+    border-color: #abdbb9 !important;
+  }
+
+  .text-green-400 {
+    color: #137333 !important;
+  }
+
+  .text-orange-400 {
+    color: #b06000 !important;
+  }
+
+  .bg-orange-500\/10 {
+    background-color: #fff3cd !important;
+    border-color: #ffeeba !important;
   }
 
   body {
@@ -147,6 +899,7 @@
   nav.bg-dark ul.text-primary a {
     color: var(--color-light) !important;
   }
+
   nav.bg-dark ul.text-primary a:hover {
     color: #FFFFFF !important;
   }
@@ -272,5 +1025,24 @@ textarea {
 
 /* Hero section light theme gradient overlay */
 .hero-gradient-overlay {
-  background: linear-gradient(to right, var(--color-body-bg) 0%, rgba(250, 245, 239, 0.85) 40%, rgba(250, 245, 239, 0.4) 75%, transparent 100%) !important;
+  background: none !important;
+}
+
+.trust-ribbon {
+  width: max-content;
+  animation: trustScroll 25s linear infinite;
+}
+
+.trust-ribbon:hover {
+  animation-play-state: paused;
+}
+
+@keyframes trustScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }

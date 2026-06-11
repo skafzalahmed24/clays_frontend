@@ -105,12 +105,12 @@ const Header = ({
 
             {/* Main Nav */}
             <nav className="bg-dark text-light border-b border-light/10 transition-all duration-300">
-                <div className="w-full px-4 md:px-6 lg:px-12 py-2">
+                <div className="w-full px-4 md:px-6 lg:px-12 py-0">
                     {/* Header Layout when NOT scrolled */}
                     {!isScrolled ? (
                         <div className="flex flex-col w-full">
                             {/* Top row: Left (Brand tag), Center (Logo), Right (Icons) */}
-                            <div className="grid grid-cols-3 items-center w-full pt-1 pb-3">
+                            <div className="grid grid-cols-3 items-center w-full pt-1 pb-1">
                                 {/* Left: Brand tagline */}
                                 <div className="hidden md:flex items-center space-x-4">
                                     <span className="text-[11px] font-heading tracking-widest text-light/50 uppercase">Clarysays Luxury</span>
@@ -121,12 +121,12 @@ const Header = ({
                                 <div className="flex justify-center items-center">
                                     <Link to="/" className="cursor-pointer flex flex-col items-center gap-1">
                                         <Image
-                                            className="h-24 md:h-32 w-auto drop-shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] transition-all duration-300 hover:drop-shadow-[0_0_16px_rgba(var(--color-primary-rgb),0.8)]"
+                                            className="h-12 md:h-16 w-auto drop-shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] transition-all duration-300 hover:drop-shadow-[0_0_16px_rgba(var(--color-primary-rgb),0.8)]"
                                             src={settings?.identity?.logo || BRAND_CONFIG.logo}
                                             alt={`${settings?.identity?.brandName || BRAND_CONFIG.brandName} Logo`}
                                             isStatic={!settings?.identity?.logo}
                                         />
-                                        <span className="font-script font-bold text-light tracking-[0.2em] text-2xl md:text-3xl mt-2">
+                                        <span className="font-script font-bold text-light tracking-[0.2em] text-lg md:text-xl mt-1">
                                             {(settings?.identity?.brandName || BRAND_CONFIG.brandName).toUpperCase()}
                                         </span>
                                     </Link>
@@ -178,7 +178,7 @@ const Header = ({
                             <hr className="border-light/10 w-full" />
 
                             {/* Middle row: Desktop Navigation Links centered */}
-                            <div className="hidden md:flex justify-center items-center py-3 space-x-6">
+                            <div className="hidden md:flex justify-center items-center py-1.5 space-x-6">
                                 <Link to="/shop" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
                                 <Link to="/categories" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/categories')}`}>Categories</Link>
                                 <Link to="/collections" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/collections')}`}>Collections</Link>
@@ -192,7 +192,7 @@ const Header = ({
                             <hr className="border-light/5 w-full hidden md:block" />
 
                             {/* Bottom row: Category list (New Arrivals, etc.) */}
-                            <div className="hidden md:block py-2">
+                            <div className="hidden md:block py-1">
                                 <ul className="flex justify-center items-center text-[12px] font-heading tracking-widest text-primary gap-8 w-full">
                                     <li
                                         className="py-1"

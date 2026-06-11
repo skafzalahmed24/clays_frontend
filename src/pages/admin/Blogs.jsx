@@ -50,7 +50,7 @@ const AdminBlogs = () => {
                     <div className="min-w-[800px]">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="border-b border-light/10 text-xs uppercase tracking-widest text-light/50">
+                                <tr className="admin-blog-table-header border-b border-light/10 text-xs uppercase tracking-widest text-light/50">
                                     <th className="p-4 font-normal">Image</th>
                                     <th className="p-4 font-normal">Title</th>
                                     <th className="p-4 font-normal">Category</th>

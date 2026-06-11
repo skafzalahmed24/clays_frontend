@@ -124,7 +124,7 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden">
+        <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden admin-layout">
             {/* Background Effects */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]"></div>
