@@ -1046,3 +1046,48 @@ textarea {
     transform: translateX(-50%);
   }
 }
+
+/* Confirm Dialog Text Color Fix */
+div.z-\[100\] .bg-dark-paper p.text-light\/60,
+div.z-\[100\] .bg-dark-paper .text-light\/60 {
+  color: #ffffff !important;
+}
+
+div.z-\[100\] .bg-dark-paper .hover\:text-light:hover {
+  color: #ffffff !important;
+}
+
+/* Admin Login Page Input Fields and Autofill Fix */
+.admin-layout.bg-\[\#050505\] .bg-white\/5 input {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: rgba(0, 91, 48, 0.25) !important;
+}
+
+.admin-layout.bg-\[\#050505\] .bg-white\/5 input::placeholder {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.admin-layout.bg-\[\#050505\] .bg-white\/5 .text-light\/30 {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.admin-layout.bg-\[\#050505\] .bg-white\/5 input:-webkit-autofill,
+.admin-layout.bg-\[\#050505\] .bg-white\/5 input:-webkit-autofill:hover,
+.admin-layout.bg-\[\#050505\] .bg-white\/5 input:-webkit-autofill:focus,
+.admin-layout.bg-\[\#050505\] .bg-white\/5 input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+  -webkit-text-fill-color: #000000 !important;
+  caret-color: #000000 !important;
+}
+
+/* Admin Login Page Link Visibility Fix */
+.admin-layout.bg-\[\#050505\] .bg-white\/5 a {
+  color: #00592f !important;
+  border-color: rgba(0, 80, 42, 0.2) !important;
+}
+
+.admin-layout.bg-\[\#050505\] .bg-white\/5 a:hover {
+  color: #003e20 !important;
+  border-color: #003e20 !important;
+}
