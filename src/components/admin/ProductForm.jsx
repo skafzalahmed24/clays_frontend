@@ -120,10 +120,16 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
+        setFormData(prev => {
+            const next = {
+                ...prev,
+                [name]: type === 'checkbox' ? checked : value
+            };
+            if (name === 'category') {
+                next.subCategory = ''; // Reset subCategory when parent category changes
+            }
+            return next;
+        });
     };
 
     const validate = () => {
@@ -489,7 +495,9 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
                                         value={formData.subCategory}
                                         onChange={handleChange}
                                         placeholder="Select Sub Category"
-                                        options={(attributes.subCategories && Array.isArray(attributes.subCategories) ? attributes.subCategories : []).map(sub => ({ value: sub.name, label: sub.name }))}
+                                        options={(attributes.subCategories && Array.isArray(attributes.subCategories) ? attributes.subCategories : [])
+                                            .filter(sub => !formData.category || sub.value === formData.category)
+                                            .map(sub => ({ value: sub.name, label: sub.name }))}
                                     />
                                 </div>
                                 <button

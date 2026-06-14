@@ -44,6 +44,7 @@ const AdminAttributes = () => {
     const [newDescription, setNewDescription] = useState('');
     const [newImage, setNewImage] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
+    const [newParentCategory, setNewParentCategory] = useState('');
 
     // Edit State
     const [isEditing, setIsEditing] = useState(false);
@@ -63,6 +64,7 @@ const AdminAttributes = () => {
         setNewDescription('');
         setNewImage(null);
         setImagePreview('');
+        setNewParentCategory('');
         setIsEditing(false);
         setEditItem(null);
         if (document.getElementById('fileInput')) {
@@ -93,8 +95,11 @@ const AdminAttributes = () => {
             setNewItem(item.name);
             setNewDescription(item.description);
             setImagePreview(item.img);
+        } else if (activeTab === 'subCategories') {
+            setNewItem(item.name);
+            setNewParentCategory(item.value || '');
         } else {
-            // For others (materials, occasions, subCategories), item is now an object {id, name, value}
+            // For others (materials, occasions), item is now an object {id, name, value}
             // We just edit the name
             setNewItem(item.name);
         }
@@ -148,6 +153,12 @@ const AdminAttributes = () => {
 
         if (activeTab === 'colors') {
             commonPayload.value = newColorCode;
+        } else if (activeTab === 'subCategories') {
+            if (!newParentCategory) {
+                showToast('Parent Category is required', 'error');
+                return;
+            }
+            commonPayload.value = newParentCategory;
         } else if (activeTab === 'collections') {
             commonPayload.value = newDescription;
             commonPayload.img = imgUrl;
@@ -250,6 +261,23 @@ const AdminAttributes = () => {
                                     </div>
                                 )}
 
+                                {activeTab === 'subCategories' && (
+                                    <div className="space-y-1">
+                                        <label className="text-xs text-light/60 block">Parent Category *</label>
+                                        <select
+                                            value={newParentCategory}
+                                            onChange={(e) => setNewParentCategory(e.target.value)}
+                                            className="w-full bg-transparent border-b border-white/20 pb-2 text-light placeholder-light/30 focus:outline-none focus:border-primary transition-colors disabled:opacity-50 appearance-none rounded-none"
+                                            required
+                                        >
+                                            <option value="" className="bg-dark text-light/50">Select Parent Category</option>
+                                            {(attributes.categories || []).map(cat => (
+                                                <option key={cat.id} value={cat.name} className="bg-dark text-light">{cat.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+
                                 {(activeTab === 'categories' || activeTab === 'collections') && (
                                     <div className="space-y-2">
                                         <label className="text-xs text-light/60 block">Image *</label>
@@ -321,6 +349,7 @@ const AdminAttributes = () => {
                         const hex = (activeTab === 'colors') ? item.hex : null;
                         const img = (activeTab === 'categories' || activeTab === 'collections') ? item.img : null;
                         const desc = (activeTab === 'collections') ? item.description : null;
+                        const parent = (activeTab === 'subCategories') ? item.value : null;
 
                         return (
                             <div
@@ -350,6 +379,7 @@ const AdminAttributes = () => {
                                             {hex && <span className="text-light/40 text-[10px] font-mono uppercase leading-tight">{hex}</span>}
                                         </div>
                                         {desc && <span className="text-light/50 text-xs block truncate">{desc}</span>}
+                                        {parent && <span className="text-primary text-xs block truncate mt-1 border border-primary/30 rounded px-1.5 py-0.5 inline-block">Parent: {parent}</span>}
                                     </div>
                                 </div>
 
