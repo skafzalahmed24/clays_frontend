@@ -353,10 +353,11 @@ const AdminAttributes = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-1 opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="flex gap-1">
                                     <button
                                         onClick={() => handleEditClick(item)}
-                                        className="p-2 text-primary hover:bg-white/5 rounded-md"
+                                        className="p-2 hover:bg-white/5 rounded-md"
+                                        style={{ color: 'var(--color-primary)' }}
                                         title="Edit"
                                         type="button"
                                     >
@@ -364,7 +365,8 @@ const AdminAttributes = () => {
                                     </button>
                                     <button
                                         onClick={() => handleDelete(item)}
-                                        className="p-2 text-red-400 hover:bg-red-500/10 rounded-md"
+                                        className="p-2 hover:bg-red-500/10 rounded-md"
+                                        style={{ color: '#f87171' }}
                                         title="Delete"
                                         type="button"
                                     >

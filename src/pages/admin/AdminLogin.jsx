@@ -177,7 +177,7 @@ const AdminLogin = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-primary text-dark font-heading py-3 uppercase tracking-widest hover:bg-white transition-all duration-300 shadow-lg hover:shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-primary text-dark font-heading py-3 uppercase tracking-widest hover:brightness-110 hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? 'Authenticating...' : 'Access Dashboard'}
                     </button>

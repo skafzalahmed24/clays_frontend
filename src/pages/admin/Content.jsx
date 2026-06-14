@@ -22,6 +22,7 @@ import Select from '../../components/ui/Select';
 import Input from '../../components/ui/Input';
 import PreviewableImage from '../../components/ui/PreviewableImage';
 import { REGEX } from '../../utils/regex';
+import Icons from '../../components/ui/Icons';
 
 const AdminContent = () => {
     const { showToast } = useToast();
@@ -189,7 +190,6 @@ const AdminContent = () => {
                     handleCancelEdit();
                     form.reset();
                     scrollToList(heroListRef);
-                    window.open('/#hero', '_blank');
                 })
                 .catch(err => showToast(err?.data?.message || err.message, 'error'));
         } else {
@@ -201,7 +201,6 @@ const AdminContent = () => {
                     setHeroImageFile(null);
                     form.reset();
                     scrollToList(heroListRef);
-                    window.open('/', '_blank');
                 })
                 .catch(err => showToast(err?.data?.message || err.message, 'error'));
         }
@@ -251,7 +250,6 @@ const AdminContent = () => {
                 setNewTestimonial({ text: '', author: '', role: '' });
                 form.reset();
                 scrollToList(testimonialListRef);
-                window.open('/#testimonials', '_blank');
             })
             .catch(err => showToast(err?.data?.message || err.message, 'error'));
     };
@@ -289,7 +287,6 @@ const AdminContent = () => {
                 setSocialImageFile(null);
                 form.reset();
                 scrollToList(socialListRef);
-                window.open('/#socialfeed', '_blank');
             })
             .catch(err => showToast(err?.data?.message || err.message, 'error'));
     };
@@ -323,7 +320,6 @@ const AdminContent = () => {
                 showToast('Heritage section updated', 'success');
                 setHeritageImageFile(null);
                 scrollToList(heritageFormRef);
-                window.open('/#heritage', '_blank');
                 // Optimistic update
                 setHeritageForm(prev => ({
                     ...prev,
@@ -350,7 +346,6 @@ const AdminContent = () => {
                 setNewTrustBadge({ text: '', icon: '', order: 0 });
                 form.reset();
                 scrollToList(trustBadgeListRef);
-                window.open('/#trustbadges', '_blank');
             })
             .catch(err => showToast(err?.data?.message || err.message, 'error'));
     };
@@ -387,7 +382,6 @@ const AdminContent = () => {
                 setNewFAQ({ question: '', answer: '' });
                 form.reset();
                 scrollToList(faqListRef);
-                window.open('/#faq', '_blank');
             })
             .catch(err => showToast(err?.data?.message || err.message, 'error'));
     };
@@ -476,7 +470,6 @@ const AdminContent = () => {
                 showToast('About page updated', 'success');
                 setStoryImageFile(null);
                 scrollToList(aboutFormRef);
-                window.open('/about', '_blank');
 
                 // Optimistic update
                 const m = data?.modules || {};
@@ -513,7 +506,6 @@ const AdminContent = () => {
             .unwrap()
             .then(() => {
                 showToast(`${activeLegalPage.replace('-', ' ')} updated`, 'success');
-                window.open('/' + activeLegalPage, '_blank');
             })
             .catch(err => showToast(err?.data?.message || err.message, 'error'));
     };

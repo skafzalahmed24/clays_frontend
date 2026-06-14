@@ -61,7 +61,10 @@ const Journal = () => {
                                         alt={post.title}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
                                     />
-                                    <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-sm px-4 py-1 text-xs text-white uppercase tracking-widest border border-white/10">
+                                    <div 
+                                        className="absolute top-4 left-4 bg-black/60 backdrop-blur-sm px-4 py-1 text-xs uppercase tracking-widest border rounded-sm"
+                                        style={{ color: 'var(--color-primary)', borderColor: 'var(--color-primary)' }}
+                                    >
                                         {post.category}
                                     </div>
                                 </div>
@@ -79,7 +82,11 @@ const Journal = () => {
                                     </p>
                                 </div>
                                 <div className="mt-auto">
-                                    <Link to={`/journal/${post._id}`} className="inline-flex items-center text-primary text-xs uppercase tracking-[0.2em] group-hover:underline">
+                                    <Link 
+                                        to={`/journal/${post._id}`} 
+                                        className="inline-flex items-center text-xs uppercase tracking-[0.2em] group-hover:underline"
+                                        style={{ color: 'var(--color-primary)' }}
+                                    >
                                         Read Article <span className="ml-2 text-lg">→</span>
                                     </Link>
                                 </div>
