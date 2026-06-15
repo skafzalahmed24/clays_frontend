@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Icons from '../ui/Icons';
 import Image from '../ui/Image';
-import { setCartOpen } from '../../store/slices/cartSlice';
-import { useGetSettingsQuery } from '../../store/api/contentApiSlice';
+import { setCartOpen, addToCart } from '../../store/slices/cartSlice';
+import { useGetSettingsQuery, useGetMegaMenuQuery } from '../../store/api/contentApiSlice';
 import { useGetAttributesQuery } from '../../store/api/attributeApiSlice';
 import { BRAND_CONFIG } from '../../utils/config';
 
@@ -26,12 +26,10 @@ const Header = ({
 
     // Derived categories
     const categories = attributesData?.categories || [];
+    const subCategories = attributesData?.subCategories || [];
 
-    // Helper to fetch mega menu on hover
-    // const [triggerMegaMenu, { data: megaMenuData }] = useLazyGetMegaMenuQuery();
-
-    // Assistant cleanup: activeMenu used to be used for Mega Menu
     const [activeMenu, setActiveMenu] = useState(null);
+    const { data: currentMenuData, isFetching: isMegaMenuFetching } = useGetMegaMenuQuery(activeMenu, { skip: !activeMenu });
     const [isScrolledState, setIsScrolledState] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
     const menuTimer = useRef(null);
@@ -72,10 +70,6 @@ const Header = ({
         if (isGhost) return;
         if (menuTimer.current) clearTimeout(menuTimer.current);
         setActiveMenu(menu);
-        // Fetch dynamic menu if trigger available
-        // if (menu) {
-        //     triggerMegaMenu(menu);
-        // }
     };
 
     const handleMouseLeave = () => {
@@ -86,11 +80,6 @@ const Header = ({
     };
 
     const closeMobileMenu = () => setMobileMenuOpen(false);
-
-    // Resolve Menu Data (using local state or just the hook result if active)
-    // const currentMenuData = activeMenu && megaMenuData && megaMenuData[activeMenu] ? megaMenuData[activeMenu] : null;
-    // Resolve Menu Data (disabled)
-    // const currentMenuData = null;
 
     return (
         <div className={isGhost
@@ -177,47 +166,39 @@ const Header = ({
                             {/* Line Full (Full width horizontal divider line) */}
                             <hr className="border-light/10 w-full" />
 
-                            {/* Middle row: Desktop Navigation Links centered */}
-                            <div className="hidden md:flex justify-center items-center py-1.5 space-x-6">
-                                <Link to="/shop" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
-                                <Link to="/categories" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/categories')}`}>Categories</Link>
-                                <Link to="/collections" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/collections')}`}>Collections</Link>
-                                <Link to="/about" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/about')}`}>About</Link>
-                                <Link to="/journal" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/journal')}`}>Journal</Link>
-                                <Link to="/track-order" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/track-order')}`}>Track Order</Link>
-                                <Link to="/contact" className={`hover:text-primary transition-colors duration-300 font-heading text-xs tracking-widest uppercase ${isActive('/contact')}`}>Contact us</Link>
-                            </div>
-
-                            {/* Divider above bottom category bar */}
-                            <hr className="border-light/5 w-full hidden md:block" />
-
-                            {/* Bottom row: Category list (New Arrivals, etc.) */}
-                            <div className="hidden md:block py-1">
-                                <ul className="flex justify-center items-center text-[12px] font-heading tracking-widest text-primary gap-8 w-full">
-                                    <li
-                                        className="py-1"
-                                        onMouseEnter={() => handleMouseEnter("New Arrivals")}
-                                        onMouseLeave={handleMouseLeave}
-                                    >
-                                        <Link to="/new-arrivals" className="hover:text-light transition-colors">New Arrivals</Link>
+                            {/* Unified Navigation Row */}
+                            <div className="hidden md:flex justify-center items-center py-2">
+                                <ul className="flex justify-center items-center text-[11px] lg:text-[12px] font-heading tracking-widest text-primary gap-4 lg:gap-6 w-full flex-wrap">
+                                    <li className="py-1">
+                                        <Link to="/shop" className={`hover:text-light transition-colors uppercase ${isActive('/shop')}`}>Shop</Link>
                                     </li>
+
                                     {(categories && Array.isArray(categories) ? categories : []).slice(0, 8).map((cat) => (
                                         <li
                                             key={cat.id}
-                                            className="cursor-pointer hover:text-light transition-colors py-1"
+                                            className="cursor-pointer hover:text-light transition-colors py-1 uppercase"
                                             onMouseEnter={() => handleMouseEnter(cat.name)}
                                             onMouseLeave={handleMouseLeave}
                                         >
                                             <Link
                                                 to={`/category/${cat.name.toLowerCase()}`}
-                                                className={`${isActive(`/category/${cat.name.toLowerCase()}`)}`}
+                                                className={`flex items-center gap-1 ${isActive(`/category/${cat.name.toLowerCase()}`)}`}
+                                                onClick={() => setActiveMenu(null)}
                                             >
                                                 {cat.name}
+                                                <Icons.ChevronDown className="w-3 h-3 opacity-70" />
                                             </Link>
                                         </li>
                                     ))}
-                                    <li className="bg-primary text-dark px-2 py-0.5 font-bold cursor-pointer hover:bg-light transition-colors">
-                                        <Link to="/offers" className="block">Offers</Link>
+                                    <li
+                                        className="py-1"
+                                        onMouseEnter={() => handleMouseEnter("New Arrivals")}
+                                        onMouseLeave={handleMouseLeave}
+                                    >
+                                        <Link to="/new-arrivals" className={`hover:text-light transition-colors uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
+                                    </li>
+                                    <li className="py-1">
+                                        <Link to="/offers" className={`hover:text-light transition-colors uppercase ${isActive('/offers')}`}>Offers</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -240,15 +221,41 @@ const Header = ({
                                 </Link>
                             </div>
 
-                            {/* Center: Main Nav Links */}
-                            <div className="hidden md:flex space-x-5 items-center justify-center">
-                                <Link to="/shop" className={`hover:text-primary transition-colors duration-300 font-heading text-[10px] tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
-                                <Link to="/categories" className={`hover:text-primary transition-colors duration-300 font-heading text-[10px] tracking-widest uppercase ${isActive('/categories')}`}>Categories</Link>
-                                <Link to="/collections" className={`hover:text-primary transition-colors duration-300 font-heading text-[10px] tracking-widest uppercase ${isActive('/collections')}`}>Collections</Link>
-                                <Link to="/about" className={`hover:text-primary transition-colors duration-300 font-heading text-[10px] tracking-widest uppercase ${isActive('/about')}`}>About</Link>
-                                <Link to="/journal" className={`hover:text-primary transition-colors duration-300 font-heading text-[10px] tracking-widest uppercase ${isActive('/journal')}`}>Journal</Link>
-                                <Link to="/track-order" className={`hover:text-primary transition-colors duration-300 font-heading text-[10px] tracking-widest uppercase ${isActive('/track-order')}`}>Track Order</Link>
-                                <Link to="/contact" className={`hover:text-primary transition-colors duration-300 font-heading text-[10px] tracking-widest uppercase ${isActive('/contact')}`}>Contact us</Link>
+                            {/* Center: Main Nav Links (Compact) */}
+                            <div className="hidden md:flex flex-1 mx-4">
+                                <ul className="flex justify-center items-center text-[9px] lg:text-[10px] font-heading tracking-widest text-primary gap-3 lg:gap-4 w-full flex-wrap">
+                                    <li className="py-1">
+                                        <Link to="/shop" className={`hover:text-light transition-colors uppercase ${isActive('/shop')}`}>Shop</Link>
+                                    </li>
+
+                                    {(categories && Array.isArray(categories) ? categories : []).slice(0, 5).map((cat) => (
+                                        <li
+                                            key={cat.id}
+                                            className="cursor-pointer hover:text-light transition-colors py-1 uppercase hidden lg:block"
+                                            onMouseEnter={() => handleMouseEnter(cat.name)}
+                                            onMouseLeave={handleMouseLeave}
+                                        >
+                                            <Link
+                                                to={`/category/${cat.name.toLowerCase()}`}
+                                                className={`flex items-center gap-1 ${isActive(`/category/${cat.name.toLowerCase()}`)}`}
+                                                onClick={() => setActiveMenu(null)}
+                                            >
+                                                {cat.name}
+                                                <Icons.ChevronDown className="w-3 h-3 opacity-70" />
+                                            </Link>
+                                        </li>
+                                    ))}
+                                    <li
+                                        className="py-1"
+                                        onMouseEnter={() => handleMouseEnter("New Arrivals")}
+                                        onMouseLeave={handleMouseLeave}
+                                    >
+                                        <Link to="/new-arrivals" className={`hover:text-light transition-colors uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
+                                    </li>
+                                    <li className="py-1">
+                                        <Link to="/offers" className={`hover:text-light transition-colors uppercase ${isActive('/offers')}`}>Offers</Link>
+                                    </li>
+                                </ul>
                             </div>
 
                             {/* Right: Icons & Mobile Hamburger */}
@@ -295,18 +302,79 @@ const Header = ({
                     )}
                 </div>
 
+                {/* Mega Menu Dropdown for specific parent categories */}
+                {activeMenu && currentMenuData && currentMenuData.categories && currentMenuData.categories.length > 0 && (
+                    <div 
+                        className="absolute top-full left-0 w-full bg-light border-t border-b border-dark/10 shadow-2xl z-40 animate-in fade-in slide-in-from-top-2 duration-300"
+                        onMouseEnter={() => handleMouseEnter(activeMenu)}
+                        onMouseLeave={handleMouseLeave}
+                    >
+                        <div className="w-full max-w-7xl mx-auto px-6 md:px-12 py-8">
+                            <div className="flex flex-col md:flex-row gap-12">
+                                {/* Left Column: Subcategories */}
+                                <div className="w-full md:w-1/4 lg:w-1/5 border-r border-dark/10 pr-6">
+                                    <h3 className="font-heading text-primary font-bold text-sm tracking-widest mb-6">Shop by Category</h3>
+                                    <ul className="space-y-4">
+                                        {currentMenuData.categories.map((sub, idx) => (
+                                            <li key={idx}>
+                                                <Link 
+                                                    to={sub.link} 
+                                                    className="text-dark hover:text-primary font-medium transition-colors text-sm"
+                                                    onClick={() => setActiveMenu(null)}
+                                                >
+                                                    {sub.name}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                
+                                {/* Right Column: Featured Products */}
+                                <div className="w-full md:w-3/4 lg:w-4/5">
+                                    {currentMenuData.featuredProducts && currentMenuData.featuredProducts.length > 0 ? (
+                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                                            {currentMenuData.featuredProducts.map((product) => (
+                                                <div key={product.id} className="group flex flex-col">
+                                                    <Link to={`/product/${product.id}`} className="block relative aspect-[4/5] overflow-hidden mb-4 bg-dark/5 rounded-sm" onClick={() => setActiveMenu(null)}>
+                                                        <img src={product.img || '/placeholder.png'} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                                    </Link>
+                                                    <div className="flex flex-col flex-1 items-center text-center">
+                                                        <Link to={`/product/${product.id}`} className="text-dark font-heading font-medium text-xs tracking-widest group-hover:text-primary transition-colors mb-2 line-clamp-2" onClick={() => setActiveMenu(null)}>
+                                                            {product.name}
+                                                        </Link>
+                                                        <p className="text-dark/80 font-medium text-sm mb-4">₹{product.price.toFixed(2)}</p>
+                                                        <button 
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                dispatch(addToCart({ product, qty: 1, isGuest: !user }));
+                                                            }}
+                                                            className="mt-auto w-[80%] py-2 bg-primary/20 text-primary hover:bg-primary hover:text-light transition-colors font-heading font-bold text-xs uppercase tracking-widest rounded-sm"
+                                                        >
+                                                            Add to Cart
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full text-dark/50 font-heading tracking-widest uppercase">
+                                            No Featured Products
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+
+
                 {/* Mobile Menu Dropdown */}
                 <div className={`md:hidden bg-dark border-b border-light/10 overflow-y-auto transition-all duration-300 ${mobileMenuOpen ? 'max-h-[85vh]' : 'max-h-0'}`}>
                     <div className="px-4 py-4 space-y-2 text-center">
-                        <Link to="/new-arrivals" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
-                        <Link to="/offers" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium text-primary hover:text-light tracking-widest uppercase ${isActive('/offers')}`}>Offers</Link>
                         <Link to="/shop" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
-                        <Link to="/categories" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/categories')}`}>Categories</Link>
-                        <Link to="/collections" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/collections')}`}>Collections</Link>
-                        <Link to="/about" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/about')}`}>About</Link>
-                        <Link to="/journal" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/journal')}`}>Journal</Link>
-                        <Link to="/track-order" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/track-order')}`}>Track Order</Link>
-                        <Link to="/contact" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/contact')}`}>Contact us</Link>
+                        <Link to="/new-arrivals" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
+                        <Link to="/offers" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/offers')}`}>Offers</Link>
                         <Link to={user ? "/account" : "/login"} onClick={closeMobileMenu} className="block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase">Account</Link>
                     </div>
                 </div>

@@ -82,6 +82,7 @@ const AppRoutes = ({
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/categories" element={<Categories />} />
                     <Route path="/category/:categoryName" element={<CategoryDetails />} />
+                    <Route path="/category/:categoryName/:subCategoryName" element={<CategoryDetails />} />
                     <Route path="/journal" element={<Journal />} />
                     <Route path="/journal/:id" element={<JournalDetails />} />
                     <Route path="/new-arrivals" element={<NewArrivals />} />

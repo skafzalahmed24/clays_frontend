@@ -15,6 +15,12 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
     // Fallback or use categories from attributes if available, else empty
     const categories = attributes.categories || [];
 
+    // Filter subcategories based on selected parent categories
+    const selectedCategories = selectedFilters?.category || [];
+    const filteredSubCategories = selectedCategories.length > 0
+        ? (attributes.subCategories || []).filter(sub => selectedCategories.includes(sub.value))
+        : (attributes.subCategories || []);
+
     // Construct dynamic filter options from Context
     const filterOptions = [
         {
@@ -25,7 +31,7 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
         {
             id: 'subCategory',
             label: 'Sub Category',
-            options: (attributes.subCategories || []).map(s => s.name)
+            options: filteredSubCategories.map(s => s.name)
         },
         {
             id: 'price',

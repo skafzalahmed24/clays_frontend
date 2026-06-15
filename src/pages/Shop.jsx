@@ -16,12 +16,26 @@ const Shop = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const collectionFilter = queryParams.get('collection');
+    const categoryFilter = queryParams.get('category');
+    const subCategoryFilter = queryParams.get('subCategory');
     const { format } = usePrice();
 
     const [page, setPage] = useState(1);
-    const [selectedFilters, setSelectedFilters] = useState({});
+    const [selectedFilters, setSelectedFilters] = useState({
+        category: categoryFilter ? [categoryFilter] : [],
+        subCategory: subCategoryFilter ? [subCategoryFilter] : []
+    });
     const [sortBy, setSortBy] = useState('featured');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Sync selectedFilters when URL parameters change
+    useEffect(() => {
+        setSelectedFilters(prev => ({
+            ...prev,
+            category: categoryFilter ? [categoryFilter] : [],
+            subCategory: subCategoryFilter ? [subCategoryFilter] : []
+        }));
+    }, [categoryFilter, subCategoryFilter]);
 
     // Derived filters for API
     const minPrice = selectedFilters.price?.length ?

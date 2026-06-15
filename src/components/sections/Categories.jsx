@@ -4,11 +4,11 @@ import Icons from '../ui/Icons';
 import { useGetAttributesQuery } from '../../store/api/attributeApiSlice';
 import { getMediaUrl } from '../../utils/apiConfig';
 
-const Categories = ({ title = "Collection list", showViewAll = true }) => {
+const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
     const { data: attributes, isLoading } = useGetAttributesQuery();
     const categories = attributes?.categories || [];
     const navigate = useNavigate();
-    
+
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const itemsToShow = 4;
@@ -38,17 +38,17 @@ const Categories = ({ title = "Collection list", showViewAll = true }) => {
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-serif text-primary tracking-wide">{title}</h2>
                 </div>
-                
+
                 <div className="relative group">
                     {/* Navigation Arrows */}
-                    <button 
+                    <button
                         onClick={prevSlide}
                         className="absolute left-[-2rem] top-[40%] -translate-y-1/2 z-10 p-2 text-primary opacity-70 hover:opacity-100 transition-opacity hidden md:block"
                     >
                         <Icons.ChevronLeft className="w-10 h-10" />
                     </button>
-                    
-                    <button 
+
+                    <button
                         onClick={nextSlide}
                         className="absolute right-[-2rem] top-[40%] -translate-y-1/2 z-10 p-2 text-primary opacity-70 hover:opacity-100 transition-opacity hidden md:block"
                     >
@@ -57,16 +57,16 @@ const Categories = ({ title = "Collection list", showViewAll = true }) => {
 
                     {/* Slider Container */}
                     <div className="overflow-hidden">
-                        <div 
+                        <div
                             className="flex transition-transform duration-500 ease-out"
                             style={{ transform: `translateX(-${currentIndex * (100 / itemsToShow)}%)` }}
                         >
                             {categories.map((cat) => (
-                                <div 
-                                    key={cat.id} 
+                                <div
+                                    key={cat.id}
                                     className="w-full min-w-[100%] md:min-w-[50%] lg:min-w-[25%] px-4"
                                 >
-                                    <div 
+                                    <div
                                         className="cursor-pointer group/card flex flex-col items-center"
                                         onClick={() => navigate(`/category/${cat.name.toLowerCase()}`)}
                                     >
@@ -101,7 +101,7 @@ const Categories = ({ title = "Collection list", showViewAll = true }) => {
                                                 />
                                             </div>
                                         </div>
-                                        
+
                                         {/* Category Title */}
                                         <h3 className="mt-6 text-2xl font-serif text-primary tracking-wide">
                                             {cat.name}
@@ -120,11 +120,10 @@ const Categories = ({ title = "Collection list", showViewAll = true }) => {
                             <button
                                 key={idx}
                                 onClick={() => setCurrentIndex(idx)}
-                                className={`h-[2px] transition-all duration-300 ${
-                                    currentIndex === idx 
-                                        ? 'w-8 bg-primary' 
+                                className={`h-[2px] transition-all duration-300 ${currentIndex === idx
+                                        ? 'w-8 bg-primary'
                                         : 'w-4 bg-primary/40 hover:bg-primary/80'
-                                }`}
+                                    }`}
                                 aria-label={`Go to slide ${idx + 1}`}
                             />
                         ))}
@@ -134,8 +133,8 @@ const Categories = ({ title = "Collection list", showViewAll = true }) => {
                 {/* View More Button */}
                 {showViewAll && (
                     <div className="mt-16 text-center">
-                        <Link 
-                            to="/collections" 
+                        <Link
+                            to="/collections"
                             className="inline-block px-10 py-3 border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 font-heading uppercase tracking-widest text-sm"
                         >
                             View More Categories

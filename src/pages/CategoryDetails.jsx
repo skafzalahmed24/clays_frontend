@@ -11,31 +11,34 @@ import SEO from '../components/common/SEO';
 import { usePrice } from '../hooks/usePrice';
 
 const CategoryDetails = () => {
-    const { categoryName } = useParams();
+    const { categoryName, subCategoryName } = useParams();
     const decodedCategoryName = decodeURIComponent(categoryName);
+    const decodedSubCategoryName = subCategoryName ? decodeURIComponent(subCategoryName) : null;
     const { format } = usePrice();
-
-    const [selectedFilters, setSelectedFilters] = useState({
-        category: [decodedCategoryName]
-    });
-    const [sortBy, setSortBy] = useState('featured');
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    // Sync selectedFilters when categoryName changes (navigation)
-    useEffect(() => {
-        setSelectedFilters({
-            category: [decodedCategoryName]
-        });
-    }, [decodedCategoryName]);
-
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     const { data: attributes } = useGetAttributesQuery();
     const categories = attributes?.categories || [];
 
-    // Find category from Redux/API Data
+    // Find category from Redux/API Data to get correct casing
     const category = categories.find(c => c.name.toLowerCase() === decodedCategoryName.toLowerCase());
+
+    const [selectedFilters, setSelectedFilters] = useState({
+        category: category ? [category.name] : [decodedCategoryName],
+        subCategory: decodedSubCategoryName ? [decodedSubCategoryName] : []
+    });
+    const [sortBy, setSortBy] = useState('featured');
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Sync selectedFilters when categoryName or subCategoryName changes (navigation)
+    useEffect(() => {
+        setSelectedFilters({
+            category: category ? [category.name] : [decodedCategoryName],
+            subCategory: decodedSubCategoryName ? [decodedSubCategoryName] : []
+        });
+    }, [decodedCategoryName, decodedSubCategoryName, category]);
+
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const [page, setPage] = useState(1);
 
@@ -43,11 +46,11 @@ const CategoryDetails = () => {
     // eslint-disable-next-line
     useEffect(() => {
         setPage(1);
-    }, [selectedFilters, sortBy, decodedCategoryName]);
+    }, [selectedFilters, sortBy, decodedCategoryName, decodedSubCategoryName]);
 
     const { data, isLoading } = useGetProductsQuery({
         // If user has modified category filters, use them. Otherwise default to the page's category.
-        category: selectedFilters.category && selectedFilters.category.length > 0 ? selectedFilters.category : decodedCategoryName,
+        category: selectedFilters.category && selectedFilters.category.length > 0 ? selectedFilters.category : (category ? category.name : decodedCategoryName),
         // Pass filters directly (arrays)
         subCategory: selectedFilters.subCategory,
         color: selectedFilters.color,
@@ -79,7 +82,7 @@ const CategoryDetails = () => {
     // Scroll to top on mount
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [categoryName]);
+    }, [categoryName, subCategoryName]);
 
     const handleFilterChange = (filterId, newOptions) => {
         setSelectedFilters(prev => ({
@@ -99,17 +102,22 @@ const CategoryDetails = () => {
         );
     }
 
+    const pageTitle = decodedSubCategoryName || category.name;
+    const pageSubtitle = decodedSubCategoryName 
+        ? `Explore our curated collection of ${decodedSubCategoryName.toLowerCase()}, crafted for moments of elegance.`
+        : `Explore our curated collection of ${category.name.toLowerCase()}, crafted for moments of elegance.`;
+
     return (
         <div className="pt-0 min-h-screen bg-body">
             <SEO
-                title={category.name}
-                description={`Explore our curated collection of ${category.name}, crafted for moments of elegance.`}
+                title={pageTitle}
+                description={pageSubtitle}
             />
             {/* Hero Section */}
             <PageHeader
-                title={category.name}
-                eyebrow="Discover"
-                subtitle={`Explore our curated collection of ${category.name.toLowerCase()}, crafted for moments of elegance.`}
+                title={pageTitle}
+                eyebrow={decodedSubCategoryName ? category.name : "Discover"}
+                subtitle={pageSubtitle}
                 backgroundImage={category.img}
             />
 
@@ -121,7 +129,13 @@ const CategoryDetails = () => {
                         <span className="mx-3 text-light/20">/</span>
                         <Link to="/categories" className="hover:text-primary transition-colors">Categories</Link>
                         <span className="mx-3 text-light/20">/</span>
-                        <span className="text-primary font-medium">{category.name}</span>
+                        <Link to={`/category/${encodeURIComponent(category.name)}`} className="hover:text-primary transition-colors">{category.name}</Link>
+                        {decodedSubCategoryName && (
+                            <>
+                                <span className="mx-3 text-light/20">/</span>
+                                <span className="text-primary font-medium">{decodedSubCategoryName}</span>
+                            </>
+                        )}
                         <span className="ml-6 pl-6 border-l border-light/10 text-light/30 hidden md:inline">
                             {filteredProducts.length} items
                         </span>
