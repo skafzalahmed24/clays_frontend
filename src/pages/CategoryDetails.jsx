@@ -206,7 +206,7 @@ const CategoryDetails = () => {
                             </span>
                             <h3 className="text-2xl font-serif text-light mb-3">No matches found</h3>
                             <p className="text-light/50 mb-8 max-w-md text-center font-light leading-relaxed">
-                                We couldn't find any products matching your specific preferences. Try adjusting your filters or browsing our full collection.
+                                We couldn't find any products matching your specific preferences. Try adjusting your filters or browsing our full catalog.
                             </p>
                             <button
                                 onClick={() => setSelectedFilters({})}

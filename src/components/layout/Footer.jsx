@@ -62,12 +62,7 @@ const Footer = () => {
                             <div>
                                 <h4 className="font-heading text-light text-lg mb-6">Shop</h4>
                                 <ul className="space-y-3 text-light/70 text-sm">
-                                    <li><Link to="/shop" className="hover:text-primary transition-colors">All Jewelry</Link></li>
                                     <li><Link to="/new-arrivals" className="hover:text-primary transition-colors">New Arrivals</Link></li>
-                                    <li><Link to="/collections" className="hover:text-primary transition-colors">Collections</Link></li>
-                                    <li><Link to="/category/Rings" className="hover:text-primary transition-colors">Rings</Link></li>
-                                    <li><Link to="/category/Necklaces" className="hover:text-primary transition-colors">Necklaces</Link></li>
-                                    <li><Link to="/category/Earrings" className="hover:text-primary transition-colors">Earrings</Link></li>
                                 </ul>
                             </div>
                             <div>

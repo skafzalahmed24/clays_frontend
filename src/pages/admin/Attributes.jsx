@@ -28,7 +28,6 @@ const AdminAttributes = () => {
         colors: [],
         materials: [],
         occasions: [],
-        collections: [],
         ...(attributesData || {})
     };
 
@@ -91,10 +90,6 @@ const AdminAttributes = () => {
         } else if (activeTab === 'categories') {
             setNewItem(item.name);
             setImagePreview(item.img); // Use existing URL
-        } else if (activeTab === 'collections') {
-            setNewItem(item.name);
-            setNewDescription(item.description);
-            setImagePreview(item.img);
         } else if (activeTab === 'subCategories') {
             setNewItem(item.name);
             setNewParentCategory(item.value || '');
@@ -128,8 +123,8 @@ const AdminAttributes = () => {
             return;
         }
 
-        // Image validation for Categories and Collections
-        if ((activeTab === 'categories' || activeTab === 'collections') && !imagePreview && !newImage) {
+        // Image validation for Categories
+        if ((activeTab === 'categories') && !imagePreview && !newImage) {
             showToast('Image is required', 'error');
             return;
         }
@@ -159,9 +154,6 @@ const AdminAttributes = () => {
                 return;
             }
             commonPayload.value = newParentCategory;
-        } else if (activeTab === 'collections') {
-            commonPayload.value = newDescription;
-            commonPayload.img = imgUrl;
         } else if (activeTab === 'categories') {
             commonPayload.img = imgUrl || 'https://via.placeholder.com/150';
             // Categories don't need 'value' field usually but backend schema might stick it
@@ -199,7 +191,6 @@ const AdminAttributes = () => {
 
     const tabs = [
         { id: 'categories', label: 'Categories' },
-        { id: 'collections', label: 'Collections' },
         { id: 'subCategories', label: 'Sub Categories' },
         { id: 'colors', label: 'Colors' },
         { id: 'materials', label: 'Materials' },
@@ -249,18 +240,6 @@ const AdminAttributes = () => {
                                     />
                                 </div>
 
-                                {activeTab === 'collections' && (
-                                    <div className="space-y-1">
-                                        <label className="text-xs text-light/60 block">Description</label>
-                                        <Textarea
-                                            value={newDescription}
-                                            onChange={(e) => setNewDescription(e.target.value)}
-                                            placeholder="Description (e.g. Timeless pieces for your special day)"
-                                            className="h-24 resize-none"
-                                        />
-                                    </div>
-                                )}
-
                                 {activeTab === 'subCategories' && (
                                     <div className="space-y-1">
                                         <label className="text-xs text-light/60 block">Parent Category *</label>
@@ -278,7 +257,7 @@ const AdminAttributes = () => {
                                     </div>
                                 )}
 
-                                {(activeTab === 'categories' || activeTab === 'collections') && (
+                                {activeTab === 'categories' && (
                                     <div className="space-y-2">
                                         <label className="text-xs text-light/60 block">Image *</label>
                                         <div className="flex gap-4 items-center">
@@ -347,8 +326,7 @@ const AdminAttributes = () => {
                         // All items are now objects
                         const name = item.name;
                         const hex = (activeTab === 'colors') ? item.hex : null;
-                        const img = (activeTab === 'categories' || activeTab === 'collections') ? item.img : null;
-                        const desc = (activeTab === 'collections') ? item.description : null;
+                        const img = (activeTab === 'categories') ? item.img : null;
                         const parent = (activeTab === 'subCategories') ? item.value : null;
 
                         return (
@@ -378,7 +356,6 @@ const AdminAttributes = () => {
                                             <span className="text-light font-medium truncate">{name}</span>
                                             {hex && <span className="text-light/40 text-[10px] font-mono uppercase leading-tight">{hex}</span>}
                                         </div>
-                                        {desc && <span className="text-light/50 text-xs block truncate">{desc}</span>}
                                         {parent && <span className="text-primary text-xs block truncate mt-1 border border-primary/30 rounded px-1.5 py-0.5 inline-block">Parent: {parent}</span>}
                                     </div>
                                 </div>

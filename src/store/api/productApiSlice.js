@@ -4,7 +4,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProducts: builder.query({
 
-            query: ({ keyword = '', pageNumber = 1, category, subCategory, collection, color, material, occasion, isFeatured, isNewArrival, minPrice, maxPrice, sort, limit, isOnOffer } = {}) => ({
+            query: ({ keyword = '', pageNumber = 1, category, subCategory, color, material, occasion, isFeatured, isNewArrival, minPrice, maxPrice, sort, limit, isOnOffer } = {}) => ({
                 url: '/products',
                 params: {
                     search: keyword,
@@ -12,7 +12,6 @@ export const productApiSlice = apiSlice.injectEndpoints({
                     limit,
                     category,
                     subCategory,
-                    collection,
                     'attributes.color': color,
                     'attributes.material': material,
                     'attributes.occasion': occasion,

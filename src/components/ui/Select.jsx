@@ -3,14 +3,18 @@ import Icons from './Icons';
 
 const Select = ({ label = "", name = "", value, onChange, options = [], disabled, required = false, placeholder, error, className, icon: Icon }) => {
     // Select component using atomic styling
+    const isControlled = value !== undefined;
+    const selectProps = isControlled 
+        ? { value, onChange } 
+        : { defaultValue: "", onChange };
+
     return (
         <div className="w-full">
             <div className="relative">
                 <select
                     name={name}
                     id={name}
-                    value={value ?? ""}
-                    onChange={onChange}
+                    {...selectProps}
                     disabled={disabled}
                     required={required}
                     className={`block w-full px-4 py-3 bg-white/5 border rounded-sm text-text-main appearance-none focus:outline-none focus:ring-1 focus:ring-primary transition-all duration-300 ${error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500' : 'border-white/10 focus:border-primary'

@@ -171,7 +171,8 @@ const BlogForm = () => {
                         <Textarea
                             value={formData.excerpt}
                             onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                            className="h-24 resize-none"
+                            className="h-24 resize-none !bg-white !text-black placeholder:text-gray-500"
+                            style={{ backgroundColor: '#ffffff', color: '#000000' }}
                             placeholder="Short summary for the listing page..."
                             required
                         />
@@ -204,13 +205,25 @@ const BlogForm = () => {
                     </div>
 
                     <style>{`
-                        .quill { background-color: rgba(255,255,255,0.05); border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
-                        .ql-toolbar { border-color: rgba(255,255,255,0.1) !important; color: #eee; }
-                        .ql-container { border-color: rgba(255,255,255,0.1) !important; color: #eee; min-height: 200px; font-size: 16px; }
-                        .ql-fill { fill: #ccc !important; }
-                        .ql-stroke { stroke: #ccc !important; }
-                        .ql-picker { color: #ccc !important; }
-                        .ql-editor.ql-blank::before { color: rgba(255,255,255,0.3) !important; font-style: italic; }
+                        .quill-editor-container .quill { background-color: #ffffff !important; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); overflow: hidden; }
+                        .quill-editor-container .ql-toolbar { border-color: rgba(0,0,0,0.1) !important; background-color: #ffffff !important; color: #000000 !important; }
+                        .quill-editor-container .ql-container { border-color: rgba(0,0,0,0.1) !important; background-color: #ffffff !important; color: #000000 !important; min-height: 200px; font-size: 16px; }
+                        .quill-editor-container .ql-fill { fill: #000000 !important; }
+                        .quill-editor-container .ql-stroke { stroke: #000000 !important; }
+                        .quill-editor-container .ql-picker { color: #000000 !important; }
+                        .quill-editor-container .ql-picker-options { background-color: #ffffff !important; border-color: rgba(0,0,0,0.1) !important; }
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor,
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor * { color: #000000 !important; background-color: #ffffff !important; }
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor p, 
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor h1, 
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor h2, 
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor h3, 
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor h4, 
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor h5, 
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor h6, 
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor span, 
+                        .admin-layout .bg-dark\\/50 .quill-editor-container .ql-editor li { color: #000000 !important; }
+                        .quill-editor-container .ql-editor.ql-blank::before { color: rgba(0,0,0,0.5) !important; font-style: italic; }
                     `}</style>
 
                     <div className="quill-editor-container">
@@ -227,7 +240,7 @@ const BlogForm = () => {
                                     ['clean']
                                 ],
                             }}
-                            className="text-light"
+                            className="text-black"
                             placeholder="Write your article content here..."
                         />
                     </div>

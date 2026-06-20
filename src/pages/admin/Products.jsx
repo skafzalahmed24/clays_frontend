@@ -87,7 +87,7 @@ const AdminProducts = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
                 <h1 className="font-heading text-3xl text-light">Products</h1>
-                <Link to="/admin/products/new" className="flex items-center gap-2 bg-primary text-dark px-6 py-2 rounded-sm font-medium">
+                <Link to="/admin/products/new" className="flex items-center gap-2 bg-primary text-dark px-6 py-2 rounded-sm font-medium no-hover-effect">
                     <Icons.Plus />
                     <span>Add Product</span>
                 </Link>

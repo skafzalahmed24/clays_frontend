@@ -14,5 +14,16 @@ export const BRAND_CONFIG = {
   payment: {
     currency: "INR",
     currencySymbol: "₹"
+  },
+  contact: {
+    address: {
+      line1: "123 Herbal Way",
+      line2: "Green District",
+      city: "Mumbai",
+      pincode: "400001",
+      country: "India"
+    },
+    phone: "+91 98765 43210",
+    email: "support@clarysays.com"
   }
 };

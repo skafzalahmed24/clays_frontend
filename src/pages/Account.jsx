@@ -106,7 +106,7 @@ const OrdersList = () => {
                 <EmptyState
                     icon={Icons.Box}
                     title="No Orders Yet"
-                    message="You haven't placed any orders yet. Start shopping to discover our luxury collection."
+                    message="You haven't placed any orders yet. Start shopping to discover our luxury catalog."
                     actionLabel="Shop Now"
                     actionLink="/shop"
                 />

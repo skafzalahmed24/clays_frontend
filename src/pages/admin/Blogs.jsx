@@ -37,7 +37,7 @@ const AdminBlogs = () => {
                 />
                 <Link
                     to="/admin/blogs/new"
-                    className="flex items-center gap-2 bg-primary text-dark px-4 py-2 rounded-sm font-medium hover:bg-light transition-colors"
+                    className="flex items-center gap-2 bg-primary text-dark px-4 py-2 rounded-sm font-medium hover:outline hover:outline-1 hover:outline-primary hover:outline-offset-2"
                 >
                     <Icons.Plus className="w-5 h-5" />
                     <span>Write New Article</span>

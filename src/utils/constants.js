@@ -22,7 +22,7 @@ import { BRAND_CONFIG } from './config';
 export const MEGA_MENU_DATA = {
   "New Arrivals": {
     categories: [
-      { title: "Latest Collections", items: ["Spring Bloom", "Heritage Gold", "Modern Minimalist", "Diamond Sparkle"] },
+      { title: "Latest Catalog", items: ["Spring Bloom", "Heritage Gold", "Modern Minimalist", "Diamond Sparkle"] },
       { title: "Trending Now", items: ["Stackable Rings", "Layered Necklaces", "Statement Hoops", "Cocktail Rings"] },
     ],
     featured: { img: heroImg1, title: "New Season Essentials", link: "Shop Now" }
@@ -34,7 +34,7 @@ export const MEGA_MENU_DATA = {
       { title: "By Gemstone", items: ["Diamond", "Pearl", "Ruby", "Emerald", "Sapphire"] },
       { title: "Occasion", items: ["Daily Wear", "Office Wear", "Party Wear", "Wedding"] },
     ],
-    featured: { img: clientPearlEarrings, title: "Vintage Pearl Collection", link: "Explore" }
+    featured: { img: clientPearlEarrings, title: "Vintage Pearl Catalog", link: "Explore" }
   },
   "Rings": {
     categories: [
@@ -47,9 +47,9 @@ export const MEGA_MENU_DATA = {
   "Diamond Jewellery": {
     categories: [
       { title: "Categories", items: ["Diamond Rings", "Diamond Earrings", "Diamond Pendants", "Diamond Bangles", "Nose Pins"] },
-      { title: "Collections", items: ["Solitaire Collection", "Daily Wear Diamonds", "Bridal Set", "Cocktail Jewellery"] },
+      { title: "Catalog", items: ["Solitaire Catalog", "Daily Wear Diamonds", "Bridal Set", "Cocktail Jewellery"] },
     ],
-    featured: { img: product3, title: "Shine Bright", link: "View Collection" }
+    featured: { img: product3, title: "Shine Bright", link: "View Catalog" }
   },
   "Necklaces": {
     categories: [
@@ -72,7 +72,7 @@ export const MEGA_MENU_DATA = {
     ],
     featured: { img: catPendant, title: "Minimalist Drops", link: "Shop Now" }
   },
-  "Wedding Collections": {
+  "Wedding Catalog": {
     categories: [
       { title: "By Region", items: ["South Indian", "North Indian", "Bengali", "Maharashtrian"] },
       { title: "Sets", items: ["Bridal Sets", "Necklace Sets", "Bangle Sets"] }

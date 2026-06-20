@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetFAQsQuery, useGetPageQuery } from '../store/api/contentApiSlice';
 import PageHeader from '../components/layout/PageHeader';
 import { MEGA_MENU_DATA } from '../utils/constants';
@@ -7,10 +7,15 @@ import SEO from '../components/common/SEO';
 const FAQ = () => {
     const { data: faqs, isLoading: loading } = useGetFAQsQuery();
     const { data: pageData } = useGetPageQuery('faq');
+    const [openIndex, setOpenIndex] = useState(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+    const toggleFAQ = (index) => {
+        setOpenIndex(openIndex === index ? null : index);
+    };
 
     const displayFAQs = faqs || [];
 
@@ -41,14 +46,39 @@ const FAQ = () => {
                     ) : displayFAQs.length === 0 ? (
                         <div className="text-center py-8 text-light/50">No FAQs found.</div>
                     ) : (
-                        displayFAQs.map((faq, index) => (
-                            <div key={index} className="bg-white/5 border border-white/5 p-6 rounded-sm hover:border-primary/30 transition-colors animate-in slide-in-from-bottom-2 fade-in duration-500" style={{ animationDelay: `${index * 100}ms` }}>
-                                <h4 className="text-lg font-serif text-white mb-3">{faq.question || faq.q}</h4>
-                                <p className="font-light text-white/70 leading-relaxed text-sm whitespace-pre-wrap">
-                                    {faq.answer || faq.a}
-                                </p>
-                            </div>
-                        ))
+                        displayFAQs.map((faq, index) => {
+                            const isOpen = openIndex === index;
+                            return (
+                                <div key={index} className="bg-white border border-[#005b30]/10 p-6 rounded-sm hover:border-[#005b30]/30 transition-colors animate-in slide-in-from-bottom-2 fade-in duration-500" style={{ animationDelay: `${index * 100}ms` }}>
+                                    <button 
+                                        className="w-full flex justify-between items-center text-left focus:outline-none cursor-pointer"
+                                        onClick={() => toggleFAQ(index)}
+                                    >
+                                        <h4 className="text-lg font-serif text-[#005b30]">
+                                            {faq.question || faq.q}
+                                        </h4>
+                                        <span className="ml-4 flex-shrink-0 text-[#005b30] transition-transform duration-300 transform">
+                                            {isOpen ? (
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                                                </svg>
+                                            ) : (
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                                </svg>
+                                            )}
+                                        </span>
+                                    </button>
+                                    <div 
+                                        className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[1000px] mt-4 opacity-100' : 'max-h-0 opacity-0'}`}
+                                    >
+                                        <p className="font-light text-black leading-relaxed text-sm whitespace-pre-wrap">
+                                            {faq.answer || faq.a}
+                                        </p>
+                                    </div>
+                                </div>
+                            );
+                        })
                     )}
                 </div>
 

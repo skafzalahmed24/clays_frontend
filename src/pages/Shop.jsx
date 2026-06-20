@@ -14,8 +14,6 @@ import { usePrice } from '../hooks/usePrice';
 
 const Shop = () => {
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const collectionFilter = queryParams.get('collection');
     const categoryFilter = queryParams.get('category');
     const subCategoryFilter = queryParams.get('subCategory');
     const { format } = usePrice();
@@ -56,7 +54,6 @@ const Shop = () => {
     const { data: pageData, isLoading: loadingPage } = useGetPageQuery('shop');
 
     const { data, isLoading: productsLoading } = useGetProductsQuery({
-        collection: collectionFilter || undefined,
         pageNumber: page,
         minPrice,
         maxPrice,
@@ -114,9 +111,9 @@ const Shop = () => {
     };
 
     const pageHeader = pageData?.modules?.header || {
-        title: collectionFilter ? `${collectionFilter} Collection` : "Shop All",
-        eyebrow: collectionFilter ? "Featured Collection" : "Our Collection",
-        subtitle: "Explore our complete collection of handcrafted luxury jewelry."
+        title: "Shop All",
+        eyebrow: "Our Catalog",
+        subtitle: "Explore our complete catalog of handcrafted luxury jewelry."
     };
 
     // Verify Data Types
@@ -127,12 +124,12 @@ const Shop = () => {
         <div className="pt-0 min-h-screen bg-body">
             <SEO
                 title={pageData?.seo?.title || "Shop All"}
-                description={pageData?.seo?.description || "Explore our complete collection of handcrafted luxury jewelry."}
+                description={pageData?.seo?.description || "Explore our complete catalog of handcrafted luxury jewelry."}
             />
             <PageHeader
                 title={safeTitle}
-                eyebrow={typeof pageHeader.eyebrow === 'string' ? pageHeader.eyebrow : "Our Collection"}
-                subtitle={typeof pageHeader.subtitle === 'string' ? pageHeader.subtitle : "Explore our collection"}
+                eyebrow={typeof pageHeader.eyebrow === 'string' ? pageHeader.eyebrow : "Our Catalog"}
+                subtitle={typeof pageHeader.subtitle === 'string' ? pageHeader.subtitle : "Explore our catalog"}
                 backgroundImage={pageHeader.bannerImage || bannerImg}
             />
 
@@ -219,7 +216,7 @@ const Shop = () => {
                             </span>
                             <h3 className="text-2xl font-serif text-light mb-3">No matches found</h3>
                             <p className="text-light/50 mb-8 max-w-md text-center font-light leading-relaxed">
-                                We couldn't find any products matching your specific preferences. Try adjusting your filters or browsing our full collection.
+                                We couldn't find any products matching your specific preferences. Try adjusting your filters or browsing our full catalog.
                             </p>
                             <button
                                 onClick={() => setSelectedFilters({})}

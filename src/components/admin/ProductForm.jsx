@@ -18,8 +18,7 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
         subCategories: [],
         colors: [],
         materials: [],
-        occasions: [],
-        collections: []
+        occasions: []
     };
 
     const [uploadImage] = useUploadImageMutation();
@@ -30,7 +29,6 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
         name: '',
         category: '',
         subCategory: '',
-        collection: '',
         price: '',
         originalPrice: '',
         description: '',
@@ -505,27 +503,6 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
                                     onClick={() => navigate('/admin/attributes', { state: { tab: 'subCategories' } })}
                                     className="p-3 bg-white/5 border border-white/10 rounded-sm hover:bg-primary hover:text-dark transition-colors text-light/60 mb-[1px]"
                                     title="Manage Sub Categories"
-                                >
-                                    <Icons.Plus className="w-4 h-4" />
-                                </button>
-                            </div>
-
-                            <div className="flex gap-2 items-end">
-                                <div className="flex-1">
-                                    <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Collection</label>
-                                    <Select
-                                        name="collection"
-                                        value={formData.collection}
-                                        onChange={handleChange}
-                                        placeholder="Select Collection"
-                                        options={(attributes.collections && Array.isArray(attributes.collections) ? attributes.collections : []).map(col => ({ value: col.name, label: col.name }))}
-                                    />
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => navigate('/admin/attributes', { state: { tab: 'collections' } })}
-                                    className="p-3 bg-white/5 border border-white/10 rounded-sm hover:bg-primary hover:text-dark transition-colors text-light/60 mb-[1px]"
-                                    title="Manage Collections"
                                 >
                                     <Icons.Plus className="w-4 h-4" />
                                 </button>

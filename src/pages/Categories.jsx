@@ -14,7 +14,7 @@ const Categories = () => {
     const header = pageData?.modules?.header || {
         title: "Browse Categories",
         eyebrow: "Discover Our Assets",
-        subtitle: "Explore our exquisite collection of fine jewellery, crafted to perfection for every occasion.",
+        subtitle: "Explore our exquisite catalog of fine jewellery, crafted to perfection for every occasion.",
         bannerImage: heroImg
     };
 
@@ -66,7 +66,7 @@ const Categories = () => {
                                 {/* Smooth Transition: Replaced height animation with opacity/translate */}
                                 <div className="opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out absolute left-0 right-0 -bottom-8 group-hover:bottom-0 relative">
                                     <span className="inline-block px-6 py-2 border border-accent text-accent text-xs uppercase tracking-[0.2em] hover:bg-accent hover:text-dark transition-colors duration-300 mt-3 bg-black/20 backdrop-blur-sm">
-                                        View Collection
+                                        View Catalog
                                     </span>
                                 </div>
                             </div>

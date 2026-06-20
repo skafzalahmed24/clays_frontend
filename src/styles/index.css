@@ -565,6 +565,12 @@
     background-color: #006b39 !important;
   }
 
+  .admin-layout .bg-primary.no-hover-effect:hover,
+  .admin-layout .bg-primary.no-hover-effect:hover * {
+    background-color: var(--color-primary) !important;
+    color: var(--color-light) !important;
+  }
+
   /* Global input/select/textarea overrides inside the admin layout */
   .admin-layout input,
   .admin-layout select,
@@ -1090,4 +1096,21 @@ div.z-\[100\] .bg-dark-paper .hover\:text-light:hover {
 .admin-layout.bg-\[\#050505\] .bg-white\/5 a:hover {
   color: #003e20 !important;
   border-color: #003e20 !important;
+}
+
+/* Give hover effects on all admin buttons as an outline design, but do not change background or text colours */
+.admin-layout button,
+.admin-layout a.bg-primary,
+.admin-layout a.bg-dark {
+  transition: all 0.3s ease;
+  outline: 1px solid transparent;
+}
+
+.admin-layout button:hover,
+.admin-layout a.bg-primary:hover,
+.admin-layout a.bg-dark:hover {
+  outline: 1px solid var(--color-primary);
+  outline-offset: 2px;
+  /* Freeze the color and background color changes by delaying the transition infinitely */
+  transition: outline 0.2s ease, outline-offset 0.2s ease, background-color 9999s step-end, color 9999s step-end, border-color 9999s step-end !important;
 }

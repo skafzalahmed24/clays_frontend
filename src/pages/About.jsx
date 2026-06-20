@@ -5,7 +5,7 @@ import PageHeader from '../components/layout/PageHeader';
 import { BRAND_CONFIG } from '../utils/config';
 import storyImgDefault from '../assets/story.png';
 // eslint-disable-next-line
-import heroImg from '../assets/hero-2.png';
+import heroImg from '../assets/hero-3.png';
 import { API_URL, BASE_URL, getMediaUrl } from '../utils/apiConfig';
 import SEO from '../components/common/SEO';
 
@@ -39,11 +39,11 @@ function About() {
             />
             <PageHeader
                 title={aboutData.header?.title ? (
-                    aboutData.header.title
+                    <span dangerouslySetInnerHTML={{ __html: aboutData.header.title }} />
                 ) : (
-                    <span>The Legacy of <br /><span className="italic text-primary">{BRAND_CONFIG.brandName}</span></span>
+                    <span>The Essence of <br /><span className="italic text-primary">{BRAND_CONFIG.brandName}</span></span>
                 )}
-                eyebrow={aboutData.header?.eyebrow || "Since 1985"}
+                eyebrow={aboutData.header?.eyebrow || "Since 19832345"}
                 subtitle={aboutData.header?.subtitle}
                 backgroundImage={aboutData.header?.bannerImage || heroImg}
             />
@@ -53,14 +53,16 @@ function About() {
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                     <div className="order-2 md:order-1">
                         <h2 className="text-3xl md:text-5xl font-serif mb-8 leading-tight">
-                            {aboutData.story?.title ||
-                                <>Weaving dreams into <br /><span className="text-primary italic">eternal reality.</span></>
-                            }
+                            {aboutData.story?.title ? (
+                                <span dangerouslySetInnerHTML={{ __html: aboutData.story.title }} />
+                            ) : (
+                                <>Nurturing beauty through <br /><span className="text-primary italic">nature's purity.</span></>
+                            )}
                         </h2>
                         <div className="w-24 h-0.5 bg-primary/50 mb-8"></div>
                         <p className="text-white/70 text-lg font-light leading-relaxed mb-6 whitespace-pre-wrap">
                             {aboutData.story?.content ||
-                                "Clarysays was born from a simple yet profound desire: to create jewellery that transcends time. For over three decades, we have been the custodians of an ancient craft, reinterpreting traditional motifs for the modern connoisseur.\n\nEvery piece that leaves our atelier is a testament to patience, passion, and perfection. We believe that true luxury lies not just in the rarity of the materials, but in the soul poured into its creation."
+                                "Born from a profound respect for nature, we believe in the healing power of earth's finest botanicals. For over a decade, we have been crafting herbal skin and hair care products that blend ancient Ayurvedic wisdom with modern science.\n\nEvery formulation is a testament to purity, crafted without harsh chemicals or synthetics. We believe that true luxury lies in authentic, natural ingredients that nourish your skin, strengthen your hair, and revitalize your soul."
                             }
                         </p>
                     </div>
@@ -93,16 +95,16 @@ function About() {
                             // Static Fallback
                             <>
                                 <div className="p-8 border border-white/5 hover:border-primary/30 transition-colors duration-500">
-                                    <h3 className="text-2xl font-serif text-white mb-4">Artisanal Excellence</h3>
-                                    <p className="text-white/60 font-light">Handcrafted by master artisans with generations of expertise.</p>
+                                    <h3 className="text-2xl font-serif text-white mb-4">100% Natural</h3>
+                                    <p className="text-white/60 font-light">Crafted purely from organically grown herbs and botanical extracts.</p>
                                 </div>
                                 <div className="p-8 border border-white/5 hover:border-primary/30 transition-colors duration-500">
-                                    <h3 className="text-2xl font-serif text-white mb-4">Ethical Sourcing</h3>
-                                    <p className="text-white/60 font-light">Conflict-free diamonds and responsibly sourced precious metals.</p>
+                                    <h3 className="text-2xl font-serif text-white mb-4">Cruelty Free</h3>
+                                    <p className="text-white/60 font-light">Ethically tested and never tested on animals. Good for you, kind to earth.</p>
                                 </div>
                                 <div className="p-8 border border-white/5 hover:border-primary/30 transition-colors duration-500">
-                                    <h3 className="text-2xl font-serif text-white mb-4">Timeless Design</h3>
-                                    <p className="text-white/60 font-light">Creating heirlooms that will be cherished forever.</p>
+                                    <h3 className="text-2xl font-serif text-white mb-4">Holistic Wellness</h3>
+                                    <p className="text-white/60 font-light">Formulas designed to balance your inner health and outer radiance.</p>
                                 </div>
                             </>
                         )}
@@ -114,7 +116,7 @@ function About() {
             <section className="py-32 px-6 text-center">
                 <div className="max-w-3xl mx-auto">
                     <p className="text-2xl md:text-3xl font-serif italic text-white/90 leading-relaxed mb-12">
-                        "{aboutData.founder?.quote || "Jewellery is the most personal form of art. It touches the skin, and more importantly, it touches the heart."}"
+                        "{aboutData.founder?.quote || "True beauty is a reflection of wellness. When we nurture our bodies with nature's gifts, our skin glows and our hair flourishes."}"
                     </p>
                     <p className="text-primary uppercase tracking-[0.2em] text-sm">Founder, {BRAND_CONFIG.brandName}</p>
                 </div>

@@ -12,7 +12,6 @@ import Loading from '../components/common/Loading';
 // Public Pages (Lazy Loaded)
 const Home = lazy(() => import('../pages/Home'));
 const Shop = lazy(() => import('../pages/Shop'));
-const Collections = lazy(() => import('../pages/Collections'));
 const About = lazy(() => import('../pages/About'));
 const Contact = lazy(() => import('../pages/Contact'));
 const Categories = lazy(() => import('../pages/Categories'));
@@ -77,7 +76,6 @@ const AppRoutes = ({
                 }>
                     <Route path="/" element={<Home />} />
                     <Route path="/shop" element={<Shop />} />
-                    <Route path="/collections" element={<Collections />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/categories" element={<Categories />} />

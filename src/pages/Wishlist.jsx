@@ -48,8 +48,8 @@ const Wishlist = () => {
                     <EmptyState
                         icon={Icons.Heart}
                         title="Your wishlist is empty"
-                        message="Your personal collection of favorites is waiting to be started."
-                        actionLabel="Discover Collection"
+                        message="Your personal catalog of favorites is waiting to be started."
+                        actionLabel="Discover Catalog"
                         actionLink="/shop"
                     />
                 ) : (

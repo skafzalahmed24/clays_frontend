@@ -178,7 +178,7 @@ const Offers = () => {
                             </span>
                             <h3 className="text-2xl font-serif text-light mb-3">No offers found</h3>
                             <p className="text-light/50 mb-8 max-w-md text-center font-light leading-relaxed">
-                                There are currently no special offers. Please check back later or browse our full collection.
+                                There are currently no special offers. Please check back later or browse our full catalog.
                             </p>
                             <Link to="/shop">
                                 <button
