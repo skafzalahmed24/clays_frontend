@@ -9,7 +9,7 @@ const Heritage = () => {
 
     if (loading) {
         return (
-            <section className="py-24">
+            <section className="py-8 md:py-12">
                 <div className="w-full px-6 md:px-12 flex justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
                 </div>
@@ -28,7 +28,7 @@ const Heritage = () => {
     };
 
     return (
-        <section className="py-24">
+        <section className="py-8 md:py-12">
             <div className="w-full px-6 md:px-12">
                 <div className="relative">
                     <div className="absolute inset-0 bg-primary/10 transform rotate-1 rounded-3xl -z-10 hidden md:block"></div>

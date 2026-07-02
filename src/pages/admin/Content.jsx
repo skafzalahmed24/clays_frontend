@@ -87,7 +87,7 @@ const AdminContent = () => {
     const faqListRef = useRef(null);
     const aboutFormRef = useRef(null);
 
-    const [newHero, setNewHero] = useState({ title: '', subtitle: '', media: '', link: '', order: 0 });
+    const [newHero, setNewHero] = useState({ title: '', subtitle: '', media: '', link: '', order: 0, showButton: true });
     const [heroImageFile, setHeroImageFile] = useState(null);
     const [editingHero, setEditingHero] = useState(null);
 
@@ -161,10 +161,7 @@ const AdminContent = () => {
         e.preventDefault();
 
         // VALIDATION
-        if (!newHero.title.trim() || !newHero.subtitle.trim()) {
-            showToast('Title and Subtitle are required', 'error');
-            return;
-        }
+        // VALIDATION
         
         // Media is required if NOT editing, or if editing but no existing media (rare)
         if (!editingHero && !newHero.media && !heroImageFile) {
@@ -197,7 +194,7 @@ const AdminContent = () => {
                 .unwrap()
                 .then(() => {
                     showToast('Hero Slide added', 'success');
-                    setNewHero({ title: '', subtitle: '', media: '', link: '', order: 0 });
+                    setNewHero({ title: '', subtitle: '', media: '', link: '', order: 0, showButton: true });
                     setHeroImageFile(null);
                     form.reset();
                     scrollToList(heroListRef);
@@ -213,14 +210,15 @@ const AdminContent = () => {
             subtitle: slide.subtitle,
             media: slide.media,
             link: slide.link || '',
-            order: slide.order || 0
+            order: slide.order || 0,
+            showButton: slide.showButton !== undefined ? slide.showButton : true
         });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleCancelEdit = () => {
         setEditingHero(null);
-        setNewHero({ title: '', subtitle: '', media: '', link: '', order: 0 });
+        setNewHero({ title: '', subtitle: '', media: '', link: '', order: 0, showButton: true });
         setHeroImageFile(null);
     };
 
@@ -848,17 +846,15 @@ const AdminContent = () => {
                                 </div>
                                 <Input
                                     type="text"
-                                    placeholder="Title *"
+                                    placeholder="Title (Optional)"
                                     value={newHero.title}
                                     onChange={e => setNewHero({ ...newHero, title: e.target.value })}
-                                    required
                                 />
                                 <Input
                                     type="text"
-                                    placeholder="Subtitle *"
+                                    placeholder="Subtitle (Optional)"
                                     value={newHero.subtitle}
                                     onChange={e => setNewHero({ ...newHero, subtitle: e.target.value })}
-                                    required
                                 />
                                 <div className="space-y-1">
                                     <input
@@ -882,6 +878,16 @@ const AdminContent = () => {
                                     value={newHero.order}
                                     onChange={e => setNewHero({ ...newHero, order: e.target.value })}
                                 /> */}
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        id="showButton"
+                                        checked={newHero.showButton}
+                                        onChange={e => setNewHero({ ...newHero, showButton: e.target.checked })}
+                                        className="w-4 h-4 text-primary bg-body border-white/20 rounded focus:ring-primary focus:ring-2"
+                                    />
+                                    <label htmlFor="showButton" className="text-sm text-light">Show Button on Banner</label>
+                                </div>
                                 <div className="md:col-span-2 flex gap-3 mt-2">
                                     <button type="submit" disabled={isAddingHero || isUpdatingHero || isUploading} className="flex-1 bg-primary text-dark font-bold rounded p-3 disabled:opacity-50 disabled:cursor-not-allowed">
                                         {isAddingHero || isUpdatingHero || isUploading ? 'Processing...' : (editingHero ? 'Update Slide' : 'Add Slide')}

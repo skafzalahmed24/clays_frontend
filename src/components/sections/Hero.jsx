@@ -16,11 +16,11 @@ const Hero = () => {
         return () => clearInterval(timer);
     }, [heroSlides]);
 
-    if (loading) return <div className="h-[380px] md:h-[500px] bg-body flex items-center justify-center text-primary">Loading...</div>;
+    if (loading) return <div className="h-[300px] md:h-[580px] bg-body flex items-center justify-center text-primary">Loading...</div>;
 
     if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
         return (
-            <section className="relative h-[380px] md:h-[500px] flex items-center justify-center overflow-hidden bg-body">
+            <section className="relative h-[300px] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
                 <div className="text-center">
                     <h1 className="text-4xl text-primary font-heading">Welcome to Clarysays</h1>
                 </div>
@@ -29,7 +29,7 @@ const Hero = () => {
     }
 
     return (
-        <section className="relative h-[380px] md:h-[500px] flex items-center justify-center overflow-hidden bg-body">
+        <section className="relative h-[300px] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
             {heroSlides.map((slide, index) => (
                 <div
                     key={slide._id}
@@ -39,16 +39,15 @@ const Hero = () => {
                     {REGEX.IS_VIDEO.test(slide.media) ? (
                         <video
                             src={getMediaUrl(slide.media)}
-                            className="w-full h-full object-cover opacity-60"
+                            className="w-full h-full object-cover"
                             autoPlay
                             muted
                             loop
                             playsInline
                         />
                     ) : (
-                        <img src={getMediaUrl(slide.media)} alt={slide.title} className="w-full h-full object-cover opacity-60" />
+                        <img src={getMediaUrl(slide.media)} alt={slide.title} className="w-full h-full object-cover" />
                     )}
-                    <div className="absolute inset-0 hero-gradient-overlay"></div>
                 </div>
             ))}
 
@@ -65,11 +64,13 @@ const Hero = () => {
                                     <p className="text-xl md:text-2xl text-text-main/80 mb-10 max-w-lg font-light drop-shadow-md">
                                         {slide.subtitle}
                                     </p>
-                                    <Link to={slide.link || "/shop"}>
-                                        <button className="bg-primary w-fit hover:bg-light text-dark font-heading font-bold py-4 px-12 transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.4)]">
-                                            Explore Collection
-                                        </button>
-                                    </Link>
+                                    {slide.showButton !== false && (
+                                        <Link to={slide.link || "/shop"}>
+                                            <button className="bg-primary w-fit hover:bg-light text-dark font-heading font-bold py-4 px-12 transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.4)]">
+                                                Explore Collection
+                                            </button>
+                                        </Link>
+                                    )}
                                 </div>
                             )
                         ))}

@@ -27,16 +27,16 @@ const AdminSidebar = ({ isOpen, onClose }) => {
         return location.pathname.startsWith(path);
     };
     const linkClass = (path) => `flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-300 ${isActive(path)
-        ? 'bg-primary text-dark font-medium'
-        : 'text-[#ffffff]'}`;
+        ? 'bg-primary text-white font-medium shadow-md'
+        : 'text-dark/70 hover:text-primary hover:bg-dark/5'}`;
 
     return (
-        <aside className={`fixed left-0 top-0 h-screen w-64 bg-dark-paper border-r border-white/10 z-50 flex flex-col transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
-            <div className="p-6 border-b border-white/10 flex items-center justify-center relative">
+        <aside className={`fixed left-0 top-0 h-screen w-64 bg-dark-paper border-r border-dark/10 z-50 flex flex-col transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+            <div className="p-6 border-b border-dark/10 flex items-center justify-center relative">
                 {/* Close Button for Mobile */}
                 <button
                     onClick={onClose}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-white/50 hover:text-white md:hidden"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-dark/50 hover:text-dark md:hidden"
                 >
                     <Icons.Close />
                 </button>
@@ -44,7 +44,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
                 <Link to="/" className="flex flex-col items-center">
                     {/* Simplified Logo for Admin */}
                     <span className="font-script font-bold text-primary text-2xl tracking-widest">Clarysays</span>
-                    <span className="text-[0.6rem] uppercase tracking-[0.3em] text-light/50 mt-1">Admin Panel</span>
+                    <span className="text-[0.6rem] uppercase tracking-[0.3em] text-dark/50 mt-1">Admin Panel</span>
                 </Link>
             </div>
 
@@ -89,14 +89,14 @@ const AdminSidebar = ({ isOpen, onClose }) => {
                     <Icons.Tag />
                     <span>Coupons</span>
                 </Link>
-                <div className="my-4 border-t border-white/10"></div>
+                <div className="my-4 border-t border-dark/10"></div>
                 <Link to="/admin/settings" className={linkClass('/admin/settings')} onClick={onClose}>
                     <Icons.Settings />
                     <span>Settings</span>
                 </Link>
             </nav>
 
-            <div className="p-4 border-t border-white/10">
+            <div className="p-4 border-t border-dark/10">
                 <button
                     onClick={handleLogout}
                     className="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-md w-full transition-colors"

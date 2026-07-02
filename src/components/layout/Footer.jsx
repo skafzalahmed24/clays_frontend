@@ -12,32 +12,32 @@ const Footer = () => {
     const socialLinks = settings?.socialLinks || {};
 
     return (
-        <footer className="bg-dark text-light border-t border-light/10 pt-20 pb-10">
+        <footer className="bg-dark text-dark border-t border-dark/10 pt-12 pb-6">
             <div className="w-full px-6 md:px-12">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
                     {/* Brand */}
                     <div className="flex flex-col items-center md:items-start text-center md:text-left">
                         <Link to="/" className="inline-block">
                             <Image 
                                 src={settings?.identity?.footerLogo || settings?.identity?.logo || BRAND_CONFIG.logo} 
                                 alt={settings?.identity?.brandName || BRAND_CONFIG.brandName} 
-                                className="h-32 mb-6" 
+                                className="h-16 mb-4" 
                                 isStatic={!settings?.identity?.footerLogo && !settings?.identity?.logo}
                             />
                         </Link>
-                        <p className="text-light/70 text-sm leading-relaxed mb-6">
+                        <p className="text-dark/70 text-sm leading-relaxed mb-4">
                             {BRAND_CONFIG.meta.description}
                         </p>
                         <div className="flex justify-center md:justify-start space-x-4">
                             {/* Social Icons */}
                             {socialLinks.instagram && (
-                                <a href={socialLinks.instagram} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-light/10 flex items-center justify-center hover:bg-primary hover:text-dark transition-colors"><Icons.Instagram /></a>
+                                <a href={socialLinks.instagram} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-dark/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><Icons.Instagram /></a>
                             )}
                             {socialLinks.facebook && (
-                                <a href={socialLinks.facebook} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-light/10 flex items-center justify-center hover:bg-primary hover:text-dark transition-colors"><Icons.Facebook /></a>
+                                <a href={socialLinks.facebook} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-dark/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><Icons.Facebook /></a>
                             )}
                             {socialLinks.youtube && (
-                                <a href={socialLinks.youtube} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-light/10 flex items-center justify-center hover:bg-primary hover:text-dark transition-colors"><Icons.YouTube /></a>
+                                <a href={socialLinks.youtube} target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-dark/10 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><Icons.YouTube /></a>
                             )}
                         </div>
                     </div>
@@ -46,8 +46,8 @@ const Footer = () => {
                     {settings?.footerLinks?.length > 0 ? (
                         settings.footerLinks.map((section, index) => (
                             <div key={index}>
-                                <h4 className="font-heading text-light text-lg mb-6">{section.title}</h4>
-                                <ul className="space-y-3 text-light/70 text-sm">
+                                <h4 className="font-heading text-dark font-bold text-lg mb-4">{section.title}</h4>
+                                <ul className="space-y-2 text-dark/70 text-sm">
                                     {section.links.map((link, lIndex) => (
                                         <li key={lIndex}>
                                             <Link to={link.url} className="hover:text-primary transition-colors">{link.label}</Link>
@@ -60,14 +60,14 @@ const Footer = () => {
                         <>
                             {/* Fallback Static Links if no dynamic data */}
                             <div>
-                                <h4 className="font-heading text-light text-lg mb-6">Shop</h4>
-                                <ul className="space-y-3 text-light/70 text-sm">
+                                <h4 className="font-heading text-dark font-bold text-lg mb-4">Shop</h4>
+                                <ul className="space-y-2 text-dark/70 text-sm">
                                     <li><Link to="/new-arrivals" className="hover:text-primary transition-colors">New Arrivals</Link></li>
                                 </ul>
                             </div>
                             <div>
-                                <h4 className="font-heading text-light text-lg mb-6">Support</h4>
-                                <ul className="space-y-3 text-light/70 text-sm">
+                                <h4 className="font-heading text-dark font-bold text-lg mb-4">Support</h4>
+                                <ul className="space-y-2 text-dark/70 text-sm">
                                     <li><Link to="/about" className="hover:text-primary transition-colors">About Us</Link></li>
                                     <li><Link to="/journal" className="hover:text-primary transition-colors">Journal</Link></li>
                                     <li><Link to="/track-order" className="hover:text-primary transition-colors">Track Order</Link></li>
@@ -83,17 +83,15 @@ const Footer = () => {
                     )}
                 </div>
 
-                <div className="border-t border-light/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-light/50">
+                <div className="border-t border-dark/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-dark/50">
                     <div className="flex flex-col md:flex-row items-center gap-2">
                         <p>&copy; {new Date().getFullYear()} {settings?.identity?.brandName || settings?.storeName || BRAND_CONFIG.brandName}. All rights reserved.</p>
-                        <span className="hidden md:inline text-light/20">|</span>
+                        <span className="hidden md:inline text-dark/20">|</span>
                         <p className="font-mono opacity-80">v{BRAND_CONFIG.version}</p>
                     </div>
                     <div className="flex gap-4">
                         <span>VISA</span>
                         <span>MASTERCARD</span>
-                        {/* <span>AMEX</span>
-                        <span>PAYPAL</span> */}
                     </div>
                 </div>
             </div>

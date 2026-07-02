@@ -15,14 +15,23 @@ export default {
         'text-main': 'var(--color-text-main)',
       },
       fontFamily: {
-        heading: ['Cinzel', 'serif'],
-        body: ['Cinzel', 'serif'],
-        script: ['"Abril Fatface"', 'cursive'],
+        heading: ['Poppins', 'sans-serif'],
+        body: ['Poppins', 'sans-serif'],
+        script: ['Poppins', 'sans-serif'],
+      },
+      borderRadius: {
+        'card': '16px',
+        'btn': '12px',
+        'input': '10px',
+      },
+      boxShadow: {
+        'soft': '0 4px 20px rgba(0, 0, 0, 0.05)',
       },
       animation: {
-        'fade-in': 'fadeIn 1.5s ease-out forwards',
-        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+        'fade-in': 'fadeIn 0.3s ease-out forwards',
+        'fade-in-up': 'fadeInUp 0.3s ease-out forwards',
         'pan-slow': 'panSlow 20s linear infinite alternate',
+        'hover-lift': 'hoverLift 0.3s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
@@ -30,12 +39,16 @@ export default {
           '100%': { opacity: '1' },
         },
         fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         panSlow: {
           '0%': { transform: 'scale(1) translate(0, 0)' },
-          '100%': { transform: 'scale(1.1) translate(-1%, -1%)' },
+          '100%': { transform: 'scale(1.05) translate(-1%, -1%)' },
+        },
+        hoverLift: {
+          '0%': { transform: 'translateY(0)', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)' },
+          '100%': { transform: 'translateY(-5px)', boxShadow: '0 10px 25px rgba(0, 0, 0, 0.08)' },
         }
       },
     },

@@ -6,6 +6,9 @@ import Categories from '../components/sections/Categories';
 import Heritage from '../components/sections/Heritage';
 import Testimonials from '../components/sections/Testimonials';
 import SocialFeed from '../components/sections/SocialFeed';
+import BeautyPhilosophy from '../components/sections/BeautyPhilosophy';
+import IngredientSpotlight from '../components/sections/IngredientSpotlight';
+import BeautyRoutine from '../components/sections/BeautyRoutine';
 import { useGetPageQuery } from '../store/api/contentApiSlice';
 
 const Home = () => {
@@ -33,9 +36,12 @@ const Home = () => {
             />
             <div id="hero"><Hero /></div>
             <div id="trustbadges"><TrustBarriers /></div>
+            <div id="philosophy"><BeautyPhilosophy /></div>
             <div id="categories"><Categories title={pageData?.modules?.categories?.title} /></div>
+            <div id="ingredients"><IngredientSpotlight /></div>
             <div id="heritage"><Heritage /></div>
             <div id="testimonials"><Testimonials title={pageData?.modules?.testimonials?.title} /></div>
+            <div id="routine"><BeautyRoutine /></div>
             <div id="socialfeed"><SocialFeed title={pageData?.modules?.social?.title} followLink={pageData?.modules?.social?.link} /></div>
         </>
     );

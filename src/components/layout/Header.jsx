@@ -84,7 +84,7 @@ const Header = ({
     return (
         <div className={isGhost
             ? "relative w-full opacity-0 pointer-events-none -z-10"
-            : "fixed top-0 left-0 right-0 xl:left-[60px] xl:right-[60px] w-full xl:w-[calc(100%-120px)] z-50 transition-all duration-300"
+            : "fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300"
         }>
             {/* Search Overlay */}
             <SearchOverlay
@@ -93,90 +93,37 @@ const Header = ({
             />
 
             {/* Main Nav */}
-            <nav className="bg-dark text-light border-b border-light/10 transition-all duration-300">
+            <nav className="bg-[#E8D3A2] text-dark shadow-soft border-b border-light/10 transition-all duration-300">
                 <div className="w-full px-4 md:px-6 lg:px-12 py-0">
                     {/* Header Layout when NOT scrolled */}
                     {!isScrolled ? (
-                        <div className="flex flex-col w-full">
-                            {/* Top row: Left (Brand tag), Center (Logo), Right (Icons) */}
-                            <div className="grid grid-cols-3 items-center w-full pt-1 pb-1">
-                                {/* Left: Brand tagline */}
-                                <div className="hidden md:flex items-center space-x-4">
-                                    <span className="text-[11px] font-heading tracking-widest text-light/50 uppercase">Clarysays Luxury</span>
-                                </div>
-                                <div className="md:hidden"></div> {/* Mobile spacer */}
-
-                                {/* Center: Logo & Brand Name */}
-                                <div className="flex justify-center items-center">
-                                    <Link to="/" className="cursor-pointer flex flex-col items-center gap-1">
-                                        <Image
-                                            className="h-12 md:h-16 w-auto drop-shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)] transition-all duration-300 hover:drop-shadow-[0_0_16px_rgba(var(--color-primary-rgb),0.8)]"
-                                            src={settings?.identity?.logo || BRAND_CONFIG.logo}
-                                            alt={`${settings?.identity?.brandName || BRAND_CONFIG.brandName} Logo`}
-                                            isStatic={!settings?.identity?.logo}
-                                        />
-                                        <span className="font-script font-bold text-light tracking-[0.2em] text-lg md:text-xl mt-1">
-                                            {(settings?.identity?.brandName || BRAND_CONFIG.brandName).toUpperCase()}
-                                        </span>
-                                    </Link>
-                                </div>
-
-                                {/* Right: Icons & Mobile Hamburger */}
-                                <div className="flex items-center justify-end space-x-4 md:space-x-5">
-                                    <div className="hidden md:flex items-center space-x-5">
-                                        <button onClick={() => setSearchOpen(true)} title="Search" className="text-light/80 hover:text-primary transition-colors"><Icons.Search /></button>
-                                        <Link to="/wishlist" title="Wishlist" className="text-light/80 hover:text-primary transition-colors relative">
-                                            <Icons.Heart />
-                                            {(Array.isArray(wishlistItems) && wishlistItems.length > 0) && (
-                                                <span className="absolute -top-2 -right-2 bg-primary text-dark text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                                                    {wishlistItems.length}
-                                                </span>
-                                            )}
-                                        </Link>
-                                        <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-light/80 hover:text-primary transition-colors"><Icons.User /></Link>
-                                        <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-light/80 hover:text-primary transition-colors relative">
-                                            <Icons.Cart />
-                                            {(Array.isArray(cartItems) && cartItems.length > 0) && (
-                                                <span className="absolute -top-2 -right-2 bg-primary text-dark text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                                                    {cartItems.reduce((acc, item) => acc + item.qty, 0)}
-                                                </span>
-                                            )}
-                                        </button>
-                                    </div>
-
-                                    {/* Mobile menu hamburger */}
-                                    <div className="md:hidden flex items-center gap-4">
-                                        <button onClick={() => setSearchOpen(true)} title="Search" className="text-light/80 hover:text-primary relative">
-                                            <Icons.Search />
-                                        </button>
-                                        <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-light/80 hover:text-primary relative">
-                                            <Icons.Cart />
-                                            {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-primary text-dark text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
-                                        </button>
-                                        <button
-                                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                            className="p-2 rounded-md text-light/70 hover:text-primary focus:outline-none"
-                                        >
-                                            {mobileMenuOpen ? <Icons.Close /> : <Icons.Menu />}
-                                        </button>
-                                    </div>
-                                </div>
+                        <div className="flex items-center justify-between w-full py-2">
+                            {/* Left: Logo & Brand Name */}
+                            <div className="flex-shrink-0 flex items-center">
+                                <Link to="/" className="cursor-pointer flex flex-col items-center gap-1">
+                                    <Image
+                                        className="h-12 md:h-14 w-auto drop-shadow-sm transition-all duration-300 hover:scale-105"
+                                        src={settings?.identity?.logo || BRAND_CONFIG.logo}
+                                        alt={`${settings?.identity?.brandName || BRAND_CONFIG.brandName} Logo`}
+                                        isStatic={!settings?.identity?.logo}
+                                    />
+                                    <span className="font-script font-bold text-dark tracking-[0.2em] text-sm md:text-md mt-1">
+                                        {(settings?.identity?.brandName || BRAND_CONFIG.brandName).toUpperCase()}
+                                    </span>
+                                </Link>
                             </div>
 
-                            {/* Line Full (Full width horizontal divider line) */}
-                            <hr className="border-light/10 w-full" />
-
-                            {/* Unified Navigation Row */}
-                            <div className="hidden md:flex justify-center items-center py-2">
-                                <ul className="flex justify-center items-center text-[11px] lg:text-[12px] font-heading tracking-widest text-primary gap-4 lg:gap-6 w-full flex-wrap">
+                            {/* Center: Main Nav Links */}
+                            <div className="hidden md:flex flex-1 mx-4">
+                                <ul className="flex justify-center items-center text-[11px] lg:text-[12px] font-heading font-bold tracking-widest text-dark gap-4 lg:gap-6 w-full flex-wrap">
                                     <li className="py-1">
-                                        <Link to="/shop" className={`hover:text-light transition-colors uppercase ${isActive('/shop')}`}>Shop</Link>
+                                        <Link to="/shop" className={`uppercase ${isActive('/shop')}`}>Shop</Link>
                                     </li>
 
                                     {(categories && Array.isArray(categories) ? categories : []).slice(0, 8).map((cat) => (
                                         <li
                                             key={cat.id}
-                                            className="cursor-pointer hover:text-light transition-colors py-1 uppercase"
+                                            className="cursor-pointer py-1 uppercase"
                                             onMouseEnter={() => handleMouseEnter(cat.name)}
                                             onMouseLeave={handleMouseLeave}
                                         >
@@ -195,12 +142,53 @@ const Header = ({
                                         onMouseEnter={() => handleMouseEnter("New Arrivals")}
                                         onMouseLeave={handleMouseLeave}
                                     >
-                                        <Link to="/new-arrivals" className={`hover:text-light transition-colors uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
+                                        <Link to="/new-arrivals" className={`uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
                                     </li>
                                     <li className="py-1">
-                                        <Link to="/offers" className={`hover:text-light transition-colors uppercase ${isActive('/offers')}`}>Offers</Link>
+                                        <Link to="/offers" className={`uppercase ${isActive('/offers')}`}>Offers</Link>
                                     </li>
                                 </ul>
+                            </div>
+
+                            {/* Right: Icons & Mobile Hamburger */}
+                            <div className="flex items-center justify-end space-x-4 md:space-x-5">
+                                <div className="hidden md:flex items-center space-x-5">
+                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-dark/80 hover:text-primary transition-colors"><Icons.Search /></button>
+                                    <Link to="/wishlist" title="Wishlist" className="text-dark/80 hover:text-primary transition-colors relative">
+                                        <Icons.Heart />
+                                        {(Array.isArray(wishlistItems) && wishlistItems.length > 0) && (
+                                            <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                                {wishlistItems.length}
+                                            </span>
+                                        )}
+                                    </Link>
+                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-dark/80 hover:text-primary transition-colors"><Icons.User /></Link>
+                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-dark/80 hover:text-primary transition-colors relative">
+                                        <Icons.Cart />
+                                        {(Array.isArray(cartItems) && cartItems.length > 0) && (
+                                            <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                                {cartItems.reduce((acc, item) => acc + item.qty, 0)}
+                                            </span>
+                                        )}
+                                    </button>
+                                </div>
+
+                                {/* Mobile menu hamburger */}
+                                <div className="md:hidden flex items-center gap-4">
+                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-dark/80 hover:text-primary relative">
+                                        <Icons.Search />
+                                    </button>
+                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-dark/80 hover:text-primary relative">
+                                        <Icons.Cart />
+                                        {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
+                                    </button>
+                                    <button
+                                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                        className="p-2 rounded-md text-dark/70 hover:text-primary focus:outline-none"
+                                    >
+                                        {mobileMenuOpen ? <Icons.Close /> : <Icons.Menu />}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ) : (
@@ -215,7 +203,7 @@ const Header = ({
                                         alt={`${settings?.identity?.brandName || BRAND_CONFIG.brandName} Logo`}
                                         isStatic={!settings?.identity?.logo}
                                     />
-                                    <span className="font-script font-bold text-light tracking-widest text-lg">
+                                    <span className="font-script font-bold text-dark tracking-widest text-lg">
                                         {(settings?.identity?.brandName || BRAND_CONFIG.brandName).toUpperCase()}
                                     </span>
                                 </Link>
@@ -223,15 +211,15 @@ const Header = ({
 
                             {/* Center: Main Nav Links (Compact) */}
                             <div className="hidden md:flex flex-1 mx-4">
-                                <ul className="flex justify-center items-center text-[9px] lg:text-[10px] font-heading tracking-widest text-primary gap-3 lg:gap-4 w-full flex-wrap">
+                                <ul className="flex justify-center items-center text-[9px] lg:text-[10px] font-heading font-bold tracking-widest text-dark gap-3 lg:gap-4 w-full flex-wrap">
                                     <li className="py-1">
-                                        <Link to="/shop" className={`hover:text-light transition-colors uppercase ${isActive('/shop')}`}>Shop</Link>
+                                        <Link to="/shop" className={`uppercase ${isActive('/shop')}`}>Shop</Link>
                                     </li>
 
                                     {(categories && Array.isArray(categories) ? categories : []).slice(0, 5).map((cat) => (
                                         <li
                                             key={cat.id}
-                                            className="cursor-pointer hover:text-light transition-colors py-1 uppercase hidden lg:block"
+                                            className="cursor-pointer py-1 uppercase hidden lg:block"
                                             onMouseEnter={() => handleMouseEnter(cat.name)}
                                             onMouseLeave={handleMouseLeave}
                                         >
@@ -250,10 +238,10 @@ const Header = ({
                                         onMouseEnter={() => handleMouseEnter("New Arrivals")}
                                         onMouseLeave={handleMouseLeave}
                                     >
-                                        <Link to="/new-arrivals" className={`hover:text-light transition-colors uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
+                                        <Link to="/new-arrivals" className={`uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
                                     </li>
                                     <li className="py-1">
-                                        <Link to="/offers" className={`hover:text-light transition-colors uppercase ${isActive('/offers')}`}>Offers</Link>
+                                        <Link to="/offers" className={`uppercase ${isActive('/offers')}`}>Offers</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -283,16 +271,16 @@ const Header = ({
 
                                 {/* Mobile Hamburger */}
                                 <div className="md:hidden flex items-center gap-4">
-                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-light/80 hover:text-primary relative">
+                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-dark/80 hover:text-primary relative">
                                         <Icons.Search />
                                     </button>
-                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-light/80 hover:text-primary relative">
+                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-dark/80 hover:text-primary relative">
                                         <Icons.Cart />
-                                        {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-primary text-dark text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
+                                        {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
                                     </button>
                                     <button
                                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                        className="p-2 rounded-md text-light/70 hover:text-primary focus:outline-none"
+                                        className="p-2 rounded-md text-dark/70 hover:text-primary focus:outline-none"
                                     >
                                         {mobileMenuOpen ? <Icons.Close /> : <Icons.Menu />}
                                     </button>
@@ -370,12 +358,12 @@ const Header = ({
 
 
                 {/* Mobile Menu Dropdown */}
-                <div className={`md:hidden bg-dark border-b border-light/10 overflow-y-auto transition-all duration-300 ${mobileMenuOpen ? 'max-h-[85vh]' : 'max-h-0'}`}>
-                    <div className="px-4 py-4 space-y-2 text-center">
-                        <Link to="/shop" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
-                        <Link to="/new-arrivals" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
-                        <Link to="/offers" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/offers')}`}>Offers</Link>
-                        <Link to={user ? "/account" : "/login"} onClick={closeMobileMenu} className="block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase">Account</Link>
+                <div className={`md:hidden bg-[#E8D3A2] border-b border-light/10 overflow-y-auto transition-all duration-300 ${mobileMenuOpen ? 'max-h-[85vh]' : 'max-h-0'}`}>
+                    <div className="px-4 py-4 space-y-2 text-center text-dark">
+                        <Link to="/shop" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
+                        <Link to="/new-arrivals" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
+                        <Link to="/offers" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/offers')}`}>Offers</Link>
+                        <Link to={user ? "/account" : "/login"} onClick={closeMobileMenu} className="block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase">Account</Link>
                     </div>
                 </div>
             </nav>
