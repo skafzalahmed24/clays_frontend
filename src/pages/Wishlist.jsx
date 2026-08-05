@@ -41,6 +41,7 @@ const Wishlist = () => {
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
                 backgroundImage={header.bannerImage}
+                theme="light"
             />
 
             <div className="w-full px-6 md:px-12 py-16">

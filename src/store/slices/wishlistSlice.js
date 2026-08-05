@@ -62,7 +62,7 @@ const wishlistSlice = createSlice({
             })
             .addCase(fetchWishlist.fulfilled, (state, action) => {
                 state.loading = false;
-                state.items = action.payload;
+                state.items = Array.isArray(action.payload) ? action.payload : (action.payload?.data || []);
             })
             .addCase(fetchWishlist.rejected, (state, action) => {
                 state.loading = false;
@@ -70,11 +70,11 @@ const wishlistSlice = createSlice({
             })
             // Add
             .addCase(addToWishlist.fulfilled, (state, action) => {
-                state.items = action.payload; // Backend returns updated list
+                state.items = Array.isArray(action.payload) ? action.payload : (action.payload?.data || []);
             })
             // Remove
             .addCase(removeFromWishlist.fulfilled, (state, action) => {
-                state.items = action.payload;
+                state.items = Array.isArray(action.payload) ? action.payload : (action.payload?.data || []);
             })
             // Clear on Logout
             .addCase(logoutUser.fulfilled, (state) => {

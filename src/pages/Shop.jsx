@@ -14,8 +14,11 @@ import { usePrice } from '../hooks/usePrice';
 
 const Shop = () => {
     const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
     const categoryFilter = queryParams.get('category');
     const subCategoryFilter = queryParams.get('subCategory');
+    const isFeaturedFilter = queryParams.get('featured') === 'true';
+    const isNewArrivalFilter = queryParams.get('new') === 'true';
     const { format } = usePrice();
 
     const [page, setPage] = useState(1);
@@ -71,6 +74,8 @@ const Shop = () => {
         color: selectedFilters.color,
         material: selectedFilters.material,
         occasion: selectedFilters.occasion,
+        isFeatured: isFeaturedFilter ? true : undefined,
+        isNewArrival: isNewArrivalFilter ? true : undefined,
         sort: sortParam,
         limit: 12
     });
@@ -117,7 +122,7 @@ const Shop = () => {
     };
 
     // Verify Data Types
-    const safeTitle = typeof pageHeader.title === 'string' ? pageHeader.title : 'Shop All';
+    const safeTitle = isFeaturedFilter ? "Featured Products" : isNewArrivalFilter ? "New Arrivals" : (typeof pageHeader.title === 'string' ? pageHeader.title : 'Shop All');
     const safeTotal = typeof totalProducts === 'number' ? totalProducts : 0;
 
     return (
@@ -138,7 +143,7 @@ const Shop = () => {
                     <div className="flex items-center text-xs md:text-sm text-light/40 uppercase tracking-wider font-light">
                         <Link to="/" className="hover:text-primary transition-colors">Home</Link>
                         <span className="mx-3 text-light/20">/</span>
-                        <span className="text-primary font-medium">Shop All</span>
+                        <span className="text-primary font-medium">{isFeaturedFilter ? "Featured Products" : isNewArrivalFilter ? "New Arrivals" : "Shop All"}</span>
                         <span className="ml-6 pl-6 border-l border-light/10 text-light/30 hidden md:inline">
                             {safeTotal} items
                         </span>

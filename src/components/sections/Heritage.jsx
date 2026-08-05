@@ -28,7 +28,7 @@ const Heritage = () => {
     };
 
     return (
-        <section className="py-16 md:py-24 bg-body relative overflow-hidden">
+        <section className="py-8 md:py-12 bg-body relative overflow-hidden">
             <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     

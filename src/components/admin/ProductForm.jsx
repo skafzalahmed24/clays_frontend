@@ -37,6 +37,7 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
         stock: 0,
         inStock: true,
         isNewArrival: true,
+        isFeatured: false,
         color: '',
         material: '',
 

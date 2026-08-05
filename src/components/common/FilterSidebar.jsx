@@ -192,7 +192,7 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
                                                             <polyline points="20 6 9 17 4 12"></polyline>
                                                         </svg>
                                                     </div>
-                                                    <span className="text-sm text-light/60 group-hover:text-light transition-colors font-light tracking-wide">
+                                                    <span className="text-sm text-light/60 group-hover:text-primary transition-colors font-light tracking-wide">
                                                         {option}
                                                     </span>
                                                 </label>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const BeautyRoutine = () => {
     return (
-        <section className="relative py-12 md:py-20 bg-body flex items-center justify-center overflow-hidden">
+        <section className="relative py-8 md:py-12 bg-body flex items-center justify-center overflow-hidden">
             {/* Background Accent */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3"></div>

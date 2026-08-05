@@ -23,6 +23,7 @@ import Input from '../../components/ui/Input';
 import PreviewableImage from '../../components/ui/PreviewableImage';
 import { REGEX } from '../../utils/regex';
 import Icons from '../../components/ui/Icons';
+import { PRIVACY_POLICY_FALLBACK, TERMS_CONDITIONS_FALLBACK, SHIPPING_RETURNS_FALLBACK, CARE_GUIDE_FALLBACK } from '../../utils/defaultContent';
 
 const AdminContent = () => {
     const { showToast } = useToast();
@@ -488,10 +489,18 @@ const AdminContent = () => {
     const [legalSections, setLegalSections] = useState([]);
 
     useEffect(() => {
-        if (activeLegalPageData?.modules?.sections) {
+        if (activeLegalPageData?.modules?.sections && activeLegalPageData.modules.sections.length > 0) {
             setLegalSections(activeLegalPageData.modules.sections);
         } else {
-            setLegalSections([]);
+            if (activeLegalPage === 'privacy-policy') {
+                setLegalSections(PRIVACY_POLICY_FALLBACK);
+            } else if (activeLegalPage === 'terms-conditions') {
+                setLegalSections(TERMS_CONDITIONS_FALLBACK);
+            } else if (activeLegalPage === 'shipping-returns') {
+                setLegalSections(SHIPPING_RETURNS_FALLBACK);
+            } else {
+                setLegalSections([]);
+            }
         }
     }, [activeLegalPageData, activeLegalPage]);
 
@@ -626,7 +635,7 @@ const AdminContent = () => {
     });
     const [systemBannerFile, setSystemBannerFile] = useState(null);
 
-    const systemPageSlugs = ['home', 'about', 'shop', 'collections', 'journal', 'care-guide', 'new-arrivals', 'offers', 'categories', 'search', 'wishlist', 'faq', 'track-order'];
+    const systemPageSlugs = ['home', 'about', 'shop', 'collections', 'journal', 'care-guide', 'new-arrivals', 'offers', 'categories', 'search', 'wishlist', 'faq', 'track-order', 'privacy-policy', 'terms-conditions', 'shipping-returns'];
 
     useEffect(() => {
         if (activeTab === 'systempages' && systemPageData) {
@@ -735,10 +744,10 @@ const AdminContent = () => {
     useEffect(() => {
         if (activeSystemPage === 'care-guide' && systemPageData) {
             const data = systemPageData;
-            if (data && data.modules && data.modules.sections) {
+            if (data?.modules?.sections && data.modules.sections.length > 0) {
                 setCareSections(data.modules.sections);
             } else {
-                setCareSections([]);
+                setCareSections(CARE_GUIDE_FALLBACK);
             }
         }
     }, [systemPageData, activeSystemPage]);

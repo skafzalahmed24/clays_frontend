@@ -16,7 +16,7 @@ const SocialFeed = ({ title, followLink }) => {
     const followUrl = followLink || "https://www.instagram.com";
 
     return (
-        <section className="py-8 md:py-12">
+        <section className="py-6 md:py-8">
             <div className="w-full px-6 md:px-12">
                 <div className="flex justify-between items-center mb-12">
                     <h2 className="text-2xl md:text-3xl font-heading">{displayTitle}</h2>

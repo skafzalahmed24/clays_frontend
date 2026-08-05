@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useGetPageQuery } from '../store/api/contentApiSlice';
 import PageHeader from '../components/layout/PageHeader'; // Using consistent layout Header
+import { TERMS_CONDITIONS_FALLBACK } from '../utils/defaultContent';
 
 const TermsConditions = () => {
     const { data: pageData } = useGetPageQuery('terms-conditions');
@@ -10,39 +11,28 @@ const TermsConditions = () => {
     }, []);
 
     const data = pageData?.modules || {};
-    const sections = data.sections || [
-        {
-            title: "1. Introduction",
-            content: "Welcome to Clarysays. These Terms and Conditions govern your use of our website and services. By accessing or using our site, you agree to be bound by these terms."
-        },
-        {
-            title: "2. Intellectual Property",
-            content: "The content, organization, graphics, design, compilation, magnetic translation, digital conversion and other matters related to the Site are protected under applicable copyrights, trademarks and other proprietary (including but not limited to intellectual property) rights."
-        },
-        {
-            title: "3. Use License",
-            content: "Permission is granted to temporarily download one copy of the materials (information or software) on Clarysays's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title."
-        }
-    ];
+    const sections = data.sections || TERMS_CONDITIONS_FALLBACK;
+    const header = data.header || {};
 
     return (
-        <div className="pt-0 min-h-screen bg-[#050505] text-white/80">
+        <div className="pt-0 min-h-screen bg-body text-black/80">
             <PageHeader
-                title="Terms & Conditions"
-                eyebrow="Legal"
-                subtitle="Guidelines for using our services."
+                title={header.title || "Terms & Conditions"}
+                eyebrow={header.eyebrow || "Legal"}
+                subtitle={header.subtitle || "Guidelines for using our services."}
+                backgroundImage={header.bannerImage}
             />
 
             <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 space-y-8 font-light leading-relaxed text-sm md:text-base">
                 {sections.map((section, index) => (
                     <section key={index}>
-                        <h3 className="text-xl font-serif text-white mb-4">{section.title}</h3>
+                        <h3 className="text-xl font-serif text-black mb-4">{section.title}</h3>
                         <div className="whitespace-pre-wrap">{section.content}</div>
                     </section>
                 ))}
 
-                <section className="border-t border-white/10 pt-8 mt-12">
-                    <p className="text-white/50 text-xs">Last Updated: {data.lastUpdated || "December 2025"}</p>
+                <section className="border-t border-black/10 pt-8 mt-12">
+                    <p className="text-black/50 text-xs">Last Updated: {data.lastUpdated || "December 2025"}</p>
                 </section>
             </div>
         </div>

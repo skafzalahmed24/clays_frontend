@@ -130,14 +130,19 @@ const ProductDetails = () => {
             navigate('/login');
             return;
         }
-        if (isInWishlist) {
-            await dispatch(removeFromWishlist(product._id));
-            showToast(`${product.name} removed from wishlist`, 'info');
-        } else {
-            await dispatch(addToWishlist(product));
-            showToast(`${product.name} added to wishlist`, 'success');
+        try {
+            if (isInWishlist) {
+                await dispatch(removeFromWishlist(product._id)).unwrap();
+                showToast(`${product.name} removed from wishlist`, 'info');
+            } else {
+                await dispatch(addToWishlist(product)).unwrap();
+                showToast(`${product.name} added to wishlist`, 'success');
+            }
+            refetch();
+        } catch (error) {
+            const errorMessage = error?.data?.message || error?.message || (typeof error === 'string' ? error : 'Action failed');
+            showToast(errorMessage, 'error');
         }
-        refetch();
     };
 
     const handleReviewSubmit = async (e) => {
@@ -254,7 +259,7 @@ const ProductDetails = () => {
                                 </span>
                             )}
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-serif text-light mb-6 leading-tight">{product.name}</h1>
+                        <h1 className="text-4xl md:text-5xl font-serif text-black mb-6 leading-tight">{product.name}</h1>
 
                         <div className="flex items-center gap-4 mb-8">
                             <span className="text-3xl font-light text-primary">{format(product.price)}</span>
@@ -373,7 +378,7 @@ const ProductDetails = () => {
 
                 {/* Reviews Section */}
                 <div className="py-24 border-t border-light/10 mt-24">
-                    <h2 className="text-3xl font-serif text-light mb-12 text-center">{settings?.uiLabels?.product?.reviewsTitle || 'Customer Reviews'}</h2>
+                    <h2 className="text-3xl font-serif text-black mb-12 text-center">{settings?.uiLabels?.product?.reviewsTitle || 'Customer Reviews'}</h2>
 
                     <div className="max-w-4xl mx-auto">
                         {/* Review List */}

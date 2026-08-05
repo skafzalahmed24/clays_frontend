@@ -25,7 +25,7 @@ const Contact = () => {
     const header = pageData?.modules?.header || {};
 
     return (
-        <div className="pt-0 min-h-screen bg-[#050505] text-white">
+        <div className="pt-0 min-h-screen bg-body text-black">
             <SEO
                 title={pageData?.seo?.title || "Contact Us"}
                 description={pageData?.seo?.description || "Get in touch with us."}
@@ -42,7 +42,7 @@ const Contact = () => {
                     {/* Contact Info */}
                     <div className="space-y-12">
                         {loading && !settings ? (
-                            <div className="text-white/50">Loading contact details...</div>
+                            <div className="text-black/50">Loading contact details...</div>
                         ) : (
                             <div className="space-y-12">
                                 {settings?.addresses && settings.addresses.length > 0 ? (
@@ -50,16 +50,16 @@ const Contact = () => {
                                         <div key={index}>
                                             <h3 className="text-primary text-sm uppercase tracking-[0.2em] mb-4 font-bold">Visit Our Boutique {settings.addresses.length > 1 ? `#${index + 1}` : ''}</h3>
                                             <p className="text-2xl font-serif mb-2">{addr.line1}</p>
-                                            <p className="text-white/60 font-light">{addr.line2}</p>
-                                            <p className="text-white/60 font-light">{addr.city}, {addr.pincode}</p>
-                                            <p className="text-white/60 font-light uppercase tracking-widest text-xs mt-1">{addr.country}</p>
+                                            <p className="text-black/60 font-light">{addr.line2}</p>
+                                            <p className="text-black/60 font-light">{addr.city}, {addr.pincode}</p>
+                                            <p className="text-black/60 font-light uppercase tracking-widest text-xs mt-1">{addr.country}</p>
                                             <div className="mt-6 flex gap-4">
                                                 <button
                                                     onClick={() => {
                                                         const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${addr.line1}, ${addr.city}, ${addr.pincode}, ${addr.country}`)}`;
                                                         window.open(addr.googleMapsUrl || searchUrl, '_blank');
                                                     }}
-                                                    className="px-6 py-2 border border-white/20 text-sm hover:border-primary hover:text-primary transition-colors"
+                                                    className="px-6 py-2 border border-black/20 text-sm hover:border-primary hover:text-primary transition-colors"
                                                 >
                                                     Get Directions
                                                 </button>
@@ -70,16 +70,16 @@ const Contact = () => {
                                     <div>
                                         <h3 className="text-primary text-sm uppercase tracking-[0.2em] mb-4 font-bold">Visit Our Boutique</h3>
                                         <p className="text-2xl font-serif mb-2">{address.line1}</p>
-                                        <p className="text-white/60 font-light">{address.line2}</p>
-                                        <p className="text-white/60 font-light">{address.city}, {address.pincode}</p>
-                                        <p className="text-white/60 font-light uppercase tracking-widest text-xs mt-1">{address.country || 'India'}</p>
+                                        <p className="text-black/60 font-light">{address.line2}</p>
+                                        <p className="text-black/60 font-light">{address.city}, {address.pincode}</p>
+                                        <p className="text-black/60 font-light uppercase tracking-widest text-xs mt-1">{address.country || 'India'}</p>
                                         <div className="mt-6 flex gap-4">
                                             <button
                                                 onClick={() => {
                                                     const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address.line1}, ${address.city}, ${address.pincode}, ${address.country || 'India'}`)}`;
                                                     window.open(address.googleMapsUrl || searchUrl, '_blank');
                                                 }}
-                                                className="px-6 py-2 border border-white/20 text-sm hover:border-primary hover:text-primary transition-colors"
+                                                className="px-6 py-2 border border-black/20 text-sm hover:border-primary hover:text-primary transition-colors"
                                             >
                                                 Get Directions
                                             </button>
@@ -90,12 +90,12 @@ const Contact = () => {
                                 <div>
                                     <h3 className="text-primary text-sm uppercase tracking-[0.2em] mb-4 font-bold">Contact Details</h3>
                                     <div className="space-y-3">
-                                        <a href={`tel:${phone}`} className="flex items-center gap-4 text-white/80 hover:text-primary transition-colors">
-                                            <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-primary"><Icons.Phone /></span>
+                                        <a href={`tel:${phone}`} className="flex items-center gap-4 text-black/80 hover:text-primary transition-colors">
+                                            <span className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-primary"><Icons.Phone /></span>
                                             {phone}
                                         </a>
-                                        <a href={`mailto:${email}`} className="flex items-center gap-4 text-white/80 hover:text-primary transition-colors">
-                                            <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-primary"><Icons.Email /></span>
+                                        <a href={`mailto:${email}`} className="flex items-center gap-4 text-black/80 hover:text-primary transition-colors">
+                                            <span className="w-8 h-8 rounded-full bg-black/5 flex items-center justify-center text-primary"><Icons.Email /></span>
                                             {email}
                                         </a>
                                     </div>
@@ -106,11 +106,11 @@ const Contact = () => {
 
                         <div>
                             <h3 className="text-primary text-sm uppercase tracking-[0.2em] mb-4 font-bold">Opening Hours</h3>
-                            <div className="space-y-4 text-white/60 font-light text-sm">
+                            <div className="space-y-4 text-black/60 font-light text-sm">
                                 {settings?.openingHours && settings.openingHours.length > 0 ? (
                                     settings.openingHours.map((hour, index) => (
                                         <div key={index}>
-                                            <span className="block text-white mb-1">{hour.label}</span>
+                                            <span className="block text-black mb-1">{hour.label}</span>
                                             {hour.value}
                                         </div>
                                     ))
@@ -118,11 +118,11 @@ const Contact = () => {
                                     // Fallback
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <span className="block text-white mb-1">Mon - Sat</span>
+                                            <span className="block text-black mb-1">Mon - Sat</span>
                                             11:00 AM - 8:00 PM
                                         </div>
                                         <div>
-                                            <span className="block text-white mb-1">Sunday</span>
+                                            <span className="block text-black mb-1">Sunday</span>
                                             11:00 AM - 6:00 PM
                                         </div>
                                     </div>
@@ -132,7 +132,7 @@ const Contact = () => {
                     </div>
 
                     {/* Contact Form */}
-                    <div className="bg-white/5 p-8 md:p-12 border border-white/5">
+                    <div className="bg-black/5 p-8 md:p-12 border border-black/5">
                         <h2 className="text-2xl font-serif mb-8">Send us a Message</h2>
                         <form className="space-y-6" onSubmit={async (e) => {
                             e.preventDefault();
@@ -155,13 +155,13 @@ const Contact = () => {
                         }}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs text-white/60">
+                                    <label className="text-xs text-black/60">
                                         First Name <span className="text-red-500 ml-1">*</span>
                                     </label>
-                                    <Input name="firstName" required type="text" placeholder="John" className="bg-black/50 border-white/10 text-white placeholder:text-white/20" />
+                                    <Input name="firstName" required type="text" placeholder="John" className="bg-white border-black/10 text-black placeholder:text-black/40" />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs text-white/60">
+                                    <label className="text-xs text-black/60">
                                         Last Name <span className="text-red-500 ml-1">*</span>
                                     </label>
                                     <Input
@@ -169,12 +169,12 @@ const Contact = () => {
                                         required
                                         type="text"
                                         placeholder="Doe"
-                                        className="bg-black/50 border-white/10 text-white placeholder:text-white/20"
+                                        className="bg-white border-black/10 text-black placeholder:text-black/40"
                                     />
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs text-white/60">
+                                <label className="text-xs text-black/60">
                                     Email Address <span className="text-red-500 ml-1">*</span>
                                 </label>
                                 <Input
@@ -182,16 +182,16 @@ const Contact = () => {
                                     required
                                     type="email"
                                     placeholder="john@example.com"
-                                    className="bg-black/50 border-white/10 text-white placeholder:text-white/20"
+                                    className="bg-white border-black/10 text-black placeholder:text-black/40"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs text-white/60">
+                                <label className="text-xs text-black/60">
                                     Subject <span className="text-red-500 ml-1">*</span>
                                 </label>
                                 <Select
                                     name="subject"
-                                    className="bg-black/50 border-white/10 text-white"
+                                    className="bg-white border-black/10 text-black"
                                     options={settings?.contactSubjects && settings.contactSubjects.length > 0
                                         ? settings.contactSubjects.map(s => ({ value: s, label: s }))
                                         : [
@@ -204,10 +204,10 @@ const Contact = () => {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs text-white/60">
+                                <label className="text-xs text-black/60">
                                     Message <span className="text-red-500 ml-1">*</span>
                                 </label>
-                                <Textarea name="message" required rows="5" placeholder="How can we help you?" className="bg-black/50 border-white/10 text-white placeholder:text-white/20" />
+                                <Textarea name="message" required rows="5" placeholder="How can we help you?" className="bg-white border-black/10 text-black placeholder:text-black/40" />
                             </div>
                             <button
                                 type="submit"

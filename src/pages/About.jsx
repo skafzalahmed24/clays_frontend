@@ -32,7 +32,7 @@ function About() {
     const hasValues = aboutData.values && aboutData.values.length > 0 && aboutData.values.some(v => v.title);
 
     return (
-        <div className="pt-0 min-h-screen bg-[#050505] text-white">
+        <div className="pt-0 min-h-screen bg-body text-black">
             <SEO
                 title={pageData?.seo?.title}
                 description={pageData?.seo?.description}
@@ -60,7 +60,7 @@ function About() {
                             )}
                         </h2>
                         <div className="w-24 h-0.5 bg-primary/50 mb-8"></div>
-                        <p className="text-white/70 text-lg font-light leading-relaxed mb-6 whitespace-pre-wrap">
+                        <p className="text-black/70 text-lg font-light leading-relaxed mb-6 whitespace-pre-wrap">
                             {aboutData.story?.content ||
                                 "Born from a profound respect for nature, we believe in the healing power of earth's finest botanicals. For over a decade, we have been crafting herbal skin and hair care products that blend ancient Ayurvedic wisdom with modern science.\n\nEvery formulation is a testament to purity, crafted without harsh chemicals or synthetics. We believe that true luxury lies in authentic, natural ingredients that nourish your skin, strengthen your hair, and revitalize your soul."
                             }
@@ -78,33 +78,33 @@ function About() {
             </section>
 
             {/* Values */}
-            <section className="py-24 bg-white/5">
+            <section className="py-24 bg-black/5">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                         {hasValues ? (
                             // Dynamic Values
                             aboutData.values.map((val, idx) => (
                                 val.title && (
-                                    <div key={idx} className="p-8 border border-white/5 hover:border-primary/30 transition-colors duration-500">
-                                        <h3 className="text-2xl font-serif text-white mb-4">{val.title}</h3>
-                                        <p className="text-white/60 font-light">{val.description}</p>
+                                    <div key={idx} className="p-8 border border-black/5 hover:border-primary/30 transition-colors duration-500">
+                                        <h3 className="text-2xl font-serif text-black mb-4">{val.title}</h3>
+                                        <p className="text-black/60 font-light">{val.description}</p>
                                     </div>
                                 )
                             ))
                         ) : (
                             // Static Fallback
                             <>
-                                <div className="p-8 border border-white/5 hover:border-primary/30 transition-colors duration-500">
-                                    <h3 className="text-2xl font-serif text-white mb-4">100% Natural</h3>
-                                    <p className="text-white/60 font-light">Crafted purely from organically grown herbs and botanical extracts.</p>
+                                <div className="p-8 border border-black/5 hover:border-primary/30 transition-colors duration-500">
+                                    <h3 className="text-2xl font-serif text-black mb-4">100% Natural</h3>
+                                    <p className="text-black/60 font-light">Crafted purely from organically grown herbs and botanical extracts.</p>
                                 </div>
-                                <div className="p-8 border border-white/5 hover:border-primary/30 transition-colors duration-500">
-                                    <h3 className="text-2xl font-serif text-white mb-4">Cruelty Free</h3>
-                                    <p className="text-white/60 font-light">Ethically tested and never tested on animals. Good for you, kind to earth.</p>
+                                <div className="p-8 border border-black/5 hover:border-primary/30 transition-colors duration-500">
+                                    <h3 className="text-2xl font-serif text-black mb-4">Cruelty Free</h3>
+                                    <p className="text-black/60 font-light">Ethically tested and never tested on animals. Good for you, kind to earth.</p>
                                 </div>
-                                <div className="p-8 border border-white/5 hover:border-primary/30 transition-colors duration-500">
-                                    <h3 className="text-2xl font-serif text-white mb-4">Holistic Wellness</h3>
-                                    <p className="text-white/60 font-light">Formulas designed to balance your inner health and outer radiance.</p>
+                                <div className="p-8 border border-black/5 hover:border-primary/30 transition-colors duration-500">
+                                    <h3 className="text-2xl font-serif text-black mb-4">Holistic Wellness</h3>
+                                    <p className="text-black/60 font-light">Formulas designed to balance your inner health and outer radiance.</p>
                                 </div>
                             </>
                         )}
@@ -115,7 +115,7 @@ function About() {
             {/* Founder/Signature */}
             <section className="py-32 px-6 text-center">
                 <div className="max-w-3xl mx-auto">
-                    <p className="text-2xl md:text-3xl font-serif italic text-white/90 leading-relaxed mb-12">
+                    <p className="text-2xl md:text-3xl font-serif italic text-black/90 leading-relaxed mb-12">
                         "{aboutData.founder?.quote || "True beauty is a reflection of wellness. When we nurture our bodies with nature's gifts, our skin glows and our hair flourishes."}"
                     </p>
                     <p className="text-primary uppercase tracking-[0.2em] text-sm">Founder, {BRAND_CONFIG.brandName}</p>

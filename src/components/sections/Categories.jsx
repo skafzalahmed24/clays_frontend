@@ -25,7 +25,7 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
 
     if (isLoading) {
         return (
-            <section className="py-8 md:py-12 bg-body flex justify-center items-center min-h-[300px]">
+            <section className="py-6 md:py-8 bg-body flex justify-center items-center min-h-[200px]">
                 <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
             </section>
         );
@@ -34,7 +34,7 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
     if (categories.length === 0) return null;
 
     return (
-        <section className="py-8 md:py-12 bg-body">
+        <section className="py-6 md:py-8 bg-body">
             <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative">
                 <div className="flex flex-col items-center mb-12">
                     <h2 className="text-2xl md:text-3xl font-heading font-bold text-dark tracking-widest uppercase mb-4">{title}</h2>

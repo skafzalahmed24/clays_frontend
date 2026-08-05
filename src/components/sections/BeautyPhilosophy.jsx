@@ -2,7 +2,7 @@ import React from 'react';
 
 const BeautyPhilosophy = () => {
     return (
-        <section className="py-12 md:py-16 bg-body text-dark relative overflow-hidden">
+        <section className="py-8 md:py-10 bg-body text-dark relative overflow-hidden">
             <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12 relative z-10 text-center">
                 <div className="flex flex-col items-center mb-12">
                     <h2 className="text-3xl md:text-5xl font-heading font-bold tracking-widest uppercase mb-4 text-primary">Our Vision</h2>

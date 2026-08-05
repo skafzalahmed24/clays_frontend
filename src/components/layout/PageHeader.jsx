@@ -1,7 +1,10 @@
 import React from 'react';
 import { getMediaUrl } from '../../utils/apiConfig';
 
-const PageHeader = ({ title, subtitle, eyebrow, backgroundImage, className = "" }) => {
+const PageHeader = ({ title, subtitle, eyebrow, backgroundImage, theme, className = "" }) => {
+    const activeTheme = theme || (backgroundImage ? 'dark' : 'light');
+    const textColor = activeTheme === 'dark' ? 'text-white' : 'text-black';
+    const subtitleColor = activeTheme === 'dark' ? 'text-white/70' : 'text-black/70';
     return (
         <div className={`relative h-[35vh] min-h-[300px] flex items-center justify-center overflow-hidden ${className}`}>
             {/* Background */}
@@ -28,11 +31,11 @@ const PageHeader = ({ title, subtitle, eyebrow, backgroundImage, className = "" 
                         {eyebrow}
                     </span>
                 )}
-                <h1 className="text-4xl md:text-6xl font-serif text-white mb-6 drop-shadow-lg animate-fade-in-up">
+                <h1 className={`text-4xl md:text-6xl font-serif ${textColor} mb-6 drop-shadow-lg animate-fade-in-up`}>
                     {title}
                 </h1>
                 {subtitle && (
-                    <p className="text-white/70 max-w-2xl mx-auto text-lg font-light leading-relaxed animate-fade-in-up delay-100">
+                    <p className={`max-w-2xl mx-auto text-lg font-light leading-relaxed animate-fade-in-up delay-100 ${subtitleColor}`}>
                         {subtitle}
                     </p>
                 )}

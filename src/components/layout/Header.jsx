@@ -193,7 +193,7 @@ const Header = ({
                         </div>
                     ) : (
                         /* Header Layout when Scrolled (Compact View) */
-                        <div className="flex items-center justify-between w-full py-1">
+                        <div className="flex items-center justify-between w-full py-2">
                             {/* Left: Compact Logo */}
                             <div className="flex-shrink-0 flex items-center">
                                 <Link to="/" className="cursor-pointer flex items-center gap-2">

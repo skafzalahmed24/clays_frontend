@@ -35,7 +35,7 @@ const Journal = () => {
     }, []);
 
     return (
-        <div className="pt-0 min-h-screen bg-[#050505]">
+        <div className="pt-0 min-h-screen bg-body text-black">
             <SEO
                 title={pageData?.seo?.title || "Journal"}
                 description={pageData?.seo?.description || "Read our latest stories."}
@@ -50,7 +50,7 @@ const Journal = () => {
             {/* Blog Grid */}
             <div className="max-w-7xl mx-auto px-6 py-24">
                 {loading ? (
-                    <div className="text-center text-white/50">Loading articles...</div>
+                    <div className="text-center text-black/50">Loading articles...</div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {(blogs && Array.isArray(blogs) ? blogs : []).map((post) => (
@@ -69,15 +69,15 @@ const Journal = () => {
                                     </div>
                                 </div>
                                 <div className="flex-grow">
-                                    <div className="flex items-center gap-4 text-xs text-white/40 mb-3 uppercase tracking-wider">
+                                    <div className="flex items-center gap-4 text-xs text-black/40 mb-3 uppercase tracking-wider">
                                         <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                                         <span className="w-1 h-1 rounded-full bg-primary/50"></span>
                                         <span>By {post.author || 'Admin'}</span>
                                     </div>
-                                    <h2 className="text-2xl font-serif text-white mb-3 leading-tight group-hover:text-primary transition-colors duration-300">
+                                    <h2 className="text-2xl font-serif text-black mb-3 leading-tight group-hover:text-primary transition-colors duration-300">
                                         {post.title}
                                     </h2>
-                                    <p className="text-white/60 font-light leading-relaxed mb-6 line-clamp-3">
+                                    <p className="text-black/60 font-light leading-relaxed mb-6 line-clamp-3">
                                         {post.excerpt}
                                     </p>
                                 </div>

@@ -93,19 +93,24 @@ const ProductCard = ({ product, onNavigate, searchQuery }) => {
 
                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                     <button
-                        onClick={(e) => {
+                        onClick={async (e) => {
                             e.preventDefault();
                             if (!user) {
                                 showToast('Please login to use wishlist', 'error');
                                 navigate('/login');
                                 return;
                             }
-                            if (isInWishlist) {
-                                dispatch(removeFromWishlist(productId));
-                                showToast(`${product.name} removed from wishlist`, 'info');
-                            } else {
-                                dispatch(addToWishlist({ ...product, id: productId }));
-                                showToast(`${product.name} added to wishlist`, 'success');
+                            try {
+                                if (isInWishlist) {
+                                    await dispatch(removeFromWishlist(productId)).unwrap();
+                                    showToast(`${product.name} removed from wishlist`, 'info');
+                                } else {
+                                    await dispatch(addToWishlist({ ...product, id: productId })).unwrap();
+                                    showToast(`${product.name} added to wishlist`, 'success');
+                                }
+                            } catch (error) {
+                                const errorMessage = error?.data?.message || error?.message || (typeof error === 'string' ? error : 'Action failed');
+                                showToast(errorMessage, 'error');
                             }
                         }}
                         className={`w-9 h-9 flex items-center justify-center backdrop-blur-sm rounded-full transition-all border shadow-[0_0_15px_rgba(0,0,0,0.3)] ${isInWishlist ? 'bg-primary text-dark border-primary shadow-primary/30' : 'bg-dark/40 text-light/70 border-light/10 hover:text-primary hover:bg-dark/60'}`}

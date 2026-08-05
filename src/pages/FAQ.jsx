@@ -27,7 +27,7 @@ const FAQ = () => {
     };
 
     return (
-        <div className="pt-0 min-h-screen bg-[#050505] text-white/80">
+        <div className="pt-0 min-h-screen bg-body text-black/80">
             <SEO
                 title={pageData?.seo?.title || "FAQ"}
                 description={pageData?.seo?.description}
@@ -82,7 +82,7 @@ const FAQ = () => {
                     )}
                 </div>
 
-                <div className="mt-12 text-center text-white/50 text-sm">
+                <div className="mt-12 text-center text-black/50 text-sm">
                     <p>Still have questions?</p>
                     <a href="/contact" className="text-primary hover:underline mt-2 inline-block">Contact Support</a>
                 </div>
