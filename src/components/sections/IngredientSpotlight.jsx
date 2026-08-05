@@ -6,16 +6,18 @@ const IngredientSpotlight = () => {
             <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     {/* Image Side */}
-                    <div className="relative h-[500px] md:h-[700px] w-full rounded-tr-[100px] rounded-bl-[100px] overflow-hidden shadow-2xl">
-                        <img 
-                            src="/assets/gold_standard.jpg" 
-                            alt="Premium Beauty Serum" 
-                            className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-1000"
-                        />
+                    <div className="flex justify-center md:justify-end w-full">
+                        <div className="relative aspect-[4/3] w-full overflow-hidden shadow-2xl">
+                            <img 
+                                src="/assets/gold_standard.jpg" 
+                                alt="Premium Beauty Serum" 
+                                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-1000"
+                            />
                         <div className="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent"></div>
-                        <div className="absolute bottom-10 left-10 text-white">
-                            <span className="text-sm tracking-[0.3em] uppercase text-primary font-bold">Key Ingredient</span>
-                            <h3 className="text-3xl font-heading mt-2 font-serif">24k Gold Flakes</h3>
+                        <div className="absolute bottom-8 left-8 md:bottom-10 md:left-10 text-white">
+                            <span className="text-xs md:text-sm tracking-[0.3em] uppercase text-primary font-bold">Key Ingredient</span>
+                            <h3 className="text-2xl md:text-3xl font-heading mt-2 font-serif">24k Gold Flakes</h3>
+                        </div>
                         </div>
                     </div>
                     

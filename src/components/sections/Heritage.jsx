@@ -28,34 +28,40 @@ const Heritage = () => {
     };
 
     return (
-        <section className="py-8 md:py-12">
-            <div className="w-full px-6 md:px-12">
-                <div className="relative">
-                    <div className="absolute inset-0 bg-primary/10 transform rotate-1 rounded-3xl -z-10 hidden md:block"></div>
-                    <div className="overflow-hidden flex flex-col md:flex-row shadow-2xl bg-current-surface">
-                        <div className="md:w-1/2 h-[500px]">
+        <section className="py-16 md:py-24 bg-body relative overflow-hidden">
+            <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    
+                    {/* Content Side */}
+                    <div className="flex flex-col justify-center px-4 md:px-12 order-last md:order-first">
+                        <span className="text-primary text-sm uppercase tracking-[0.3em] font-bold mb-4">{content.subtitle}</span>
+                        <h2 className="text-3xl md:text-5xl font-heading font-bold tracking-widest uppercase mb-6 text-dark">{content.title}</h2>
+                        <div className="w-16 h-1 bg-primary mb-8"></div>
+                        <p className="text-dark/70 text-lg font-light leading-relaxed mb-10">
+                            {content.description}
+                        </p>
+                        <Link
+                            to={content.link || '/about'}
+                            className="bg-transparent border border-primary text-dark hover:bg-primary hover:text-white font-heading font-bold uppercase tracking-widest py-4 px-10 transition-all duration-300 w-fit"
+                        >
+                            {content.linkText || 'Read Our Story'}
+                        </Link>
+                    </div>
+
+                    {/* Image Side */}
+                    <div className="flex justify-center md:justify-start w-full order-first md:order-last">
+                        <div className="relative aspect-[4/3] w-full overflow-hidden shadow-2xl">
                             {content.image ? (
-                                <img src={getMediaUrl(content.image)} alt="Heritage" className="w-full h-full object-cover" />
+                                <img src={getMediaUrl(content.image)} alt="Heritage" className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-1000" />
                             ) : (
-                                <div className="w-full h-full bg-dark-paper flex items-center justify-center text-light/20">
-                                    Heritage Image
+                                <div className="w-full h-full bg-dark flex items-center justify-center text-light/20">
+                                    Heritage Image (4:3)
                                 </div>
                             )}
-                        </div>
-                        <div className="md:w-1/2 p-12 md:p-20 flex flex-col justify-center">
-                            <span className="text-accent text-sm uppercase tracking-widest mb-4">{content.subtitle}</span>
-                            <h2 className="text-3xl md:text-5xl font-heading mb-6">{content.title}</h2>
-                            <p className="opacity-80 text-lg leading-relaxed mb-8 font-light">
-                                {content.description}
-                            </p>
-                            <Link
-                                to={content.link || '/about'}
-                                className="self-start px-8 py-3 border border-accent text-accent hover:border-primary hover:text-primary transition-colors uppercase tracking-widest text-sm"
-                            >
-                                {content.linkText || 'Read Our Story'}
-                            </Link>
+                            <div className="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent"></div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>

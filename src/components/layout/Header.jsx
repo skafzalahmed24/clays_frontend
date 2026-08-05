@@ -93,7 +93,7 @@ const Header = ({
             />
 
             {/* Main Nav */}
-            <nav className="bg-[#E8D3A2] text-dark shadow-soft border-b border-light/10 transition-all duration-300">
+            <nav className="bg-[#e8ded0] text-dark shadow-soft border-b border-light/10 transition-all duration-300">
                 <div className="w-full px-4 md:px-6 lg:px-12 py-0">
                     {/* Header Layout when NOT scrolled */}
                     {!isScrolled ? (
@@ -358,7 +358,7 @@ const Header = ({
 
 
                 {/* Mobile Menu Dropdown */}
-                <div className={`md:hidden bg-[#E8D3A2] border-b border-light/10 overflow-y-auto transition-all duration-300 ${mobileMenuOpen ? 'max-h-[85vh]' : 'max-h-0'}`}>
+                <div className={`md:hidden bg-[#e8ded0] border-b border-light/10 overflow-y-auto transition-all duration-300 ${mobileMenuOpen ? 'max-h-[85vh]' : 'max-h-0'}`}>
                     <div className="px-4 py-4 space-y-2 text-center text-dark">
                         <Link to="/shop" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
                         <Link to="/new-arrivals" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
