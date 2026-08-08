@@ -943,10 +943,10 @@ const Account = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
                     {/* Sidebar */}
                     <aside className="md:col-span-1">
-                        <nav className="flex md:flex-col overflow-x-auto md:overflow-visible gap-3 md:gap-2 bg-dark/5 backdrop-blur-sm border border-dark/10 p-4 rounded-lg scrollbar-hide">
+                        <nav className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-col gap-2 bg-dark/5 backdrop-blur-sm border border-dark/10 p-3 md:p-4 rounded-lg">
                             {tabs.map(tab => {
                                 const Icon = tab.icon;
-                                const baseClasses = "flex-shrink-0 md:w-full flex items-center gap-3 px-4 py-3 text-sm font-heading tracking-widest uppercase transition-all duration-300 rounded-md group relative overflow-hidden whitespace-nowrap";
+                                const baseClasses = "w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-2 md:gap-3 px-2 py-3 md:px-4 text-[10px] sm:text-xs md:text-sm font-heading tracking-widest uppercase transition-all duration-300 rounded-md group text-center md:text-left";
                                 const isTabActive = tab.path && isActive(tab.path, tab.exact);
                                 const activeClasses = "text-primary bg-dark/5 shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.1)] border border-primary/20";
                                 const inactiveClasses = "text-text-main/60 hover:text-primary hover:bg-dark/5 border border-transparent";
@@ -958,8 +958,8 @@ const Account = () => {
                                             onClick={tab.action}
                                             className={`${baseClasses} ${inactiveClasses}`}
                                         >
-                                            <Icon className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
-                                            <span>{tab.label}</span>
+                                            <Icon className="w-5 h-5 md:w-4 md:h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
+                                            <span className="break-words whitespace-normal">{tab.label}</span>
                                         </button>
                                     );
                                 }
@@ -970,8 +970,8 @@ const Account = () => {
                                         to={tab.path}
                                         className={`${baseClasses} ${isTabActive ? activeClasses : inactiveClasses}`}
                                     >
-                                        <Icon className={`w-4 h-4 transition-opacity ${isTabActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`} />
-                                        <span>{tab.label}</span>
+                                        <Icon className={`w-5 h-5 md:w-4 md:h-4 transition-opacity ${isTabActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`} />
+                                        <span className="break-words whitespace-normal">{tab.label}</span>
                                     </Link>
                                 );
                             })}

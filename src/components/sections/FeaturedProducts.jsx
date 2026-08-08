@@ -59,22 +59,21 @@ const FeaturedProducts = () => {
                     </div>
                 </div>
 
+                <style dangerouslySetInnerHTML={{__html: `
+                    .hide-scrollbar::-webkit-scrollbar { display: none; }
+                    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                `}} />
                 <div 
                     ref={scrollContainerRef}
-                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-6 px-6 md:mx-0 md:px-0" 
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-6 md:mx-0 hide-scrollbar" 
                 >
-                    <style dangerouslySetInnerHTML={{__html: `
-                        .hide-scrollbar::-webkit-scrollbar { display: none; }
-                        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-                    `}} />
-                    <div className="flex gap-4 w-max hide-scrollbar">
-                        {formattedProducts.map(product => (
-                            <div key={product._id || product.id} className="snap-start flex-none w-[70vw] sm:w-[40vw] md:w-[25vw] lg:w-[18vw] max-w-[280px]">
-                                <ProductCard product={product} />
-                            </div>
-                        ))}
-                    </div>
+                    <div className="w-2 md:hidden flex-shrink-0"></div>
+                    {formattedProducts.map(product => (
+                        <div key={product._id || product.id} className="snap-start flex-none w-[60vw] sm:w-[40vw] md:w-[25vw] lg:w-[18vw] max-w-[280px]">
+                            <ProductCard product={product} />
+                        </div>
+                    ))}
+                    <div className="w-2 md:hidden flex-shrink-0"></div>
                 </div>
             </div>
         </section>

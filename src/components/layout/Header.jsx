@@ -32,6 +32,14 @@ const Header = ({
     const { data: currentMenuData, isFetching: isMegaMenuFetching } = useGetMegaMenuQuery(activeMenu, { skip: !activeMenu });
     const [isScrolledState, setIsScrolledState] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
+    const [expandedMobileCategories, setExpandedMobileCategories] = useState({});
+
+    const toggleMobileCategory = (categoryId) => {
+        setExpandedMobileCategories(prev => ({
+            ...prev,
+            [categoryId]: !prev[categoryId]
+        }));
+    };
     const menuTimer = useRef(null);
     const location = useLocation();
 
@@ -178,6 +186,9 @@ const Header = ({
                                     <button onClick={() => setSearchOpen(true)} title="Search" className="text-dark/80 hover:text-primary relative">
                                         <Icons.Search />
                                     </button>
+                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-dark/80 hover:text-primary transition-colors">
+                                        <Icons.User />
+                                    </Link>
                                     <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-dark/80 hover:text-primary relative">
                                         <Icons.Cart />
                                         {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
@@ -274,6 +285,9 @@ const Header = ({
                                     <button onClick={() => setSearchOpen(true)} title="Search" className="text-dark/80 hover:text-primary relative">
                                         <Icons.Search />
                                     </button>
+                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-dark/80 hover:text-primary transition-colors">
+                                        <Icons.User />
+                                    </Link>
                                     <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-dark/80 hover:text-primary relative">
                                         <Icons.Cart />
                                         {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
@@ -359,11 +373,52 @@ const Header = ({
 
                 {/* Mobile Menu Dropdown */}
                 <div className={`md:hidden bg-[#e8ded0] border-b border-light/10 overflow-y-auto transition-all duration-300 ${mobileMenuOpen ? 'max-h-[85vh]' : 'max-h-0'}`}>
-                    <div className="px-4 py-4 space-y-2 text-center text-dark">
+                    <div className="px-4 py-4 space-y-2 text-left text-dark">
                         <Link to="/shop" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
+                        
+                        {/* Dynamic Categories */}
+                        <div className="border-t border-b border-dark/10 my-2 py-2 text-left">
+                            {(categories && Array.isArray(categories) ? categories : []).map((cat) => {
+                                const catSubCategories = (subCategories && Array.isArray(subCategories) ? subCategories : []).filter(sub => sub.value === cat.name);
+                                return (
+                                    <div key={cat.id} className="py-2 border-b border-dark/5 last:border-0">
+                                        <div className="flex items-center justify-between">
+                                            <Link 
+                                                to={`/category/${cat.name.toLowerCase()}`} 
+                                                onClick={closeMobileMenu} 
+                                                className={`flex-1 block py-1 text-sm font-heading font-bold hover:text-white tracking-widest uppercase ${isActive(`/category/${cat.name.toLowerCase()}`)}`}
+                                            >
+                                                {cat.name}
+                                            </Link>
+                                            {catSubCategories.length > 0 && (
+                                                <button 
+                                                    onClick={() => toggleMobileCategory(cat.id)}
+                                                    className="p-2 text-dark/70 hover:text-white transition-colors"
+                                                >
+                                                    <Icons.ChevronDown className={`w-4 h-4 transition-transform duration-300 ${expandedMobileCategories[cat.id] ? 'rotate-180' : ''}`} />
+                                                </button>
+                                            )}
+                                        </div>
+                                        {catSubCategories.length > 0 && expandedMobileCategories[cat.id] && (
+                                            <div className="pl-4 mt-1 space-y-1 animate-in fade-in slide-in-from-top-2 duration-300">
+                                                {catSubCategories.map(sub => (
+                                                    <Link
+                                                        key={sub.id}
+                                                        to={`/category/${cat.name.toLowerCase()}/${sub.name.toLowerCase()}`}
+                                                        onClick={closeMobileMenu}
+                                                        className={`block py-1 text-xs font-heading font-medium text-dark/70 hover:text-white tracking-widest uppercase ${isActive(`/category/${cat.name.toLowerCase()}/${sub.name.toLowerCase()}`)}`}
+                                                    >
+                                                        {sub.name}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
                         <Link to="/new-arrivals" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
                         <Link to="/offers" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/offers')}`}>Offers</Link>
-                        <Link to={user ? "/account" : "/login"} onClick={closeMobileMenu} className="block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase">Account</Link>
                     </div>
                 </div>
             </nav>

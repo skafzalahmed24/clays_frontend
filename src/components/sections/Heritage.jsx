@@ -30,7 +30,7 @@ const Heritage = () => {
     return (
         <section className="py-8 md:py-12 bg-body relative overflow-hidden">
             <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
                     
                     {/* Content Side */}
                     <div className="flex flex-col justify-center px-4 md:px-12 order-last md:order-first">
@@ -42,7 +42,7 @@ const Heritage = () => {
                         </p>
                         <Link
                             to={content.link || '/about'}
-                            className="bg-transparent border border-primary text-dark hover:bg-primary hover:text-white font-heading font-bold uppercase tracking-widest py-4 px-10 transition-all duration-300 w-fit"
+                            className="bg-transparent border border-primary text-dark hover:bg-primary hover:text-white font-heading font-bold uppercase tracking-widest py-4 px-10 transition-all duration-300 w-full md:w-fit block text-center"
                         >
                             {content.linkText || 'Read Our Story'}
                         </Link>

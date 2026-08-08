@@ -18,8 +18,8 @@ const SocialFeed = ({ title, followLink }) => {
     return (
         <section className="py-6 md:py-8">
             <div className="w-full px-6 md:px-12">
-                <div className="flex justify-between items-center mb-12">
-                    <h2 className="text-2xl md:text-3xl font-heading">{displayTitle}</h2>
+                <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-8 md:mb-12 gap-4">
+                    <h2 className="text-xl md:text-3xl font-heading text-center md:text-left">{displayTitle}</h2>
                     <a href={followUrl} className="flex items-center gap-2 text-accent hover:opacity-70 transition-opacity text-sm uppercase tracking-widest">
                         Follow Us <span className="text-xl">&rarr;</span>
                     </a>

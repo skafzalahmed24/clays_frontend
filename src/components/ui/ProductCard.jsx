@@ -34,22 +34,23 @@ const ProductCard = ({ product, onNavigate, searchQuery }) => {
     }
 
     return (
-        <div className="group cursor-pointer">
-            <div className="relative aspect-[4/5] overflow-hidden bg-light/5 mb-6 rounded-sm border border-light/5 group-hover:border-primary/30 transition-colors duration-500">
+        <div className="cursor-pointer group/card">
+            <div className="group relative aspect-[4/5] overflow-hidden bg-light/5 mb-6 rounded-sm border border-light/5 hover:border-primary/30 transition-colors duration-500">
                 <Link to={`/product/${productId}`} className="block w-full h-full" onClick={onNavigate}>
                     <img
                         src={getImageUrl(product.img)}
                         alt={product.name}
                         loading="lazy"
                         decoding="async"
-                        className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110 opacity-90 group-hover:opacity-100"
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-90 group-hover:opacity-100"
                     />
                     {/* Gradient Overlay on Hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-0 bg-dark/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+
                 </Link>
 
                 {/* Floating Action Button */}
-                <div className="absolute bottom-6 left-0 right-0 flex justify-center translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out z-10 space-x-2">
+                <div className="absolute bottom-4 md:bottom-6 left-0 right-0 flex justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 px-3 md:px-0 pointer-events-none">
                     <button
                         onClick={async (e) => {
                             e.preventDefault();
@@ -75,7 +76,7 @@ const ProductCard = ({ product, onNavigate, searchQuery }) => {
                             }
                         }}
                         disabled={localLoading}
-                        className={`px-6 py-2.5 text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] font-bold ${isInCart ? 'bg-light text-dark hover:bg-light/90' : 'bg-primary text-dark hover:bg-light'}`}
+                        className={`pointer-events-auto w-full md:w-auto px-4 md:px-6 py-2.5 md:py-3 text-[10px] md:text-xs uppercase tracking-wider md:tracking-[0.2em] transition-all duration-300 shadow-xl font-bold rounded-sm ${isInCart ? 'bg-light text-dark hover:bg-white' : 'bg-primary text-white hover:bg-dark'}`}
                     >
                         {localLoading ? '...' : (isInCart ? 'Remove' : 'Add to Cart')}
                     </button>
@@ -91,7 +92,7 @@ const ProductCard = ({ product, onNavigate, searchQuery }) => {
                 )}
 
 
-                <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                <div className="absolute top-2 right-2 md:top-4 md:right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                     <button
                         onClick={async (e) => {
                             e.preventDefault();
@@ -113,9 +114,9 @@ const ProductCard = ({ product, onNavigate, searchQuery }) => {
                                 showToast(errorMessage, 'error');
                             }
                         }}
-                        className={`w-9 h-9 flex items-center justify-center backdrop-blur-sm rounded-full transition-all border shadow-[0_0_15px_rgba(0,0,0,0.3)] ${isInWishlist ? 'bg-primary text-dark border-primary shadow-primary/30' : 'bg-dark/40 text-light/70 border-light/10 hover:text-primary hover:bg-dark/60'}`}
+                        className={`pointer-events-auto w-7 h-7 md:w-9 md:h-9 flex items-center justify-center backdrop-blur-md rounded-full transition-all border shadow-lg ${isInWishlist ? 'bg-primary text-white border-primary' : 'bg-white/90 text-dark/70 border-white hover:text-primary hover:bg-white'}`}
                     >
-                        {isInWishlist ? <Icons.HeartFilled className="w-5 h-5 drop-shadow-sm" /> : <Icons.HeartFilled className="w-5 h-5 drop-shadow-sm" />}
+                        {isInWishlist ? <Icons.HeartFilled className="w-4 h-4 md:w-5 md:h-5 drop-shadow-sm" /> : <Icons.HeartFilled className="w-4 h-4 md:w-5 md:h-5 drop-shadow-sm" />}
                     </button>
                 </div>
             </div>
@@ -134,7 +135,7 @@ const ProductCard = ({ product, onNavigate, searchQuery }) => {
                 </div>
                 {/* Colors */}
                 {Array.isArray(product.colors) && product.colors.length > 0 && (
-                    <div className="flex justify-center gap-2 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="flex justify-center gap-2 pt-2 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
                         {product.colors.filter(c => typeof c === 'string').map(c => (
                             <div key={c} className="w-2 h-2 rounded-full ring-1 ring-light/20" style={{ backgroundColor: c }}></div>
                         ))}

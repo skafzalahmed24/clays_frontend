@@ -16,11 +16,11 @@ const Hero = () => {
         return () => clearInterval(timer);
     }, [heroSlides]);
 
-    if (loading) return <div className="h-[300px] md:h-[580px] bg-body flex items-center justify-center text-primary">Loading...</div>;
+    if (loading) return <div className="min-h-[400px] md:h-[580px] bg-body flex items-center justify-center text-primary">Loading...</div>;
 
     if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
         return (
-            <section className="relative h-[300px] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
+            <section className="relative min-h-[400px] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
                 <div className="text-center">
                     <h1 className="text-4xl text-primary font-heading">Welcome to Clarysays</h1>
                 </div>
@@ -29,7 +29,7 @@ const Hero = () => {
     }
 
     return (
-        <section className="relative h-[300px] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
+        <section className="relative min-h-[400px] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
             {heroSlides.map((slide, index) => (
                 <div
                     key={slide._id}
@@ -46,7 +46,13 @@ const Hero = () => {
                             playsInline
                         />
                     ) : (
-                        <img src={getMediaUrl(slide.media)} alt={slide.title} className="w-full h-full object-cover" />
+                        <picture>
+                            {slide.mobileMedia && (
+                                <source media="(max-width: 767px)" srcSet={getMediaUrl(slide.mobileMedia)} />
+                            )}
+                            <source media="(min-width: 768px)" srcSet={getMediaUrl(slide.media)} />
+                            <img src={getMediaUrl(slide.media)} alt={slide.title || 'Hero Banner'} className="w-full h-full object-cover" />
+                        </picture>
                     )}
                 </div>
             ))}
@@ -58,10 +64,10 @@ const Hero = () => {
                         {heroSlides.map((slide, index) => (
                             index === currentSlide && (
                                 <div key={slide._id} className="animate-fade-in-up">
-                                    <h1 className="text-5xl md:text-7xl font-heading font-bold text-primary mb-6 leading-tight drop-shadow-lg">
+                                    <h1 className="text-4xl md:text-7xl font-heading font-bold text-primary mb-6 leading-tight drop-shadow-lg">
                                         {slide.title}
                                     </h1>
-                                    <p className="text-xl md:text-2xl text-text-main/80 mb-10 max-w-lg font-light drop-shadow-md">
+                                    <p className="text-lg md:text-2xl text-text-main/80 mb-10 max-w-lg font-light drop-shadow-md">
                                         {slide.subtitle}
                                     </p>
                                     {slide.showButton !== false && (

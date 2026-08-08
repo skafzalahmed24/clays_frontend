@@ -88,8 +88,9 @@ const AdminContent = () => {
     const faqListRef = useRef(null);
     const aboutFormRef = useRef(null);
 
-    const [newHero, setNewHero] = useState({ title: '', subtitle: '', media: '', link: '', order: 0, showButton: true });
+    const [newHero, setNewHero] = useState({ title: '', subtitle: '', media: '', mobileMedia: '', link: '', order: 0, showButton: true });
     const [heroImageFile, setHeroImageFile] = useState(null);
+    const [heroMobileImageFile, setHeroMobileImageFile] = useState(null);
     const [editingHero, setEditingHero] = useState(null);
 
     // --- Testimonial State ---
@@ -172,13 +173,19 @@ const AdminContent = () => {
 
         const form = e.target;
         let mediaUrl = newHero.media;
+        let mobileMediaUrl = newHero.mobileMedia;
 
         if (heroImageFile) {
             mediaUrl = await handleFileUpload(heroImageFile);
             if (!mediaUrl) return; // Upload failed
         }
 
-        const heroData = { ...newHero, media: mediaUrl };
+        if (heroMobileImageFile) {
+            mobileMediaUrl = await handleFileUpload(heroMobileImageFile);
+            if (!mobileMediaUrl) return; // Upload failed
+        }
+
+        const heroData = { ...newHero, media: mediaUrl, mobileMedia: mobileMediaUrl };
 
         if (editingHero) {
             updateHeroSlide({ id: editingHero._id, ...heroData })
@@ -186,6 +193,7 @@ const AdminContent = () => {
                 .then(() => {
                     showToast('Hero Slide updated', 'success');
                     handleCancelEdit();
+                    setHeroMobileImageFile(null);
                     form.reset();
                     scrollToList(heroListRef);
                 })
@@ -195,8 +203,9 @@ const AdminContent = () => {
                 .unwrap()
                 .then(() => {
                     showToast('Hero Slide added', 'success');
-                    setNewHero({ title: '', subtitle: '', media: '', link: '', order: 0, showButton: true });
+                    setNewHero({ title: '', subtitle: '', media: '', mobileMedia: '', link: '', order: 0, showButton: true });
                     setHeroImageFile(null);
+                    setHeroMobileImageFile(null);
                     form.reset();
                     scrollToList(heroListRef);
                 })
@@ -210,17 +219,21 @@ const AdminContent = () => {
             title: slide.title,
             subtitle: slide.subtitle,
             media: slide.media,
+            mobileMedia: slide.mobileMedia || '',
             link: slide.link || '',
             order: slide.order || 0,
             showButton: slide.showButton !== undefined ? slide.showButton : true
         });
+        setHeroImageFile(null);
+        setHeroMobileImageFile(null);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleCancelEdit = () => {
         setEditingHero(null);
-        setNewHero({ title: '', subtitle: '', media: '', link: '', order: 0, showButton: true });
+        setNewHero({ title: '', subtitle: '', media: '', mobileMedia: '', link: '', order: 0, showButton: true });
         setHeroImageFile(null);
+        setHeroMobileImageFile(null);
     };
 
     const handleDeleteHero = async (id) => {
@@ -866,6 +879,7 @@ const AdminContent = () => {
                                     onChange={e => setNewHero({ ...newHero, subtitle: e.target.value })}
                                 />
                                 <div className="space-y-1">
+                                    <label className="block text-[10px] text-light/60 uppercase tracking-wider mb-1">Desktop Banner *</label>
                                     <input
                                         type="file"
                                         className="bg-body border border-white/10 rounded p-2 text-light w-full"
@@ -874,6 +888,16 @@ const AdminContent = () => {
                                         accept="image/*,video/*"
                                     />
                                     {editingHero && !heroImageFile && <p className="text-[10px] text-light/40 ml-1">Leave empty to keep current media</p>}
+                                </div>
+                                <div className="space-y-1">
+                                    <label className="block text-[10px] text-light/60 uppercase tracking-wider mb-1">Mobile Banner (Optional)</label>
+                                    <input
+                                        type="file"
+                                        className="bg-body border border-white/10 rounded p-2 text-light w-full"
+                                        onChange={e => setHeroMobileImageFile(e.target.files[0])}
+                                        accept="image/*,video/*"
+                                    />
+                                    {editingHero && !heroMobileImageFile && <p className="text-[10px] text-light/40 ml-1">Leave empty to keep current mobile media</p>}
                                 </div>
                                 <Input
                                     type="text"

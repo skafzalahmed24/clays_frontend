@@ -10,7 +10,7 @@ const BeautyPhilosophy = () => {
                     <p className="max-w-2xl text-dark/70 text-lg font-light">Crafted with intention. We believe true luxury lies in the purity of ingredients and the efficacy of nature.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto">
                     {/* Item 1 */}
                     <div className="flex flex-col items-center group">
                         <div className="w-20 h-20 rounded-full border border-primary/30 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-dark transition-all duration-500">

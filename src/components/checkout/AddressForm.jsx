@@ -18,7 +18,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                     placeholder="First name *"
                     value={formData.firstName}
                     onChange={onChange}
-                    className="bg-transparent border-light/20 focus:border-primary"
+                    className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
                 />
                 <Input
                     type="text"
@@ -27,7 +27,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                     placeholder="Last name *"
                     value={formData.lastName}
                     onChange={onChange}
-                    className="bg-transparent border-light/20 focus:border-primary"
+                    className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
                 />
             </div>
 
@@ -38,7 +38,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                 placeholder="Email *"
                 value={formData.email}
                 onChange={onChange}
-                className="bg-transparent border-light/20 focus:border-primary"
+                className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
             />
 
             <Input
@@ -48,7 +48,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                 placeholder="Phone *"
                 value={formData.phone}
                 onChange={onChange}
-                className="bg-transparent border-light/20 focus:border-primary"
+                className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
             />
 
             <Input
@@ -58,7 +58,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                 placeholder="Address *"
                 value={formData.address}
                 onChange={onChange}
-                className="bg-transparent border-light/20 focus:border-primary"
+                className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
             />
 
             <Input
@@ -67,7 +67,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                 placeholder="Apartment, suite, etc. (optional)"
                 value={formData.apartment}
                 onChange={onChange}
-                className="bg-transparent border-light/20 focus:border-primary"
+                className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
             />
 
             <div className="grid grid-cols-2 gap-4">
@@ -78,7 +78,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                     placeholder="City *"
                     value={formData.city}
                     onChange={onChange}
-                    className="bg-transparent border-light/20 focus:border-primary"
+                    className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
                 />
                 <Input
                     type="text"
@@ -87,7 +87,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                     placeholder="Postal code *"
                     value={formData.postalCode}
                     onChange={onChange}
-                    className="bg-transparent border-light/20 focus:border-primary"
+                    className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
                 />
             </div>
 
@@ -96,7 +96,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="flex-1 border border-light/20 text-light px-6 py-3 hover:bg-white/5 transition-colors rounded-sm"
+                        className="flex-1 border border-dark/20 text-dark px-6 py-3 hover:bg-dark/5 transition-colors rounded-sm"
                     >
                         Cancel
                     </button>
@@ -105,7 +105,7 @@ const AddressForm = ({ formData, onChange, onSubmit, onCancel, isEditing = false
                     type="button"
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="flex-1 bg-primary text-dark font-bold uppercase tracking-widest px-6 py-3 hover:bg-light transition-colors rounded-sm disabled:opacity-50"
+                    className="flex-1 bg-primary text-dark font-bold uppercase tracking-widest px-6 py-3 hover:bg-dark hover:text-white transition-colors rounded-sm disabled:opacity-50"
                 >
                     {loading ? 'Saving...' : isEditing ? 'Update Address' : 'Save Address'}
                 </button>

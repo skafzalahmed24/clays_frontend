@@ -7,7 +7,7 @@ const AddressSelector = ({ addresses, selectedAddressId, onSelectAddress, onAddN
 
     return (
         <div className="space-y-4">
-            <h3 className="text-base font-heading text-light uppercase tracking-widest">
+            <h3 className="text-base font-heading text-dark uppercase tracking-widest">
                 Delivery addresses ({addresses.length})
             </h3>
 
@@ -18,7 +18,7 @@ const AddressSelector = ({ addresses, selectedAddressId, onSelectAddress, onAddN
                         onClick={() => onSelectAddress(address._id)}
                         className={`border rounded-sm p-4 cursor-pointer transition-all ${selectedAddressId === address._id
                                 ? 'border-primary bg-primary/5'
-                                : 'border-light/20 hover:border-light/40'
+                                : 'border-dark/20 hover:border-dark/40'
                             }`}
                     >
                         <div className="flex items-start gap-3">
@@ -27,7 +27,7 @@ const AddressSelector = ({ addresses, selectedAddressId, onSelectAddress, onAddN
                                 <div
                                     className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${selectedAddressId === address._id
                                             ? 'border-primary'
-                                            : 'border-light/40'
+                                            : 'border-dark/40'
                                         }`}
                                 >
                                     {selectedAddressId === address._id && (
@@ -38,7 +38,7 @@ const AddressSelector = ({ addresses, selectedAddressId, onSelectAddress, onAddN
 
                             {/* Address details */}
                             <div className="flex-1 min-w-0">
-                                <h4 className="font-medium text-light mb-1">
+                                <h4 className="font-medium text-dark mb-1">
                                     {address.firstName} {address.lastName}
                                     {address.isDefault && (
                                         <span className="ml-2 text-xs text-primary font-normal">(Default)</span>
@@ -77,7 +77,7 @@ const AddressSelector = ({ addresses, selectedAddressId, onSelectAddress, onAddN
             <button
                 type="button"
                 onClick={onAddNew}
-                className="w-full border border-light/20 hover:border-primary text-primary px-4 py-3 rounded-sm text-sm font-medium transition-colors"
+                className="w-full border border-dark/20 hover:border-primary text-primary px-4 py-3 rounded-sm text-sm font-medium transition-colors"
             >
                 + Add a new delivery address
             </button>

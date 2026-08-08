@@ -310,8 +310,8 @@ const Checkout = () => {
     if (cartItems.length === 0) return null;
 
     const renderOrderSummary = (className = "") => (
-        <div className={`bg-white/5 border border-light/10 p-6 md:p-8 rounded-sm ${className}`}>
-            <h3 className="font-heading text-lg text-light uppercase tracking-widest mb-6 border-b border-light/10 pb-4">Order Summary</h3>
+        <div className={`bg-dark/5 border border-dark/10 p-6 md:p-8 rounded-sm ${className}`}>
+            <h3 className="font-heading text-lg text-dark uppercase tracking-widest mb-6 border-b border-dark/10 pb-4">Order Summary</h3>
 
             {/* Items List */}
             <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 mb-6 custom-scrollbar pt-3">
@@ -324,17 +324,17 @@ const Checkout = () => {
 
                     return (
                         <div key={item.id || item._id} className="flex gap-4 items-center">
-                            <div className="relative w-16 h-16 bg-black/40 rounded-sm flex-shrink-0 border border-light/10 overflow-visible">
+                            <div className="relative w-16 h-16 bg-dark/10 rounded-sm flex-shrink-0 border border-dark/10 overflow-visible">
                                 <img src={getImageUrl(img)} alt={name} className="w-full h-full object-cover rounded-sm" />
-                                <span className="absolute -top-2 -right-2 w-5 h-5 bg-primary text-dark text-xs font-bold rounded-full flex items-center justify-center border-2 border-stone-900">
+                                <span className="absolute -top-2 -right-2 w-5 h-5 bg-primary text-dark text-xs font-bold rounded-full flex items-center justify-center border-2 border-body">
                                     {item.qty}
                                 </span>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h4 className="text-sm font-medium text-light truncate">{name}</h4>
-                                <p className="text-xs text-light/50">{category}</p>
+                                <h4 className="text-sm font-medium text-dark truncate">{name}</h4>
+                                <p className="text-xs text-dark/50">{category}</p>
                             </div>
-                            <div className="text-sm font-medium text-light">
+                            <div className="text-sm font-medium text-dark">
                                 {format(price * item.qty)}
                             </div>
                         </div>
@@ -354,13 +354,13 @@ const Checkout = () => {
                                 handleApplyCoupon(e);
                             }
                         }}
-                        className="bg-transparent border-light/20 text-sm py-2"
+                        className="bg-transparent border-dark/20 text-sm py-2 text-dark placeholder:text-dark/40"
                     />
                     <button
                         type="button"
                         onClick={handleApplyCoupon}
                         disabled={!couponCode || isValidating}
-                        className="bg-white/10 text-light px-4 py-2 rounded-sm text-sm font-medium hover:bg-white/20 disabled:opacity-50 transition-colors"
+                        className="bg-dark/10 text-dark px-4 py-2 rounded-sm text-sm font-medium hover:bg-dark/20 disabled:opacity-50 transition-colors"
                     >
                         {isValidating ? '...' : 'Apply'}
                     </button>
@@ -374,19 +374,19 @@ const Checkout = () => {
             </div>
 
             {/* Totals */}
-            <div className="space-y-3 border-t border-light/10 pt-4 mb-6">
-                <div className="flex justify-between text-sm text-light/70">
+            <div className="space-y-3 border-t border-dark/10 pt-4 mb-6">
+                <div className="flex justify-between text-sm text-dark/70">
                     <span>Subtotal</span>
-                    <span className="text-light">{format(subtotal)}</span>
+                    <span className="text-dark">{format(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-sm text-light/70">
+                <div className="flex justify-between text-sm text-dark/70">
                     <span>Shipping</span>
-                    <span className="text-light">{shipping === 0 ? 'Free' : format(shipping)}</span>
+                    <span className="text-dark">{shipping === 0 ? 'Free' : format(shipping)}</span>
                 </div>
                 {taxPrice > 0 && (
-                    <div className="flex justify-between text-sm text-light/70">
+                    <div className="flex justify-between text-sm text-dark/70">
                         <span>Tax ({taxRate}%)</span>
-                        <span className="text-light">{format(taxPrice)}</span>
+                        <span className="text-dark">{format(taxPrice)}</span>
                     </div>
                 )}
                 {discount > 0 && (
@@ -396,10 +396,10 @@ const Checkout = () => {
                     </div>
                 )}
             </div>
-            <div className="flex justify-between items-center pt-6 mt-6 border-t border-light/10">
-                <span className="text-lg font-heading text-light uppercase tracking-widest">Total</span>
+            <div className="flex justify-between items-center pt-6 mt-6 border-t border-dark/10">
+                <span className="text-lg font-heading text-dark uppercase tracking-widest">Total</span>
                 <div className="text-right">
-                    <span className="text-xs text-light/50 block mb-1">{currency}</span>
+                    <span className="text-xs text-dark/50 block mb-1">{currency}</span>
                     <span className="text-2xl font-bold text-primary">{format(total)}</span>
                 </div>
             </div>
@@ -417,23 +417,23 @@ const Checkout = () => {
                     <div className="flex-1">
                         {/* Breadcrumbs / Steps */}
                         <div className="flex items-center gap-2 text-sm mb-8 font-heading tracking-widest">
-                            <span className={`${step === 1 ? 'text-primary' : 'text-light'} transition-colors`}>Information</span>
-                            <span className="text-white/20">/</span>
-                            <span className={`${step === 2 ? 'text-primary' : 'text-white/40'} transition-colors`}>Payment</span>
-                            <span className="text-white/20">/</span>
-                            <span className="text-white/40">Success</span>
+                            <span className={`${step === 1 ? 'text-primary' : 'text-dark'} transition-colors`}>Information</span>
+                            <span className="text-dark/20">/</span>
+                            <span className={`${step === 2 ? 'text-primary' : 'text-dark/40'} transition-colors`}>Payment</span>
+                            <span className="text-dark/20">/</span>
+                            <span className="text-dark/40">Success</span>
                         </div>
 
                         {/* STEP 1: SHIPPING ADDRESS */}
                         {step === 1 && (
                             <form onSubmit={handleInfoSubmit} className="space-y-8 animate-in fade-in slide-in-from-left-4 duration-500">
                                 <div className="space-y-6">
-                                    <h2 className="text-lg font-heading text-light uppercase tracking-widest border-b border-light/10 pb-4">
+                                    <h2 className="text-lg font-heading text-dark uppercase tracking-widest border-b border-dark/10 pb-4">
                                         Shipping Address
                                     </h2>
 
                                     {addressesLoading ? (
-                                        <div className="text-center text-light/60 py-8">Loading addresses...</div>
+                                        <div className="text-center text-dark/60 py-8">Loading addresses...</div>
                                     ) : showAddressForm ? (
                                         <>
                                             <AddressForm
@@ -454,7 +454,7 @@ const Checkout = () => {
                                             onEdit={handleEditAddress}
                                         />
                                     ) : (
-                                        <div className="text-center text-light/60 py-4">
+                                        <div className="text-center text-dark/60 py-4">
                                             <p className="mb-4">You haven't added any delivery addresses yet.</p>
                                             <button
                                                 type="button"
@@ -471,7 +471,7 @@ const Checkout = () => {
                                     <>
                                         {renderOrderSummary('lg:hidden mb-8')}
                                         <div className="flex justify-end pt-6">
-                                            <button type="submit" className="bg-primary text-dark font-bold uppercase tracking-widest px-8 py-3 hover:bg-light transition-colors rounded-sm">
+                                            <button type="submit" className="bg-primary text-dark font-bold uppercase tracking-widest px-8 py-3 hover:bg-dark hover:text-white transition-colors rounded-sm">
                                                 Continue to Payment
                                             </button>
                                         </div>
@@ -486,15 +486,15 @@ const Checkout = () => {
                                 {(() => {
                                     const selectedAddress = addresses.find(addr => addr._id === selectedAddressId);
                                     return selectedAddress ? (
-                                        <div className="bg-white/5 border border-light/10 p-4 rounded-sm space-y-2 text-sm">
-                                            <div className="flex justify-between border-b border-light/5 pb-2">
-                                                <span className="text-light/60">Contact</span>
-                                                <span className="text-light">{selectedAddress.email}</span>
+                                        <div className="bg-dark/5 border border-dark/10 p-4 rounded-sm space-y-2 text-sm">
+                                            <div className="flex justify-between border-b border-dark/5 pb-2">
+                                                <span className="text-dark/60">Contact</span>
+                                                <span className="text-dark">{selectedAddress.email}</span>
                                                 <button type="button" onClick={() => setStep(1)} className="text-primary hover:underline text-xs">Change</button>
                                             </div>
                                             <div className="flex justify-between pt-2">
-                                                <span className="text-light/60">Ship to</span>
-                                                <span className="text-light">{selectedAddress.address}, {selectedAddress.city}</span>
+                                                <span className="text-dark/60">Ship to</span>
+                                                <span className="text-dark">{selectedAddress.address}, {selectedAddress.city}</span>
                                                 <button type="button" onClick={() => setStep(1)} className="text-primary hover:underline text-xs">Change</button>
                                             </div>
                                         </div>
@@ -506,19 +506,19 @@ const Checkout = () => {
                                 })()}
 
                                 <div className="space-y-6 pt-6">
-                                    <h2 className="text-lg font-heading text-light uppercase tracking-widest border-b border-light/10 pb-4">Payment Method</h2>
-                                    <p className="text-sm text-light/60">All transactions are secure and encrypted.</p>
+                                    <h2 className="text-lg font-heading text-dark uppercase tracking-widest border-b border-dark/10 pb-4">Payment Method</h2>
+                                    <p className="text-sm text-dark/60">All transactions are secure and encrypted.</p>
 
-                                    <div className="border border-light/20 rounded-sm overflow-hidden">
-                                        <div className="p-4 bg-white/5 border-b border-light/10 flex items-center gap-3">
+                                    <div className="border border-dark/20 rounded-sm overflow-hidden">
+                                        <div className="p-4 bg-dark/5 border-b border-dark/10 flex items-center gap-3">
                                             <div className="w-4 h-4 rounded-full border-[5px] border-primary bg-white"></div>
-                                            <span className="font-medium text-light">Credit Card</span>
+                                            <span className="font-medium text-dark">Credit Card</span>
                                         </div>
-                                        <div className="p-6 bg-black/20 space-y-4">
+                                        <div className="p-6 bg-dark/5 space-y-4">
                                             <Input
                                                 type="text"
                                                 placeholder="Card number *"
-                                                className="bg-transparent border-light/20 focus:border-primary"
+                                                className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
                                                 value={paymentData.cardNumber}
                                                 maxLength={19}
                                                 onChange={(e) => {
@@ -530,7 +530,7 @@ const Checkout = () => {
                                                 <Input
                                                     type="text"
                                                     placeholder="Expiration date (MM / YY) *"
-                                                    className="bg-transparent border-light/20 focus:border-primary"
+                                                    className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
                                                     value={paymentData.expiry}
                                                     maxLength={5}
                                                     onChange={(e) => {
@@ -545,7 +545,7 @@ const Checkout = () => {
                                                 <Input
                                                     type="text"
                                                     placeholder="Security code *"
-                                                    className="bg-transparent border-light/20 focus:border-primary"
+                                                    className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
                                                     value={paymentData.cvc}
                                                     maxLength={4}
                                                     onChange={(e) => {
@@ -557,7 +557,7 @@ const Checkout = () => {
                                             <Input
                                                 type="text"
                                                 placeholder="Name on card *"
-                                                className="bg-transparent border-light/20 focus:border-primary"
+                                                className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
                                                 value={paymentData.nameOnCard}
                                                 onChange={(e) => setPaymentData({ ...paymentData, nameOnCard: e.target.value })}
                                             />
@@ -567,13 +567,13 @@ const Checkout = () => {
                                 {renderOrderSummary('lg:hidden mb-8 mt-8')}
 
                                 <div className="flex justify-between items-center pt-8">
-                                    <button type="button" onClick={() => setStep(1)} className="text-light/60 hover:text-white transition-colors flex items-center gap-2 text-sm">
+                                    <button type="button" onClick={() => setStep(1)} className="text-dark/60 hover:text-dark transition-colors flex items-center gap-2 text-sm">
                                         <span className="rotate-180 text-xs">➜</span> Return to Information
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={loading}
-                                        className="bg-primary text-dark font-bold uppercase tracking-widest px-8 py-3 hover:bg-light transition-colors rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
+                                        className="bg-primary text-dark font-bold uppercase tracking-widest px-8 py-3 hover:bg-dark hover:text-white transition-colors rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
                                     >
                                         {loading ? "Processing..." : "Pay now"}
                                     </button>

@@ -4,12 +4,12 @@ const IngredientSpotlight = () => {
     return (
         <section className="py-8 md:py-12 bg-body relative overflow-hidden">
             <div className="w-full max-w-[1600px] mx-auto px-6 md:px-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
                     {/* Image Side */}
                     <div className="flex justify-center md:justify-end w-full">
                         <div className="relative aspect-[4/3] w-full overflow-hidden shadow-2xl">
                             <img
-                                src="/assets/gold_standard.jpg"
+                                src="/assets/gold_standard.png"
                                 alt="Premium Beauty Serum"
                                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-1000"
                             />
@@ -29,7 +29,7 @@ const IngredientSpotlight = () => {
                         <p className="text-dark/70 text-lg font-light leading-relaxed mb-10">
                             Combined with ultra-hydrating hyaluronic acid and rare botanical extracts, it penetrates deep to restore your skin's natural elasticity, leaving you with an unmistakable, radiant glow.
                         </p>
-                        <button className="bg-transparent border border-primary text-dark hover:bg-primary hover:text-white font-heading font-bold uppercase tracking-widest py-4 px-10 transition-all duration-300 w-fit">
+                        <button className="bg-transparent border border-primary text-dark hover:bg-primary hover:text-white font-heading font-bold uppercase tracking-widest py-4 px-10 transition-all duration-300 w-full md:w-fit text-center">
                             Discover The Formula
                         </button>
                     </div>

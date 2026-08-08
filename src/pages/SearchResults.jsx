@@ -118,7 +118,7 @@ const SearchResults = () => {
             {/* Mobile Filter Toggle */}
             <div className="lg:hidden px-6 py-4 border-b border-light/10 sticky top-[64px] bg-body z-30">
                 <button
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-light/5 border border-light/10 text-xs uppercase tracking-widest text-light hover:bg-light/10 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-dark text-white border border-dark/10 text-xs uppercase tracking-widest hover:bg-primary transition-colors rounded-md shadow-sm"
                     onClick={() => setIsSidebarOpen(true)}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,7 +143,7 @@ const SearchResults = () => {
                     {loading ? (
                         <div className="text-center py-20 text-light/50">Loading products...</div>
                     ) : results.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-12">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 md:gap-x-8 gap-y-12 md:gap-y-16">
                             {results.map((product) => (
                                 <ProductCard
                                     key={product.id}

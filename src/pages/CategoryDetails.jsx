@@ -141,18 +141,37 @@ const CategoryDetails = () => {
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-6 w-full md:w-auto">
+                    <div className="flex items-center gap-4 w-full lg:w-auto">
                         {/* Mobile Filter Toggle */}
                         <button
-                            className="lg:hidden flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-light/5 border border-light/10 text-xs uppercase tracking-widest text-light hover:bg-light/10 transition-colors"
+                            className="lg:hidden flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 md:py-2 md:px-6 bg-dark text-white border border-dark/10 text-xs uppercase tracking-widest hover:bg-primary transition-colors rounded-md shadow-sm"
                             onClick={() => setIsSidebarOpen(true)}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                             </svg>
-                            Filter & Sort
+                            Filter
                         </button>
 
+                        {/* Mobile Sort Dropdown */}
+                        <div className="md:hidden flex-1 relative">
+                            <select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                className="w-full appearance-none px-4 py-3 bg-white text-dark border border-dark/10 text-[10px] sm:text-xs font-bold uppercase tracking-widest rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                            >
+                                <option value="featured">Featured</option>
+                                <option value="price-low">Low to High</option>
+                                <option value="price-high">High to Low</option>
+                            </select>
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-dark/50">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        {/* Desktop & Tablet Sort */}
                         <div className="hidden md:flex items-center gap-3">
                             <span className="text-xs uppercase tracking-widest text-light/40">Sort by:</span>
                             <div className="w-48">
@@ -189,7 +208,7 @@ const CategoryDetails = () => {
                     {isLoading ? (
                         <div className="text-center py-20 text-light/50">Loading products...</div>
                     ) : filteredProducts.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 md:gap-x-8 gap-y-12 md:gap-y-16">
                             {filteredProducts.map((product) => (
                                 <ProductCard
                                     key={product.id}

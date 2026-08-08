@@ -104,14 +104,14 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
 
             {/* Sidebar Container */}
             <div className={`
-                fixed inset-y-0 left-0 z-50 w-80 bg-dark shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-y-auto border-r border-light/10
+                fixed inset-y-0 left-0 z-50 w-80 bg-[#e8ded0] shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-y-auto border-r border-dark/10
                 lg:translate-x-0 lg:sticky lg:top-[128px] lg:bottom-auto lg:h-auto lg:z-20 lg:bg-transparent lg:shadow-none lg:w-64 lg:block lg:mr-12 lg:max-h-[calc(100vh-148px)] lg:border-none
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
                 <div className="p-8 lg:px-0 lg:py-6">
                     <div className="flex justify-between items-center lg:hidden mb-8">
-                        <h2 className="text-2xl font-serif text-light">Filters</h2>
-                        <button onClick={onClose} className="text-light/60 hover:text-primary transition-colors">
+                        <h2 className="text-2xl font-serif text-dark">Filters</h2>
+                        <button onClick={onClose} className="text-dark/60 hover:text-primary transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -125,11 +125,11 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
                                     className="flex justify-between items-center w-full text-left py-2 group"
                                     onClick={() => toggleSection(filter.id)}
                                 >
-                                    <span className="font-heading text-xs uppercase tracking-[0.2em] text-light/90 font-medium group-hover:text-primary transition-colors">
+                                    <span className="font-heading text-xs uppercase tracking-[0.2em] text-dark/90 font-bold group-hover:text-primary transition-colors">
                                         {filter.label}
                                     </span>
                                     <span className={`transform transition-transform duration-300 ${expandedSections[filter.id] ? 'rotate-180' : ''}`}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-light/40 group-hover:text-primary" viewBox="0 0 20 20" fill="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-dark/40 group-hover:text-primary" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                                         </svg>
                                     </span>
@@ -141,14 +141,14 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
                                             {filter.options.map((option) => {
                                                 const isSelected = selectedFilters[filter.id]?.includes(option);
                                                 // Find color hex if available
-                                                const colorObj = attributes.colors.find(c => c.name === option);
+                                                const colorObj = (attributes.colors || []).find(c => c.name === option);
                                                 const bgStyle = colorObj ? colorObj.hex : '#ccc';
 
                                                 return (
                                                     <button
                                                         key={option}
                                                         onClick={() => handleCheckboxChange(filter.id, option)}
-                                                        className={`w-8 h-8 rounded-full border transition-all duration-300 relative group ${isSelected ? 'border-primary ring-2 ring-primary/20 scale-110' : 'border-light/20 hover:border-light/50'}`}
+                                                        className={`w-8 h-8 rounded-full border transition-all duration-300 relative group ${isSelected ? 'border-primary ring-2 ring-primary/20 scale-110' : 'border-dark/20 hover:border-dark/50'}`}
                                                         style={{ backgroundColor: bgStyle }}
                                                         title={option}
                                                     // aria-label={`Select ${option}`}
@@ -175,12 +175,12 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
                                                     <div className="relative flex items-center justify-center w-4 h-4 mr-3">
                                                         <input
                                                             type="checkbox"
-                                                            className="peer appearance-none w-4 h-4 border border-light/20 rounded-sm checked:bg-primary checked:border-primary transition-all duration-200 cursor-pointer"
+                                                            className="peer appearance-none w-4 h-4 border border-dark/20 rounded-sm checked:bg-primary checked:border-primary transition-all duration-200 cursor-pointer bg-white"
                                                             checked={selectedFilters[filter.id]?.includes(option) || false}
                                                             onChange={() => handleCheckboxChange(filter.id, option)}
                                                         />
                                                         <svg
-                                                            className="absolute w-2.5 h-2.5 text-dark pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity duration-200"
+                                                            className="absolute w-2.5 h-2.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity duration-200"
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 24 24"
                                                             fill="none"
@@ -192,7 +192,7 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
                                                             <polyline points="20 6 9 17 4 12"></polyline>
                                                         </svg>
                                                     </div>
-                                                    <span className="text-sm text-light/60 group-hover:text-primary transition-colors font-light tracking-wide">
+                                                    <span className="text-sm text-dark/70 font-medium group-hover:text-primary transition-colors tracking-wide">
                                                         {option}
                                                     </span>
                                                 </label>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetSettingsQuery } from '../../store/api/contentApiSlice'; // Import RTK Query hook
 import Icons from '../ui/Icons';
-import { setCartOpen, removeFromCart } from '../../store/slices/cartSlice';
+import { setCartOpen, removeFromCart, addToCart } from '../../store/slices/cartSlice';
 import { usePrice } from '../../hooks/usePrice';
 import { getMediaUrl } from '../../utils/apiConfig';
 
@@ -79,9 +79,35 @@ const CartDrawer = () => {
                                         <p className="text-xs text-gray-400 mb-2">
                                             {product.category || ''}
                                         </p>
-                                        <p className="text-primary text-sm">
-                                            {displayPrice} x {item.qty}
-                                        </p>
+                                        <div className="flex items-center gap-3 mt-2">
+                                            <div className="flex items-center border border-white/20 rounded-sm bg-black/20">
+                                                <button
+                                                    onClick={() => item.qty > 1 ? dispatch(addToCart({ product, qty: -1, isGuest: !user })) : dispatch(removeFromCart({ id: product.id || product._id, isGuest: !user }))}
+                                                    className="px-2 py-0.5 text-gray-400 hover:text-white transition-colors font-medium"
+                                                >
+                                                    -
+                                                </button>
+                                                <span className="text-xs text-white px-1 w-5 text-center">
+                                                    {item.qty}
+                                                </span>
+                                                <button
+                                                    onClick={() => dispatch(addToCart({ product, qty: 1, isGuest: !user }))}
+                                                    className="px-2 py-0.5 text-gray-400 hover:text-white transition-colors font-medium"
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-primary text-sm font-medium">
+                                                    {format(price * item.qty)}
+                                                </p>
+                                                {item.qty > 1 && (
+                                                    <p className="text-[10px] text-white mt-0.5">
+                                                        {displayPrice} each
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className="flex flex-col justify-between items-end">
                                         <button
@@ -104,7 +130,7 @@ const CartDrawer = () => {
                             <span className="text-gray-300">Subtotal</span>
                             <span className="text-xl font-heading text-primary">{format(cartTotal)}</span>
                         </div>
-                        <p className="text-xs text-center text-gray-500 mb-4">{labels.disclaimer || 'Shipping and taxes calculated at checkout.'}</p>
+                        <p className="text-xs text-center text-white mb-4">{labels.disclaimer || 'Shipping and taxes calculated at checkout.'}</p>
                         <button onClick={handleCheckout} className="w-full bg-primary text-dark font-heading font-bold py-3 hover:bg-white transition-colors">
                             Checkout Now
                         </button>
