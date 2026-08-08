@@ -11,8 +11,8 @@ import SEO from '../components/common/SEO';
 
 import { usePrice } from '../hooks/usePrice';
 
-// Use the image from "New Arrivals" in MEGA_MENU_DATA if available, or fallback
-const bannerImg = MEGA_MENU_DATA["New Arrivals"]?.featured?.img; // Fallback handled in component if null
+import fallbackBanner from '../assets/hero.png';
+const bannerImg = MEGA_MENU_DATA["New Arrivals"]?.featured?.img || fallbackBanner;
 
 const NewArrivals = () => {
     const { format } = usePrice();
@@ -101,7 +101,7 @@ const NewArrivals = () => {
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={header.bannerImage || bannerImg}
+                backgroundImage={bannerImg}
             />
 
             {/* Breadcrumbs & Controls */}

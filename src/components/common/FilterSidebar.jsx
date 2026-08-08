@@ -104,7 +104,7 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
 
             {/* Sidebar Container */}
             <div className={`
-                fixed inset-y-0 left-0 z-50 w-80 bg-[#e8ded0] shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-y-auto border-r border-dark/10
+                fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-y-auto border-r border-dark/10
                 lg:translate-x-0 lg:sticky lg:top-[128px] lg:bottom-auto lg:h-auto lg:z-20 lg:bg-transparent lg:shadow-none lg:w-64 lg:block lg:mr-12 lg:max-h-[calc(100vh-148px)] lg:border-none
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
@@ -172,25 +172,13 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
                                         <div className="space-y-3 pl-1">
                                             {filter.options.map((option) => (
                                                 <label key={option} className="flex items-center cursor-pointer group">
-                                                    <div className="relative flex items-center justify-center w-4 h-4 mr-3">
+                                                    <div className="relative flex items-center justify-center w-5 h-5 mr-3">
                                                         <input
                                                             type="checkbox"
-                                                            className="peer appearance-none w-4 h-4 border border-dark/20 rounded-sm checked:bg-primary checked:border-primary transition-all duration-200 cursor-pointer bg-white"
+                                                            className="w-4 h-4 border-2 border-dark/30 rounded-sm text-primary focus:ring-primary accent-primary transition-all duration-200 cursor-pointer"
                                                             checked={selectedFilters[filter.id]?.includes(option) || false}
                                                             onChange={() => handleCheckboxChange(filter.id, option)}
                                                         />
-                                                        <svg
-                                                            className="absolute w-2.5 h-2.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity duration-200"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="4"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        >
-                                                            <polyline points="20 6 9 17 4 12"></polyline>
-                                                        </svg>
                                                     </div>
                                                     <span className="text-sm text-dark/70 font-medium group-hover:text-primary transition-colors tracking-wide">
                                                         {option}

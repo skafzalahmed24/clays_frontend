@@ -84,6 +84,7 @@ const LoginForm = () => {
                 onChange={handleChange}
                 icon={Icons.Email}
                 required
+                theme="light"
             />
 
             <div>
@@ -94,9 +95,10 @@ const LoginForm = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    theme="light"
                 />
                 <div className="flex justify-end mt-2">
-                    <Link to="/forgot-password" className="text-xs text-primary hover:text-light transition-colors">Forgot Password?</Link>
+                    <Link to="/forgot-password" className="text-xs text-primary hover:text-primary/80 transition-colors font-medium">Forgot Password?</Link>
                 </div>
             </div>
 
@@ -104,13 +106,13 @@ const LoginForm = () => {
 
             <button
                 type="submit"
-                className="w-full bg-primary text-dark font-heading py-3 hover:bg-light transition-colors"
+                className="w-full bg-primary text-white font-heading font-medium py-3 rounded-lg shadow-md hover:bg-primary/90 transition-all active:scale-[0.98]"
             >
                 Login
             </button>
 
-            <div className="text-center text-sm text-light/70">
-                Don't have an account? <Link to="/register" className="text-primary hover:text-light transition-colors font-medium">Create One</Link>
+            <div className="text-center text-sm text-gray-600">
+                Don't have an account? <Link to="/register" className="text-primary hover:text-primary/80 transition-colors font-medium">Create One</Link>
             </div>
         </form>
     );

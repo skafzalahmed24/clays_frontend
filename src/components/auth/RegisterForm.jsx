@@ -81,6 +81,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 icon={Icons.User}
                 required
+                theme="light"
             />
 
             <Input
@@ -91,6 +92,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 icon={Icons.Email}
                 required
+                theme="light"
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -101,6 +103,7 @@ const RegisterForm = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    theme="light"
                 />
                 <Input
                     label="Confirm Password *"
@@ -109,6 +112,7 @@ const RegisterForm = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
+                    theme="light"
                 />
             </div>
 
@@ -116,13 +120,13 @@ const RegisterForm = () => {
 
             <button
                 type="submit"
-                className="w-full bg-primary text-dark font-heading py-3 hover:bg-light transition-colors"
+                className="w-full bg-primary text-white font-heading font-medium py-3 rounded-lg shadow-md hover:bg-primary/90 transition-all active:scale-[0.98]"
             >
                 Create Account
             </button>
 
-            <div className="text-center text-sm text-light/70">
-                Already have an account? <Link to="/login" className="text-primary hover:text-light transition-colors font-medium">Login Here</Link>
+            <div className="text-center text-sm text-gray-600">
+                Already have an account? <Link to="/login" className="text-primary hover:text-primary/80 transition-colors font-medium">Login Here</Link>
             </div>
         </form>
     );

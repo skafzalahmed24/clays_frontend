@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance with base configuration
 const client = axios.create({
-    baseURL: '/api', // Vite proxy handles the routing to localhost:5000
+    baseURL: import.meta.env.MODE === 'production' ? 'https://clarysays.com/api' : '/api',
     withCredentials: true, // Important for cookies/sessions if you're using them
     headers: {
         'Content-Type': 'application/json',

@@ -2,13 +2,13 @@ import React from 'react';
 
 const AuthLayout = ({ children, title, subtitle }) => {
     return (
-        <div className="min-h-[70vh] flex items-center justify-center bg-body px-4 py-16">
+        <div className="min-h-[70vh] flex items-center justify-center bg-gray-50 px-4 py-16">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <h2 className="font-heading text-3xl text-black mb-2 tracking-wider uppercase">{title}</h2>
-                    {subtitle && <p className="text-text-main/60 text-sm">{subtitle}</p>}
+                    <h2 className="font-heading text-3xl text-gray-900 mb-2 tracking-wider uppercase font-bold">{title}</h2>
+                    {subtitle && <p className="text-gray-600 text-sm">{subtitle}</p>}
                 </div>
-                <div className="bg-dark border border-white/5 p-8 shadow-2xl backdrop-blur-sm">
+                <div className="bg-white border border-gray-100 p-8 shadow-xl shadow-gray-200/50 rounded-2xl">
                     {children}
                 </div>
             </div>

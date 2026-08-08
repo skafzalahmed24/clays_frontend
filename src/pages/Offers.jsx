@@ -6,7 +6,7 @@ import FilterSidebar from '../components/common/FilterSidebar';
 import PageHeader from '../components/layout/PageHeader';
 import ProductCard from '../components/ui/ProductCard';
 import Select from '../components/ui/Select';
-import bannerImg from '../assets/hero-3.png'; // Using a festive/offer like banner
+import bannerImg from '../assets/hero.png'; // Using hero.png for banner
 import SEO from '../components/common/SEO';
 
 import { usePrice } from '../hooks/usePrice';
@@ -96,7 +96,7 @@ const Offers = () => {
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={header.bannerImage || bannerImg}
+                backgroundImage={bannerImg}
             />
 
             {/* Breadcrumbs & Controls */}

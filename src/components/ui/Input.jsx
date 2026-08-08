@@ -1,7 +1,7 @@
 import React, { forwardRef, useState } from 'react';
 import Icons from './Icons';
 
-const Input = forwardRef(({ label, type = 'text', name, value, onChange, icon: Icon, required = false, placeholder, error, className, noSpaces = false, ...props }, ref) => {
+const Input = forwardRef(({ label, type = 'text', name, value, onChange, icon: Icon, required = false, placeholder, error, className, noSpaces = false, theme = 'dark', ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = type === 'password';
     const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
@@ -34,6 +34,11 @@ const Input = forwardRef(({ label, type = 'text', name, value, onChange, icon: I
         extraProps.min = props.min !== undefined ? props.min : 0;
     }
 
+    const darkClasses = `bg-white/5 border-white/10 text-white placeholder-light/40 focus:border-primary focus:ring-1 focus:ring-primary ${error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500' : ''}`;
+    const lightClasses = `bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 hover:border-gray-300 ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`;
+
+    const themeClasses = theme === 'light' ? lightClasses : darkClasses;
+
     return (
         <div className="w-full">
             <div className="relative">
@@ -49,13 +54,12 @@ const Input = forwardRef(({ label, type = 'text', name, value, onChange, icon: I
                     required={required}
                     autoCapitalize="none"
                     {...extraProps}
-                    className={`block w-full px-4 py-3 bg-white/5 border rounded-sm text-white placeholder-light/40 focus:outline-none focus:ring-1 focus:ring-primary transition-all duration-300 ${error ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500' : 'border-white/10 focus:border-primary'
-                        } ${Icon ? 'pl-11' : ''} ${isPassword || props.disabled ? 'pr-10' : ''} ${className || ''}`}
+                    className={`block w-full px-4 py-3 border rounded-lg transition-all duration-300 focus:outline-none ${themeClasses} ${Icon ? 'pl-11' : ''} ${isPassword || props.disabled ? 'pr-10' : ''} ${className || ''}`}
                     placeholder={placeholder || label}
                     {...props}
                 />
                 {Icon && (
-                    <div className="absolute left-3.5 top-3.5 text-light/30 transition-colors duration-300 pointer-events-none">
+                    <div className={`absolute left-4 top-3.5 transition-colors duration-300 pointer-events-none ${theme === 'light' ? 'text-gray-400' : 'text-light/30'}`}>
                         <Icon className="w-5 h-5" />
                     </div>
                 )}
@@ -64,19 +68,19 @@ const Input = forwardRef(({ label, type = 'text', name, value, onChange, icon: I
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3.5 top-3.5 text-light/30 hover:text-primary transition-colors duration-300 focus:outline-none"
+                        className={`absolute right-4 top-3.5 transition-colors duration-300 focus:outline-none ${theme === 'light' ? 'text-gray-400 hover:text-gray-600' : 'text-light/30 hover:text-primary'}`}
                     >
                         {showPassword ? <Icons.EyeOff className="w-5 h-5" /> : <Icons.Eye className="w-5 h-5" />}
                     </button>
                 )}
 
                 {props.disabled && (
-                    <div className="absolute right-3.5 top-3.5 text-light/30 transition-colors duration-300 pointer-events-none">
+                    <div className={`absolute right-4 top-3.5 transition-colors duration-300 pointer-events-none ${theme === 'light' ? 'text-gray-400' : 'text-light/30'}`}>
                         <Icons.Lock className="w-5 h-5" />
                     </div>
                 )}
             </div>
-            {error && <p className="mt-1 text-xs text-red-400 animate-in fade-in slide-in-from-top-1">{error}</p>}
+            {error && <p className="mt-1.5 text-xs text-red-500 font-medium animate-in fade-in slide-in-from-top-1">{error}</p>}
         </div>
     );
 });

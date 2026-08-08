@@ -29,7 +29,7 @@ const Hero = () => {
     }
 
     return (
-        <section className="relative min-h-[400px] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
+        <section className="relative min-h-[60vh] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
             {heroSlides.map((slide, index) => (
                 <div
                     key={slide._id}
@@ -39,7 +39,7 @@ const Hero = () => {
                     {REGEX.IS_VIDEO.test(slide.media) ? (
                         <video
                             src={getMediaUrl(slide.media)}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-top"
                             autoPlay
                             muted
                             loop
@@ -51,7 +51,7 @@ const Hero = () => {
                                 <source media="(max-width: 767px)" srcSet={getMediaUrl(slide.mobileMedia)} />
                             )}
                             <source media="(min-width: 768px)" srcSet={getMediaUrl(slide.media)} />
-                            <img src={getMediaUrl(slide.media)} alt={slide.title || 'Hero Banner'} className="w-full h-full object-cover" />
+                            <img src={getMediaUrl(slide.media)} alt={slide.title || 'Hero Banner'} className="w-full h-full object-cover object-top" />
                         </picture>
                     )}
                 </div>

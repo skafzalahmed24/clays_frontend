@@ -101,21 +101,21 @@ const Header = ({
             />
 
             {/* Main Nav */}
-            <nav className="bg-[#e8ded0] text-dark shadow-soft border-b border-light/10 transition-all duration-300">
-                <div className="w-full px-4 md:px-6 lg:px-12 py-0">
+            <nav className="bg-[#FAF7F2] text-dark shadow-soft border-b border-[#a1824a]/10 transition-all duration-300">
+                <div className="w-full px-4 md:px-8 lg:px-16 py-0">
                     {/* Header Layout when NOT scrolled */}
                     {!isScrolled ? (
-                        <div className="flex items-center justify-between w-full py-2">
+                        <div className="flex items-center justify-between w-full py-4">
                             {/* Left: Logo & Brand Name */}
                             <div className="flex-shrink-0 flex items-center">
-                                <Link to="/" className="cursor-pointer flex flex-col items-center gap-1">
+                                <Link to="/" className="cursor-pointer flex flex-row items-center gap-3">
                                     <Image
-                                        className="h-12 md:h-14 w-auto drop-shadow-sm transition-all duration-300 hover:scale-105"
+                                        className="h-10 md:h-12 w-auto drop-shadow-sm transition-all duration-300 hover:scale-105"
                                         src={settings?.identity?.logo || BRAND_CONFIG.logo}
                                         alt={`${settings?.identity?.brandName || BRAND_CONFIG.brandName} Logo`}
                                         isStatic={!settings?.identity?.logo}
                                     />
-                                    <span className="font-script font-bold text-dark tracking-[0.2em] text-sm md:text-md mt-1">
+                                    <span className="font-serif font-bold text-[#2A3F2C] tracking-wide text-xl md:text-2xl">
                                         {(settings?.identity?.brandName || BRAND_CONFIG.brandName).toUpperCase()}
                                     </span>
                                 </Link>
@@ -123,7 +123,7 @@ const Header = ({
 
                             {/* Center: Main Nav Links */}
                             <div className="hidden md:flex flex-1 mx-4">
-                                <ul className="flex justify-center items-center text-[11px] lg:text-[12px] font-heading font-bold tracking-widest text-dark gap-4 lg:gap-6 w-full flex-wrap">
+                                <ul className="flex justify-center items-center text-[12px] md:text-[13px] font-heading font-medium tracking-widest text-[#2A3F2C] gap-6 lg:gap-8 w-full flex-wrap">
                                     <li className="py-1">
                                         <Link to="/shop" className={`uppercase ${isActive('/shop')}`}>Shop</Link>
                                     </li>
@@ -161,20 +161,20 @@ const Header = ({
                             {/* Right: Icons & Mobile Hamburger */}
                             <div className="flex items-center justify-end space-x-4 md:space-x-5">
                                 <div className="hidden md:flex items-center space-x-5">
-                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-dark/80 hover:text-primary transition-colors"><Icons.Search /></button>
-                                    <Link to="/wishlist" title="Wishlist" className="text-dark/80 hover:text-primary transition-colors relative">
+                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors"><Icons.Search /></button>
+                                    <Link to="/wishlist" title="Wishlist" className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors relative">
                                         <Icons.Heart />
                                         {(Array.isArray(wishlistItems) && wishlistItems.length > 0) && (
-                                            <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                            <span className="absolute -top-2 -right-2 bg-[#a1824a] text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
                                                 {wishlistItems.length}
                                             </span>
                                         )}
                                     </Link>
-                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-dark/80 hover:text-primary transition-colors"><Icons.User /></Link>
-                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-dark/80 hover:text-primary transition-colors relative">
+                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors"><Icons.User /></Link>
+                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors relative">
                                         <Icons.Cart />
                                         {(Array.isArray(cartItems) && cartItems.length > 0) && (
-                                            <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                            <span className="absolute -top-2 -right-2 bg-[#a1824a] text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
                                                 {cartItems.reduce((acc, item) => acc + item.qty, 0)}
                                             </span>
                                         )}
@@ -183,19 +183,19 @@ const Header = ({
 
                                 {/* Mobile menu hamburger */}
                                 <div className="md:hidden flex items-center gap-4">
-                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-dark/80 hover:text-primary relative">
+                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-[#a1824a] hover:text-[#2A3F2C] relative">
                                         <Icons.Search />
                                     </button>
-                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-dark/80 hover:text-primary transition-colors">
+                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors">
                                         <Icons.User />
                                     </Link>
-                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-dark/80 hover:text-primary relative">
+                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-[#a1824a] hover:text-[#2A3F2C] relative">
                                         <Icons.Cart />
-                                        {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
+                                        {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-[#a1824a] text-white text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
                                     </button>
                                     <button
                                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                        className="p-2 rounded-md text-dark/70 hover:text-primary focus:outline-none"
+                                        className="p-2 rounded-md text-[#a1824a] hover:text-[#2A3F2C] focus:outline-none"
                                     >
                                         {mobileMenuOpen ? <Icons.Close /> : <Icons.Menu />}
                                     </button>
@@ -207,14 +207,14 @@ const Header = ({
                         <div className="flex items-center justify-between w-full py-2">
                             {/* Left: Compact Logo */}
                             <div className="flex-shrink-0 flex items-center">
-                                <Link to="/" className="cursor-pointer flex items-center gap-2">
+                                <Link to="/" className="cursor-pointer flex flex-row items-center gap-2">
                                     <Image
-                                        className="h-12 w-auto drop-shadow-[0_0_8px_rgba(var(--color-primary-rgb),0.8)]"
+                                        className="h-8 md:h-10 w-auto drop-shadow-sm transition-all duration-300 hover:scale-105"
                                         src={settings?.identity?.logo || BRAND_CONFIG.logo}
                                         alt={`${settings?.identity?.brandName || BRAND_CONFIG.brandName} Logo`}
                                         isStatic={!settings?.identity?.logo}
                                     />
-                                    <span className="font-script font-bold text-dark tracking-widest text-lg">
+                                    <span className="font-serif font-bold text-[#2A3F2C] tracking-wide text-lg md:text-xl">
                                         {(settings?.identity?.brandName || BRAND_CONFIG.brandName).toUpperCase()}
                                     </span>
                                 </Link>
@@ -222,7 +222,7 @@ const Header = ({
 
                             {/* Center: Main Nav Links (Compact) */}
                             <div className="hidden md:flex flex-1 mx-4">
-                                <ul className="flex justify-center items-center text-[9px] lg:text-[10px] font-heading font-bold tracking-widest text-dark gap-3 lg:gap-4 w-full flex-wrap">
+                                <ul className="flex justify-center items-center text-[10px] md:text-[11px] font-heading font-medium tracking-widest text-[#2A3F2C] gap-4 lg:gap-6 w-full flex-wrap">
                                     <li className="py-1">
                                         <Link to="/shop" className={`uppercase ${isActive('/shop')}`}>Shop</Link>
                                     </li>
@@ -260,20 +260,20 @@ const Header = ({
                             {/* Right: Icons & Mobile Hamburger */}
                             <div className="flex items-center space-x-4">
                                 <div className="hidden md:flex items-center space-x-4">
-                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-light/80 hover:text-primary transition-colors"><Icons.Search /></button>
-                                    <Link to="/wishlist" title="Wishlist" className="text-light/80 hover:text-primary transition-colors relative">
+                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors"><Icons.Search /></button>
+                                    <Link to="/wishlist" title="Wishlist" className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors relative">
                                         <Icons.Heart />
                                         {(Array.isArray(wishlistItems) && wishlistItems.length > 0) && (
-                                            <span className="absolute -top-2 -right-2 bg-primary text-dark text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                            <span className="absolute -top-2 -right-2 bg-[#a1824a] text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
                                                 {wishlistItems.length}
                                             </span>
                                         )}
                                     </Link>
-                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-light/80 hover:text-primary transition-colors"><Icons.User /></Link>
-                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-light/80 hover:text-primary transition-colors relative">
+                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors"><Icons.User /></Link>
+                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors relative">
                                         <Icons.Cart />
                                         {(Array.isArray(cartItems) && cartItems.length > 0) && (
-                                            <span className="absolute -top-2 -right-2 bg-primary text-dark text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                            <span className="absolute -top-2 -right-2 bg-[#a1824a] text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
                                                 {cartItems.reduce((acc, item) => acc + item.qty, 0)}
                                             </span>
                                         )}
@@ -282,19 +282,19 @@ const Header = ({
 
                                 {/* Mobile Hamburger */}
                                 <div className="md:hidden flex items-center gap-4">
-                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-dark/80 hover:text-primary relative">
+                                    <button onClick={() => setSearchOpen(true)} title="Search" className="text-[#a1824a] hover:text-[#2A3F2C] relative">
                                         <Icons.Search />
                                     </button>
-                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-dark/80 hover:text-primary transition-colors">
+                                    <Link to={user ? "/account" : "/login"} title={user ? "Account" : "Login"} className="text-[#a1824a] hover:text-[#2A3F2C] transition-colors">
                                         <Icons.User />
                                     </Link>
-                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-dark/80 hover:text-primary relative">
+                                    <button onClick={() => dispatch(setCartOpen(true))} title="Shopping Cart" className="text-[#a1824a] hover:text-[#2A3F2C] relative">
                                         <Icons.Cart />
-                                        {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
+                                        {(Array.isArray(cartItems) && cartItems.length > 0) && <span className="absolute -top-1 -right-1 bg-[#a1824a] text-white text-[10px] rounded-full h-3 w-3 block animate-pulse"></span>}
                                     </button>
                                     <button
                                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                        className="p-2 rounded-md text-dark/70 hover:text-primary focus:outline-none"
+                                        className="p-2 rounded-md text-[#a1824a] hover:text-[#2A3F2C] focus:outline-none"
                                     >
                                         {mobileMenuOpen ? <Icons.Close /> : <Icons.Menu />}
                                     </button>
@@ -372,28 +372,28 @@ const Header = ({
 
 
                 {/* Mobile Menu Dropdown */}
-                <div className={`md:hidden bg-[#e8ded0] border-b border-light/10 overflow-y-auto transition-all duration-300 ${mobileMenuOpen ? 'max-h-[85vh]' : 'max-h-0'}`}>
-                    <div className="px-4 py-4 space-y-2 text-left text-dark">
-                        <Link to="/shop" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
+                <div className={`md:hidden bg-[#FAF7F2] border-b border-[#a1824a]/10 overflow-y-auto transition-all duration-300 ${mobileMenuOpen ? 'max-h-[85vh]' : 'max-h-0'}`}>
+                    <div className="px-4 py-4 space-y-2 text-center text-dark">
+                        <Link to="/shop" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/shop')}`}>Shop</Link>
                         
                         {/* Dynamic Categories */}
-                        <div className="border-t border-b border-dark/10 my-2 py-2 text-left">
+                        <div className="border-t border-b border-dark/10 my-2 py-2 text-center">
                             {(categories && Array.isArray(categories) ? categories : []).map((cat) => {
                                 const catSubCategories = (subCategories && Array.isArray(subCategories) ? subCategories : []).filter(sub => sub.value === cat.name);
                                 return (
                                     <div key={cat.id} className="py-2 border-b border-dark/5 last:border-0">
-                                        <div className="flex items-center justify-between">
+                                        <div className="flex items-center justify-center relative">
                                             <Link 
                                                 to={`/category/${cat.name.toLowerCase()}`} 
                                                 onClick={closeMobileMenu} 
-                                                className={`flex-1 block py-1 text-sm font-heading font-bold hover:text-white tracking-widest uppercase ${isActive(`/category/${cat.name.toLowerCase()}`)}`}
+                                                className={`flex-1 block py-1 text-sm font-heading font-bold hover:text-primary tracking-widest uppercase ${isActive(`/category/${cat.name.toLowerCase()}`)}`}
                                             >
                                                 {cat.name}
                                             </Link>
                                             {catSubCategories.length > 0 && (
                                                 <button 
                                                     onClick={() => toggleMobileCategory(cat.id)}
-                                                    className="p-2 text-dark/70 hover:text-white transition-colors"
+                                                    className="absolute right-0 p-2 text-dark/70 hover:text-primary transition-colors"
                                                 >
                                                     <Icons.ChevronDown className={`w-4 h-4 transition-transform duration-300 ${expandedMobileCategories[cat.id] ? 'rotate-180' : ''}`} />
                                                 </button>
@@ -406,7 +406,7 @@ const Header = ({
                                                         key={sub.id}
                                                         to={`/category/${cat.name.toLowerCase()}/${sub.name.toLowerCase()}`}
                                                         onClick={closeMobileMenu}
-                                                        className={`block py-1 text-xs font-heading font-medium text-dark/70 hover:text-white tracking-widest uppercase ${isActive(`/category/${cat.name.toLowerCase()}/${sub.name.toLowerCase()}`)}`}
+                                                        className={`block py-1 text-xs font-heading font-medium text-dark/70 hover:text-primary tracking-widest uppercase ${isActive(`/category/${cat.name.toLowerCase()}/${sub.name.toLowerCase()}`)}`}
                                                     >
                                                         {sub.name}
                                                     </Link>
@@ -417,8 +417,8 @@ const Header = ({
                                 );
                             })}
                         </div>
-                        <Link to="/new-arrivals" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
-                        <Link to="/offers" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-white tracking-widest uppercase ${isActive('/offers')}`}>Offers</Link>
+                        <Link to="/new-arrivals" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/new-arrivals')}`}>New Arrivals</Link>
+                        <Link to="/offers" onClick={closeMobileMenu} className={`block py-2 text-sm font-heading font-medium hover:text-primary tracking-widest uppercase ${isActive('/offers')}`}>Offers</Link>
                     </div>
                 </div>
             </nav>
