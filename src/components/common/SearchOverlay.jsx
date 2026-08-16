@@ -96,7 +96,10 @@ const SearchOverlay = ({ isOpen, onClose }) => {
 
             <div className="max-w-4xl mx-auto px-6 pt-32 h-full flex flex-col">
                 {/* Search Input */}
-                <div className="flex items-center border-b-2 border-light/10 focus-within:border-primary transition-colors mb-12">
+                <div className="flex items-center border-b border-light/20 focus-within:border-primary transition-colors mb-12 pb-2">
+                    <button onClick={handleSearch} className="focus:outline-none mr-4">
+                        <Icons.Search className="w-8 h-8 md:w-10 md:h-10 text-light/40 flex-shrink-0 hover:text-primary transition-colors" />
+                    </button>
                     <div className="w-full">
                         <input
                             ref={inputRef}
@@ -105,12 +108,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            className="w-full bg-transparent py-4 text-3xl md:text-5xl font-serif text-light placeholder-light/20 focus:outline-none border-none focus:ring-0"
+                            className="w-full bg-transparent py-2 text-xl md:text-3xl font-body text-light placeholder-light/30 focus:outline-none border-none focus:ring-0"
                         />
                     </div>
-                    <button onClick={handleSearch} className="focus:outline-none">
-                        <Icons.Search className="w-8 h-8 text-light/20 flex-shrink-0 ml-4 hover:text-primary transition-colors" />
-                    </button>
                 </div>
 
                 {/* Results Area */}

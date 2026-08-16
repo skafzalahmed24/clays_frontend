@@ -167,7 +167,7 @@ const AdminOrders = () => {
                                             <tr key={order._id} className="hover:bg-white/5 transition-colors group">
                                                 <td className="p-4">
                                                     <span className="font-mono text-primary">
-                                                        #<TextHighlight text={order._id.substring(order._id.length - 6)} query={searchTerm} />
+                                                        #<TextHighlight text={order.orderNumber ? String(order.orderNumber).padStart(6, '0') : order._id.substring(order._id.length - 6)} query={searchTerm} />
                                                     </span>
                                                 </td>
                                                 <td className="p-4 text-light/70 text-sm">

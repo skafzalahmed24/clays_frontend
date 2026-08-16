@@ -73,7 +73,7 @@ const AdminOrderDetails = () => {
                     </button>
                     <div>
                         <h1 className="font-heading text-3xl text-light flex items-center gap-4">
-                            Order #{order._id.substring(order._id.length - 6)}
+                            Order #{order.orderNumber ? String(order.orderNumber).padStart(6, '0') : order._id.substring(order._id.length - 6)}
                             <span className={`text-xs px-3 py-1 rounded-full border ${getStatusColor(order.status)} font-sans font-bold uppercase tracking-wider`}>
                                 {order.status}
                             </span>

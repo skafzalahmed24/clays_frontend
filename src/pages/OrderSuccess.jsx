@@ -10,6 +10,8 @@ const OrderSuccess = () => {
     }, []);
 
     const orderId = location.state?.orderId || 'Unknown';
+    const orderNumber = location.state?.orderNumber;
+    const displayId = orderNumber ? String(orderNumber).padStart(6, '0') : (orderId !== 'Unknown' ? orderId.substring(orderId.length - 6) : 'Unknown');
 
     return (
         <div className="min-h-screen bg-body text-text-main font-body">
@@ -22,7 +24,7 @@ const OrderSuccess = () => {
                     </div>
 
                     <h2 className="font-heading text-3xl md:text-4xl text-light uppercase tracking-widest mb-4">Thank You!</h2>
-                    <p className="text-lg text-text-main/80 mb-8">Your order <span className="text-primary font-bold">#{orderId}</span> has been confirmed.</p>
+                    <p className="text-lg text-text-main/80 mb-8">Your order <span className="text-primary font-bold">#{displayId}</span> has been confirmed.</p>
 
                     <div className="text-sm text-text-main/60 mb-10 max-w-md mx-auto">
                         We've sent a confirmation email to your provided address.
@@ -30,7 +32,7 @@ const OrderSuccess = () => {
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-4 justify-center">
-                        <Link to="/account/orders" className="bg-white/5 border border-white/10 text-light font-heading uppercase tracking-widest px-8 py-3 hover:bg-white/10 transition-colors rounded-sm">
+                        <Link to="/account/orders" className="bg-black/5 border border-black/10 text-black font-heading uppercase tracking-widest px-8 py-3 hover:bg-black/10 transition-colors rounded-sm">
                             View Order
                         </Link>
                         <Link to="/shop" className="bg-primary text-dark font-heading font-bold uppercase tracking-widest px-8 py-3 hover:bg-light transition-colors rounded-sm">

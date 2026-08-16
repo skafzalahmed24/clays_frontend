@@ -78,7 +78,7 @@ const DashboardView = ({ user, handleLogout }) => {
                 <h3 className="font-heading text-lg text-dark uppercase tracking-widest mb-4">Recent Activity</h3>
                 {orders.length > 0 ? (
                     <div className="text-sm">
-                        <p className="text-dark mb-2">Latest Order: <span className="text-primary">#{orders[0]._id.substring(orders[0]._id.length - 6)}</span></p>
+                        <p className="text-dark mb-2">Latest Order: <span className="text-primary">#{orders[0].orderNumber ? String(orders[0].orderNumber).padStart(6, '0') : orders[0]._id.substring(orders[0]._id.length - 6)}</span></p>
                         <p className="text-dark/60">Placed on {new Date(orders[0].createdAt).toLocaleDateString()}</p>
                     </div>
                 ) : (
@@ -126,7 +126,7 @@ const OrdersList = () => {
                             <tbody className="text-text-main/80 divide-y divide-dark/5">
                                 {orders.map((order, idx) => (
                                     <tr key={idx} className="hover:bg-dark/5 transition-colors group">
-                                        <td className="py-4 px-6 font-medium text-dark">#{order._id.substring(order._id.length - 6)}</td>
+                                        <td className="py-4 px-6 font-medium text-dark">#{order.orderNumber ? String(order.orderNumber).padStart(6, '0') : order._id.substring(order._id.length - 6)}</td>
                                         <td className="py-4 px-6">{new Date(order.createdAt).toLocaleDateString()}</td>
                                         <td className="py-4 px-6">
                                             <span className={`px-3 py-1 rounded-full text-xs uppercase tracking-wide font-medium ${order.status === 'Delivered' ? 'bg-green-500/10 text-green-400 border border-green-500/20' :
@@ -311,7 +311,7 @@ const OrderDetails = () => {
             <div className="bg-dark/5 border border-dark/5 p-6 md:p-8">
                 <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8 border-b border-dark/10 pb-6">
                     <div>
-                        <h3 className="font-heading text-xl text-primary uppercase tracking-widest mb-1">Order #{orderDetails._id.substring(orderDetails._id.length - 6)}</h3>
+                        <h3 className="font-heading text-xl text-primary uppercase tracking-widest mb-1">Order #{orderDetails.orderNumber ? String(orderDetails.orderNumber).padStart(6, '0') : orderDetails._id.substring(orderDetails._id.length - 6)}</h3>
                         <p className="text-sm text-dark/60">Placed on {new Date(orderDetails.createdAt).toLocaleDateString()}</p>
                     </div>
                     <div className="flex items-center gap-4">
@@ -416,19 +416,19 @@ const OrderDetails = () => {
                     <div className="relative bg-[#1A1A1A] border border-dark/10 p-8 max-w-lg w-full rounded-sm shadow-2xl animate-in fade-in zoom-in-95 duration-200">
                         <button
                             onClick={() => setReviewModalOpen(false)}
-                            className="absolute top-4 right-4 text-dark/40 hover:text-dark transition-colors"
+                            className="absolute top-4 right-4 text-primary hover:scale-110 transition-transform"
                         >
                             <Icons.Close className="w-6 h-6" />
                         </button>
 
-                        <h3 className="font-serif text-2xl text-dark mb-2">
+                        <h3 className="font-serif text-2xl text-primary mb-2">
                             {isEditMode ? 'Update Your Review' : 'Write a Review'}
                         </h3>
-                        <p className="text-sm text-dark/60 mb-6 font-body">Share your experience with {selectedProductForReview.name}</p>
+                        <p className="text-sm text-primary mb-6 font-body">Share your experience with {selectedProductForReview.name}</p>
 
                         <div className="space-y-6">
                             <div>
-                                <label className="block text-xs font-heading tracking-widest text-dark mb-3">Rating</label>
+                                <label className="block text-xs font-heading tracking-widest text-primary mb-3">Rating</label>
                                 <div className="flex gap-2">
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <button
@@ -444,13 +444,13 @@ const OrderDetails = () => {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-heading tracking-widest text-dark mb-3">Your Review</label>
+                                <label className="block text-xs font-heading tracking-widest text-primary mb-3">Your Review</label>
                                 <Textarea
                                     rows={4}
                                     value={reviewComment}
                                     onChange={(e) => setReviewComment(e.target.value)}
                                     placeholder="Tell us what you liked or didn't like..."
-                                    className="bg-dark/50 border-dark/10 text-dark focus:border-primary resize-none"
+                                    className="bg-black/50 border-primary/20 text-light focus:border-primary resize-none placeholder:text-light/30"
                                 />
                             </div>
 
@@ -555,6 +555,17 @@ const AddressesView = () => {
 
         if (missingFields.length > 0) {
             showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailRegex.test(formData.email)) {
+            showToast('Please enter a valid email address', 'error');
+            return;
+        }
+
+        if (!/^\d{10}$/.test(formData.phone)) {
+            showToast('Please enter a valid 10-digit mobile number', 'error');
             return;
         }
 

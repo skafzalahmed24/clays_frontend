@@ -150,6 +150,25 @@ const Checkout = () => {
     const handleAddressFormSubmit = async (e) => {
         e.preventDefault();
 
+        // Manual validation to ensure required fields are present
+        const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'postalCode'];
+        const missingFields = requiredFields.filter(field => !formData[field]);
+
+        if (missingFields.length > 0) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+        }
+
+        if (!REGEX.EMAIL.test(formData.email)) {
+            showToast('Please enter a valid email address', 'error');
+            return;
+        }
+
+        if (!/^\d{10}$/.test(formData.phone)) {
+            showToast('Please enter a valid 10-digit mobile number', 'error');
+            return;
+        }
+
         try {
             if (editingAddress) {
                 // Update existing address
@@ -301,7 +320,7 @@ const Checkout = () => {
 
     useEffect(() => {
         if (success && order) {
-            navigate('/order-success', { state: { orderId: order._id } });
+            navigate('/order-success', { state: { orderId: order._id, orderNumber: order.orderNumber } });
             dispatch(resetOrder());
             dispatch(clearCart());
         }
@@ -347,7 +366,7 @@ const Checkout = () => {
                     <Input
                         placeholder="Promo Code"
                         value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value)}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 e.preventDefault(); // Prevent outer form submission

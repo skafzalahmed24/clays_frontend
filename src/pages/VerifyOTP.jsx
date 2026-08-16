@@ -13,6 +13,8 @@ import { logoutAdmin } from '../store/slices/adminAuthSlice';
 const VerifyOTP = () => {
     const [otp, setOtp] = useState('');
     const [email, setEmail] = useState('');
+    const [countdown, setCountdown] = useState(60);
+    const [canResend, setCanResend] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
@@ -30,6 +32,15 @@ const VerifyOTP = () => {
             // navigate('/login');
         }
     }, [location]);
+
+    useEffect(() => {
+        if (countdown > 0 && !canResend) {
+            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+            return () => clearTimeout(timer);
+        } else if (countdown === 0) {
+            setCanResend(true);
+        }
+    }, [countdown, canResend]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -52,7 +63,8 @@ const VerifyOTP = () => {
     const handleResend = async () => {
         try {
             await resendOtp({ email: email.toLowerCase() }).unwrap();
-            // Show toast or message
+            setCanResend(false);
+            setCountdown(60);
         } catch (err) {
             console.error('Resend failed', err);
         }
@@ -112,10 +124,10 @@ const VerifyOTP = () => {
                         <p className="text-light/50 text-sm mb-4">Didn't receive the code?</p>
                         <button
                             onClick={handleResend}
-                            disabled={isResending}
-                            className="text-primary text-xs hover:text-white transition-colors disabled:opacity-50"
+                            disabled={isResending || !canResend}
+                            className="text-primary text-xs hover:text-dark transition-colors disabled:opacity-50"
                         >
-                            {isResending ? 'Sending...' : 'Resend Code'}
+                            {isResending ? 'Sending...' : (canResend ? 'Resend Code' : `Resend Code in ${countdown}s`)}
                         </button>
                     </div>
                 </div>

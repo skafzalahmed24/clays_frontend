@@ -22,7 +22,7 @@ const ConfirmDialog = ({
             ></div>
 
             {/* Modal */}
-            <div className="relative bg-dark-paper border border-primary/20 rounded-sm w-full max-w-md p-6 shadow-2xl transform transition-all scale-100 animate-in fade-in zoom-in duration-200">
+            <div className="relative bg-dark-paper border border-primary/20 rounded-sm w-full max-w-md p-6 shadow-2xl transform transition-all scale-100 animate-in fade-in zoom-in duration-200 select-none">
                 {/* Decorative Elements */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
 
@@ -32,7 +32,7 @@ const ConfirmDialog = ({
                             {isDangerous ? <Icons.Trash className="w-6 h-6" /> : <Icons.Settings className="w-6 h-6" />}
                         </div>
                         <div className="space-y-2">
-                            <h3 className="text-xl font-heading text-light tracking-wide">{title}</h3>
+                            <h3 className="text-xl font-heading text-black tracking-wide">{title}</h3>
                             <p className="text-light/60 text-sm leading-relaxed font-body">{message}</p>
                         </div>
                     </div>
@@ -40,7 +40,7 @@ const ConfirmDialog = ({
                     <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-white/5">
                         <button
                             onClick={onClose}
-                            className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-light/60 hover:text-light transition-colors"
+                            className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-black/60 transition-colors"
                         >
                             {cancelText}
                         </button>
