@@ -120,6 +120,7 @@ const OrdersList = () => {
                                     <th className="py-4 px-6">Date</th>
                                     <th className="py-4 px-6">Status</th>
                                     <th className="py-4 px-6">Total</th>
+                                    <th className="py-4 px-6">Payment Mode</th>
                                     <th className="py-4 px-6 text-right">Actions</th>
                                 </tr>
                             </thead>
@@ -137,6 +138,14 @@ const OrdersList = () => {
                                             </span>
                                         </td>
                                         <td className="py-4 px-6 font-medium text-dark">{format(order.totalPrice)}</td>
+                                        <td className="py-4 px-6">
+                                            <div className="font-medium text-dark">{order.paymentMethod}</div>
+                                            {order.paymentResult?.id && (
+                                                <div className="text-dark/50 text-[10px] font-mono mt-1" title="Transaction ID">
+                                                    {order.paymentResult.id}
+                                                </div>
+                                            )}
+                                        </td>
                                         <td className="py-4 px-6 text-right">
                                             <Link
                                                 to={`${order._id}`}
@@ -387,6 +396,16 @@ const OrderDetails = () => {
                         <h4 className="font-heading text-xs text-dark/60 uppercase tracking-widest mb-2">Payment Summary</h4>
                         <div className="space-y-2 text-sm text-text-main/80">
                             <div className="flex justify-between">
+                                <span>Method</span>
+                                <span className="font-medium text-dark">{orderDetails.paymentMethod}</span>
+                            </div>
+                            {orderDetails.paymentResult?.id && (
+                                <div className="flex justify-between items-center">
+                                    <span>Txn ID</span>
+                                    <span className="font-mono text-xs text-dark/70">{orderDetails.paymentResult.id}</span>
+                                </div>
+                            )}
+                            <div className="flex justify-between border-t border-dark/5 pt-2 mt-2">
                                 <span>Subtotal</span>
                                 <span>{format(orderDetails.itemsPrice)}</span>
                             </div>

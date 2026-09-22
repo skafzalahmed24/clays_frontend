@@ -179,7 +179,16 @@ const AdminOrderDetails = () => {
                             </div>
                             <div className="pt-4 border-t border-white/5">
                                 <h3 className="text-xs uppercase tracking-wider text-light/40 mb-2">Details</h3>
-                                <p className="text-sm text-light/80">Paid at: {order.paidAt ? new Date(order.paidAt).toLocaleDateString() : 'Not Paid'}</p>
+                                <div className="space-y-2">
+                                    <p className="text-sm text-light/80">Paid at: {order.paidAt ? new Date(order.paidAt).toLocaleDateString() : 'Not Paid'}</p>
+                                    <p className="text-sm text-light/80">Payment Mode: <span className="font-medium text-light">{order.paymentMethod}</span></p>
+                                    {order.paymentResult?.id && (
+                                        <div className="text-sm text-light/80">
+                                            <span className="text-xs text-light/40 block">Transaction ID:</span>
+                                            <span className="font-mono text-xs text-light/90">{order.paymentResult.id}</span>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

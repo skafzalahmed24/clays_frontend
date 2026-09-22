@@ -158,6 +158,7 @@ const AdminOrders = () => {
                                             <th className="p-4 font-medium">Customer</th>
                                             <th className="p-4 font-medium">Items</th>
                                             <th className="p-4 font-medium">Total</th>
+                                            <th className="p-4 font-medium">Payment Mode</th>
                                             <th className="p-4 font-medium">Status</th>
                                             <th className="p-4 font-medium text-right">Actions</th>
                                         </tr>
@@ -181,6 +182,14 @@ const AdminOrders = () => {
                                                 </td>
                                                 <td className="p-4 text-light font-medium">
                                                     ₹{order.totalPrice?.toLocaleString()}
+                                                </td>
+                                                <td className="p-4">
+                                                    <div className="text-light/90 text-sm font-medium">{order.paymentMethod}</div>
+                                                    {order.paymentResult?.id && (
+                                                        <div className="text-light/50 text-[10px] font-mono mt-1" title="Transaction ID">
+                                                            {order.paymentResult.id}
+                                                        </div>
+                                                    )}
                                                 </td>
                                                 <td className="p-4">
                                                     <span className={`px-2 py-1 rounded-full text-xs border font-medium ${getStatusColor(order.status)}`}>

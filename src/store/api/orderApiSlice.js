@@ -60,8 +60,23 @@ export const orderApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Order'],
         }),
-        // Add verifyPayment if needed, though usually standard axios might be used if external, 
-        // but for internal callbacks use this.
+        getRazorpayConfig: builder.query({
+            query: () => '/config/razorpay',
+        }),
+        createRazorpayOrder: builder.mutation({
+            query: (orderId) => ({
+                url: `/orders/${orderId}/razorpay-order`,
+                method: 'POST',
+            }),
+        }),
+        verifyRazorpayPayment: builder.mutation({
+            query: ({ orderId, ...data }) => ({
+                url: `/orders/${orderId}/razorpay-verify`,
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Order'],
+        }),
     }),
 });
 
@@ -74,4 +89,7 @@ export const {
     useTrackOrderMutation,
     useDeliverOrderMutation,
     useUpdateOrderStatusMutation,
+    useGetRazorpayConfigQuery,
+    useCreateRazorpayOrderMutation,
+    useVerifyRazorpayPaymentMutation,
 } = orderApiSlice;

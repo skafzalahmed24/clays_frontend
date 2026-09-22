@@ -7,6 +7,7 @@ import { createOrder, resetOrder } from '../store/slices/orderSlice';
 import { useValidateCouponMutation } from '../store/api/couponApiSlice';
 import { useGetAddressesQuery, useAddAddressMutation, useUpdateAddressMutation } from '../store/api/addressApiSlice';
 import { useGetSettingsQuery } from '../store/api/contentApiSlice';
+import { useGetRazorpayConfigQuery, useCreateRazorpayOrderMutation, useVerifyRazorpayPaymentMutation } from '../store/api/orderApiSlice';
 import PageHeader from '../components/common/PageHeader';
 import Input from '../components/ui/Input';
 import AddressSelector from '../components/checkout/AddressSelector';
@@ -15,6 +16,16 @@ import { useToast } from '../context/ToastContext';
 import { getImageUrl } from '../utils/imageHelper';
 import { REGEX } from '../utils/regex';
 import { usePrice } from '../hooks/usePrice';
+
+function loadScript(src) {
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+    });
+}
 
 const Checkout = () => {
     const dispatch = useDispatch();
@@ -52,17 +63,16 @@ const Checkout = () => {
         phone: ''
     });
 
+    const [paymentMethod, setPaymentMethod] = useState('Razorpay');
+
     const [validateCoupon, { isLoading: isValidating }] = useValidateCouponMutation();
     const [couponCode, setCouponCode] = useState('');
     const [appliedCoupon, setAppliedCoupon] = useState(null);
     const [discount, setDiscount] = useState(0);
 
-    const [paymentData, setPaymentData] = useState({
-        cardNumber: '',
-        expiry: '',
-        cvc: '',
-        nameOnCard: ''
-    });
+    const { data: razorpayConfig } = useGetRazorpayConfigQuery();
+    const [createRazorpayOrderMutation] = useCreateRazorpayOrderMutation();
+    const [verifyRazorpayPayment] = useVerifyRazorpayPaymentMutation();
 
     // Auto-select default address on load
     // eslint-disable-next-line
@@ -223,44 +233,14 @@ const Checkout = () => {
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
 
-        // Comprehensive Validation
-        const { cardNumber, expiry, cvc, nameOnCard } = paymentData;
-
-        if (!cardNumber || !expiry || !cvc || !nameOnCard) {
-            showToast('Please fill in all payment details', 'error');
-            return;
-        }
-
-        // Validate Card Number (Simple length/digit check)
-        const cleanCard = cardNumber.replace(/\s/g, '');
-        if (!REGEX.CARD_NUMBER.test(cleanCard)) {
-            showToast('Invalid card number. Please check digits.', 'error');
-            return;
-        }
-
-        // Validate Expiry (MM/YY) and not expired
-        if (!REGEX.EXPIRY_DATE.test(expiry)) {
-            showToast('Invalid expiry date. Use MM/YY format.', 'error');
-            return;
-        }
-
-        const [expMonth, expYear] = expiry.split('/').map(Number);
-        const now = new Date();
-        const currentYear = now.getFullYear() % 100; // Last 2 digits
-        const currentMonth = now.getMonth() + 1;
-
-        if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
-            showToast('Card has expired.', 'error');
-            return;
-        }
-
-        // Validate CVC (3-4 digits)
-        if (!REGEX.CVC.test(cvc)) {
-            showToast('Invalid CVC code.', 'error');
-            return;
-        }
-
         setLoading(true);
+
+        const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+        if (!res) {
+            showToast('Razorpay SDK failed to load. Are you online?', 'error');
+            setLoading(false);
+            return;
+        }
 
         // Get selected address data
         const selectedAddress = addresses.find(addr => addr._id === selectedAddressId);
@@ -273,7 +253,6 @@ const Checkout = () => {
 
         const orderData = {
             orderItems: cartItems.map(item => {
-                // Normalize data structure for order creation
                 const product = item.product || item;
                 return {
                     product: product.id || product._id,
@@ -281,7 +260,7 @@ const Checkout = () => {
                     image: product.img,
                     price: product.price,
                     qty: item.qty,
-                    category: product.category // Optional, but good to have
+                    category: product.category
                 };
             }),
             shippingAddress: {
@@ -289,42 +268,79 @@ const Checkout = () => {
                 city: selectedAddress.city,
                 postalCode: selectedAddress.postalCode,
                 phone: selectedAddress.phone,
-                country: 'India', // Default for now
+                country: 'India',
             },
-            paymentMethod: 'Credit Card', // Hardcoded for now
+            paymentMethod: 'Razorpay',
             itemsPrice: subtotal,
             taxPrice: taxPrice,
             shippingPrice: shipping,
             totalPrice: total,
+            paymentMethod: paymentMethod,
             coupon: appliedCoupon ? {
                 code: appliedCoupon.code,
                 discount: discount
             } : null,
-            // Payer info is usually from payment gateway, but we'll send email for reference
-            paymentResult: {
-                id: 'mock_payment_id',
-                status: 'completed',
-                update_time: new Date().toISOString(),
-                email_address: selectedAddress.email
-            }
         };
 
         try {
-            await dispatch(createOrder(orderData)).unwrap();
-            // Success navigation is handled by useEffect, so we keep loading true
+            // 1. Create local order
+            const localOrder = await dispatch(createOrder(orderData)).unwrap();
+            
+            if (paymentMethod === 'COD') {
+                dispatch(resetOrder());
+                dispatch(clearCart());
+                navigate('/order-success', { state: { orderId: localOrder._id, orderNumber: localOrder.orderNumber } });
+                setLoading(false);
+                return;
+            }
+
+            // 2. Create Razorpay order
+            const rzpayOrder = await createRazorpayOrderMutation(localOrder._id).unwrap();
+
+            // 3. Open Razorpay checkout
+            const options = {
+                key: razorpayConfig?.keyId,
+                amount: rzpayOrder.amount,
+                currency: rzpayOrder.currency,
+                name: "Clarysays",
+                description: "Purchase Order",
+                order_id: rzpayOrder.id,
+                handler: async function (response) {
+                    try {
+                        await verifyRazorpayPayment({
+                            orderId: localOrder._id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                        }).unwrap();
+                        
+                        dispatch(resetOrder());
+                        dispatch(clearCart());
+                        navigate('/order-success', { state: { orderId: localOrder._id, orderNumber: localOrder.orderNumber } });
+                    } catch (error) {
+                        showToast('Payment verification failed', 'error');
+                    }
+                },
+                prefill: {
+                    name: user?.name || selectedAddress.firstName,
+                    email: user?.email || selectedAddress.email,
+                    contact: selectedAddress.phone
+                },
+                theme: {
+                    color: "#005b30"
+                }
+            };
+            const rzp1 = new window.Razorpay(options);
+            rzp1.on('payment.failed', function (response){
+                showToast(response.error.description, 'error');
+            });
+            rzp1.open();
+            setLoading(false);
         } catch (error) {
-            showToast(error?.message || 'Payment failed. Please try again.', 'error');
+            showToast(error?.message || 'Payment initiation failed.', 'error');
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        if (success && order) {
-            navigate('/order-success', { state: { orderId: order._id, orderNumber: order.orderNumber } });
-            dispatch(resetOrder());
-            dispatch(clearCart());
-        }
-    }, [success, order, navigate, dispatch]);
 
     if (cartItems.length === 0) return null;
 
@@ -528,59 +544,40 @@ const Checkout = () => {
                                     <h2 className="text-lg font-heading text-dark uppercase tracking-widest border-b border-dark/10 pb-4">Payment Method</h2>
                                     <p className="text-sm text-dark/60">All transactions are secure and encrypted.</p>
 
-                                    <div className="border border-dark/20 rounded-sm overflow-hidden">
-                                        <div className="p-4 bg-dark/5 border-b border-dark/10 flex items-center gap-3">
-                                            <div className="w-4 h-4 rounded-full border-[5px] border-primary bg-white"></div>
-                                            <span className="font-medium text-dark">Credit Card</span>
-                                        </div>
-                                        <div className="p-6 bg-dark/5 space-y-4">
-                                            <Input
-                                                type="text"
-                                                placeholder="Card number *"
-                                                className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
-                                                value={paymentData.cardNumber}
-                                                maxLength={19}
-                                                onChange={(e) => {
-                                                    const val = e.target.value.replace(/\D/g, ''); // Remove non-digits
-                                                    setPaymentData({ ...paymentData, cardNumber: val });
-                                                }}
+                                    <div className="border border-dark/20 rounded-sm overflow-hidden flex flex-col">
+                                        <label className={`p-4 cursor-pointer flex items-center gap-3 border-b border-dark/10 transition-colors ${paymentMethod === 'Razorpay' ? 'bg-dark/5' : 'hover:bg-dark/5'}`}>
+                                            <input 
+                                                type="radio" 
+                                                name="paymentMethod" 
+                                                value="Razorpay" 
+                                                checked={paymentMethod === 'Razorpay'} 
+                                                onChange={() => setPaymentMethod('Razorpay')}
+                                                className="w-4 h-4 text-primary bg-dark border-dark/20 focus:ring-primary accent-primary" 
                                             />
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Expiration date (MM / YY) *"
-                                                    className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
-                                                    value={paymentData.expiry}
-                                                    maxLength={5}
-                                                    onChange={(e) => {
-                                                        const clean = e.target.value.replace(/\D/g, '');
-                                                        let formatted = clean;
-                                                        if (clean.length >= 2) {
-                                                            formatted = clean.substring(0, 2) + '/' + clean.substring(2, 4);
-                                                        }
-                                                        setPaymentData({ ...paymentData, expiry: formatted });
-                                                    }}
-                                                />
-                                                <Input
-                                                    type="text"
-                                                    placeholder="Security code *"
-                                                    className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
-                                                    value={paymentData.cvc}
-                                                    maxLength={4}
-                                                    onChange={(e) => {
-                                                        const val = e.target.value.replace(/\D/g, '');
-                                                        setPaymentData({ ...paymentData, cvc: val });
-                                                    }}
-                                                />
+                                            <span className="font-medium text-dark">Razorpay (Cards, UPI, NetBanking)</span>
+                                        </label>
+                                        {paymentMethod === 'Razorpay' && (
+                                            <div className="p-6 bg-dark/5 text-sm text-dark/70 border-b border-dark/10">
+                                                After clicking "Pay now", you will be securely redirected to Razorpay to complete your purchase.
                                             </div>
-                                            <Input
-                                                type="text"
-                                                placeholder="Name on card *"
-                                                className="bg-transparent border-dark/20 focus:border-primary text-dark placeholder:text-dark/40"
-                                                value={paymentData.nameOnCard}
-                                                onChange={(e) => setPaymentData({ ...paymentData, nameOnCard: e.target.value })}
+                                        )}
+
+                                        <label className={`p-4 cursor-pointer flex items-center gap-3 transition-colors ${paymentMethod === 'COD' ? 'bg-dark/5' : 'hover:bg-dark/5'}`}>
+                                            <input 
+                                                type="radio" 
+                                                name="paymentMethod" 
+                                                value="COD" 
+                                                checked={paymentMethod === 'COD'} 
+                                                onChange={() => setPaymentMethod('COD')}
+                                                className="w-4 h-4 text-primary bg-dark border-dark/20 focus:ring-primary accent-primary" 
                                             />
-                                        </div>
+                                            <span className="font-medium text-dark">Cash on Delivery (COD)</span>
+                                        </label>
+                                        {paymentMethod === 'COD' && (
+                                            <div className="p-6 bg-dark/5 text-sm text-dark/70">
+                                                Pay with cash when your order is delivered to your address.
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 {renderOrderSummary('lg:hidden mb-8 mt-8')}
@@ -594,7 +591,7 @@ const Checkout = () => {
                                         disabled={loading}
                                         className="bg-primary text-dark font-bold uppercase tracking-widest px-8 py-3 hover:bg-dark hover:text-white transition-colors rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3"
                                     >
-                                        {loading ? "Processing..." : "Pay now"}
+                                        {loading ? "Processing..." : (paymentMethod === 'COD' ? "Complete order" : "Pay now")}
                                     </button>
                                 </div>
                             </form>
