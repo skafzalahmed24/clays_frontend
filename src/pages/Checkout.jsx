@@ -94,10 +94,18 @@ const Checkout = () => {
     const taxRate = settings?.taxRate ? Number(settings.taxRate) : 0;
     const taxPrice = Number((subtotal * (taxRate / 100)).toFixed(2));
 
-    const shipping = 0; // Free shipping for now
+    // Dynamic Shipping from Settings
+    const shippingConf = settings?.shippingConfig || {};
+    const freeThreshold = typeof shippingConf.freeShippingThreshold === 'number' ? shippingConf.freeShippingThreshold : 999;
+    const defaultFee = typeof shippingConf.defaultShippingFee === 'number' ? shippingConf.defaultShippingFee : 50;
+
+    let shipping = subtotal >= freeThreshold ? 0 : defaultFee;
+    if (paymentMethod === 'COD' && shippingConf.codExtraFee) {
+        shipping += Number(shippingConf.codExtraFee);
+    }
 
     // Calculate total dynamically based on discount
-    const total = subtotal + shipping + taxPrice - discount;
+    const total = Math.max(0, subtotal + shipping + taxPrice - discount);
 
     // Handlers
     const handleInputChange = (e) => {
@@ -270,7 +278,6 @@ const Checkout = () => {
                 phone: selectedAddress.phone,
                 country: 'India',
             },
-            paymentMethod: 'Razorpay',
             itemsPrice: subtotal,
             taxPrice: taxPrice,
             shippingPrice: shipping,

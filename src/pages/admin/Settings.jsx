@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useGetSettingsQuery, useUpdateSettingsMutation } from '../../store/api/contentApiSlice';
+import { useTestDelhiveryConnectionMutation } from '../../store/api/shippingApiSlice';
 import { useToast } from '../../context/ToastContext';
 import Input from '../../components/ui/Input';
 import Select from '../../components/ui/Select';
@@ -11,9 +12,11 @@ import { useConfirm } from '../../context/ConfirmContext';
 const AdminSettings = () => {
     const { data: remoteSettings, isLoading: loading } = useGetSettingsQuery();
     const [updateSettings, { isLoading: saving }] = useUpdateSettingsMutation();
+    const [testConnection, { isLoading: testingConnection }] = useTestDelhiveryConnectionMutation();
     const { showToast } = useToast();
     const { confirm } = useConfirm();
     const [activeTab, setActiveTab] = useState('general');
+    const [testResult, setTestResult] = useState(null);
 
     // Form State
     const [formData, setFormData] = useState({
@@ -29,6 +32,26 @@ const AdminSettings = () => {
 
         taxRate: '18',
         enableReviews: true,
+        
+        shippingConfig: {
+            provider: 'Delhivery',
+            warehouseName: 'Primary Warehouse',
+            warehouseAddress: '123 Herbal Garden Road, Green Sector',
+            city: 'Mumbai',
+            state: 'Maharashtra',
+            pin: '400001',
+            country: 'India',
+            phone: '+91 98765 43210',
+            sellerName: 'Clarysays',
+            sellerGst: '',
+            freeShippingThreshold: 999,
+            defaultShippingFee: 50,
+            codAvailable: true,
+            codExtraFee: 0,
+            enableAutoWaybill: false,
+            estimatedDays: '3 - 5 business days'
+        },
+
         // Migrated from Content.jsx
         openingHours: [],
         footerLinks: [],
@@ -47,14 +70,13 @@ const AdminSettings = () => {
     useEffect(() => {
         if (remoteSettings) {
             setFormData(prev => {
-                // Initialize if storeName is still default or some other indicator
-                // We use a simple check to prevent overwriting user edits after first load
                 if (prev.supportEmail === '') {
                     return {
                         ...prev,
                         ...remoteSettings,
                         taxRate: remoteSettings.taxRate || '18',
                         addresses: remoteSettings.addresses || [],
+                        shippingConfig: { ...prev.shippingConfig, ...(remoteSettings.shippingConfig || {}) },
                         socialLinks: { ...prev.socialLinks, ...(remoteSettings.socialLinks || {}) },
                         announcement: remoteSettings.announcement || { text: '', link: '' },
                         productPolicies: remoteSettings.productPolicies || { shipping: '', care: '' },
@@ -277,6 +299,31 @@ const AdminSettings = () => {
         setFormData(prev => ({ ...prev, addresses: updated }));
     };
 
+    const handleShippingChange = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            shippingConfig: {
+                ...prev.shippingConfig,
+                [field]: value
+            }
+        }));
+    };
+
+    const handleTestConnection = async () => {
+        try {
+            setTestResult(null);
+            const res = await testConnection({
+                warehouseName: formData.shippingConfig?.warehouseName,
+                pin: formData.shippingConfig?.pin
+            }).unwrap();
+            setTestResult({ success: true, message: res.message || 'Connection active and verified!' });
+            showToast('Delhivery API connection is active!', 'success');
+        } catch (err) {
+            setTestResult({ success: false, message: err?.data?.message || err?.message || 'Connection failed' });
+            showToast(err?.data?.message || 'Connection failed', 'error');
+        }
+    };
+
     if (loading && !remoteSettings) {
         return <div className="p-8 text-center">Loading settings...</div>;
     }
@@ -290,7 +337,7 @@ const AdminSettings = () => {
 
             {/* Tabs */}
             <div className="flex border-b border-white/10 mb-8 overflow-x-auto pb-1 gap-2">
-                {['General', 'Location', 'Social', 'Payment', 'Interface', 'Policies', 'Preferences'].map((tab) => (
+                {['General', 'Location', 'Shipping', 'Social', 'Payment', 'Interface', 'Policies', 'Preferences'].map((tab) => (
                     <button
                         key={tab}
                         className={`px-4 py-3 font-medium text-sm transition-all relative whitespace-nowrap rounded-t-md ${activeTab === tab.toLowerCase()
@@ -489,6 +536,249 @@ const AdminSettings = () => {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'shipping' && (
+                    <div className="space-y-8 animate-in fade-in">
+                        {/* Courier Integration Status Banner */}
+                        <div className="p-6 bg-gradient-to-r from-primary/10 via-dark-paper to-white/5 border border-primary/20 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-primary/20 border border-primary/30 rounded-full flex items-center justify-center text-primary font-bold text-xl">
+                                    🚚
+                                </div>
+                                <div>
+                                    <div className="flex items-center gap-3">
+                                        <h3 className="text-light font-heading text-lg font-bold">Delhivery Express & Logistics</h3>
+                                        <span className="bg-green-500/20 text-green-400 border border-green-500/30 text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                                            Token Active
+                                        </span>
+                                    </div>
+                                    <p className="text-light/60 text-xs mt-1">
+                                        Automated Waybill generation, real-time tracking, pincode serviceability & printable shipping labels.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    onClick={handleTestConnection}
+                                    disabled={testingConnection}
+                                    className="px-4 py-2.5 bg-primary/20 border border-primary/40 text-primary hover:bg-primary hover:text-dark font-medium text-xs rounded transition-all flex items-center gap-2 disabled:opacity-50"
+                                >
+                                    {testingConnection ? (
+                                        <div className="w-3.5 h-3.5 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                                    ) : (
+                                        <span>⚡ Test Delhivery Connection</span>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+
+                        {testResult && (
+                            <div className={`p-4 rounded-md text-xs border ${
+                                testResult.success 
+                                    ? 'bg-green-500/10 border-green-500/30 text-green-300' 
+                                    : 'bg-red-500/10 border-red-500/30 text-red-300'
+                            }`}>
+                                <p className="font-bold">{testResult.success ? '✓ Verification Successful' : '✗ Verification Notice'}</p>
+                                <p className="mt-1 opacity-90">{testResult.message}</p>
+                            </div>
+                        )}
+
+                        {/* Pickup Point / Warehouse Details */}
+                        <div className="p-6 bg-white/5 border border-white/10 rounded-lg space-y-6">
+                            <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                                <div>
+                                    <h3 className="text-light font-heading text-base font-bold uppercase tracking-wide">
+                                        Pickup Warehouse & Location
+                                    </h3>
+                                    <p className="text-light/50 text-xs mt-0.5">
+                                        The registered pickup location details sent to Delhivery for shipment pickups.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">
+                                        Delhivery Warehouse Name <span className="text-primary">*</span>
+                                    </label>
+                                    <Input
+                                        value={formData.shippingConfig?.warehouseName || ''}
+                                        onChange={(e) => handleShippingChange('warehouseName', e.target.value)}
+                                        placeholder="e.g. Primary Warehouse / Main Hub"
+                                    />
+                                    <p className="text-[10px] text-light/40 mt-1">
+                                        Must match the pickup warehouse name registered in your Delhivery One dashboard.
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">
+                                        Pickup PIN Code <span className="text-primary">*</span>
+                                    </label>
+                                    <Input
+                                        value={formData.shippingConfig?.pin || ''}
+                                        onChange={(e) => handleShippingChange('pin', e.target.value)}
+                                        placeholder="400001"
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">
+                                        Warehouse Address Line <span className="text-primary">*</span>
+                                    </label>
+                                    <Input
+                                        value={formData.shippingConfig?.warehouseAddress || ''}
+                                        onChange={(e) => handleShippingChange('warehouseAddress', e.target.value)}
+                                        placeholder="Building name, street, industrial area"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">City</label>
+                                    <Input
+                                        value={formData.shippingConfig?.city || ''}
+                                        onChange={(e) => handleShippingChange('city', e.target.value)}
+                                        placeholder="Mumbai"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">State</label>
+                                    <Input
+                                        value={formData.shippingConfig?.state || ''}
+                                        onChange={(e) => handleShippingChange('state', e.target.value)}
+                                        placeholder="Maharashtra"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">Contact Phone</label>
+                                    <Input
+                                        value={formData.shippingConfig?.phone || ''}
+                                        onChange={(e) => handleShippingChange('phone', e.target.value)}
+                                        placeholder="+91 98765 43210"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">Seller / Brand Display Name</label>
+                                    <Input
+                                        value={formData.shippingConfig?.sellerName || ''}
+                                        onChange={(e) => handleShippingChange('sellerName', e.target.value)}
+                                        placeholder="Clarysays"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">Seller GSTIN (Optional)</label>
+                                    <Input
+                                        value={formData.shippingConfig?.sellerGst || ''}
+                                        onChange={(e) => handleShippingChange('sellerGst', e.target.value)}
+                                        placeholder="27AAAAA0000A1Z5"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Shipping Calculation & Rules */}
+                        <div className="p-6 bg-white/5 border border-white/10 rounded-lg space-y-6">
+                            <div className="border-b border-white/10 pb-4">
+                                <h3 className="text-light font-heading text-base font-bold uppercase tracking-wide">
+                                    Delivery Charges & Shipping Rules
+                                </h3>
+                                <p className="text-light/50 text-xs mt-0.5">
+                                    Control checkout delivery fees, free shipping thresholds, and Cash on Delivery rules.
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">
+                                        Free Shipping Minimum Order (₹)
+                                    </label>
+                                    <Input
+                                        type="number"
+                                        value={formData.shippingConfig?.freeShippingThreshold ?? 999}
+                                        onChange={(e) => handleShippingChange('freeShippingThreshold', Number(e.target.value))}
+                                        placeholder="999"
+                                    />
+                                    <p className="text-[10px] text-light/40 mt-1">Orders above this amount qualify for ₹0 Free Shipping.</p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">
+                                        Standard Delivery Fee (₹)
+                                    </label>
+                                    <Input
+                                        type="number"
+                                        value={formData.shippingConfig?.defaultShippingFee ?? 50}
+                                        onChange={(e) => handleShippingChange('defaultShippingFee', Number(e.target.value))}
+                                        placeholder="50"
+                                    />
+                                    <p className="text-[10px] text-light/40 mt-1">Applied to orders below the free shipping threshold.</p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">
+                                        Estimated Delivery Timeline
+                                    </label>
+                                    <Input
+                                        value={formData.shippingConfig?.estimatedDays || '3 - 5 business days'}
+                                        onChange={(e) => handleShippingChange('estimatedDays', e.target.value)}
+                                        placeholder="3 - 5 business days"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs uppercase tracking-wider text-light/70 mb-2">
+                                        Extra COD Fee (₹)
+                                    </label>
+                                    <Input
+                                        type="number"
+                                        value={formData.shippingConfig?.codExtraFee ?? 0}
+                                        onChange={(e) => handleShippingChange('codExtraFee', Number(e.target.value))}
+                                        placeholder="0"
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2 flex flex-col md:flex-row gap-6 pt-2">
+                                    <div className="flex items-center justify-between p-4 bg-body/40 border border-white/5 rounded-md flex-1">
+                                        <div>
+                                            <h4 className="text-sm font-medium text-light">Accept Cash on Delivery (COD)</h4>
+                                            <p className="text-xs text-light/50">Allow customers to pay upon delivery if serviceable.</p>
+                                        </div>
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.shippingConfig?.codAvailable !== false}
+                                                onChange={(e) => handleShippingChange('codAvailable', e.target.checked)}
+                                                className="sr-only peer"
+                                            />
+                                            <div className="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                        </label>
+                                    </div>
+
+                                    <div className="flex items-center justify-between p-4 bg-body/40 border border-white/5 rounded-md flex-1">
+                                        <div>
+                                            <h4 className="text-sm font-medium text-light">Auto-Generate Waybill</h4>
+                                            <p className="text-xs text-light/50">Automatically create Delhivery AWB when paid order is placed.</p>
+                                        </div>
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={Boolean(formData.shippingConfig?.enableAutoWaybill)}
+                                                onChange={(e) => handleShippingChange('enableAutoWaybill', e.target.checked)}
+                                                className="sr-only peer"
+                                            />
+                                            <div className="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

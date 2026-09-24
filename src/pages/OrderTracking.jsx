@@ -49,10 +49,14 @@ const OrderTracking = () => {
             setStatus('found');
             setOrderData({
                 id: data.id,
+                orderNumber: data.orderNumber,
                 status: data.status,
                 date: new Date(data.date).toLocaleDateString(),
                 items: data.items,
                 total: format(data.total),
+                waybill: data.waybill,
+                courier: data.courier,
+                liveTracking: data.liveTracking,
                 timeline: data.timeline.map(step => ({
                     ...step,
                     date: step.date ? new Date(step.date).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : null
@@ -162,9 +166,56 @@ const OrderTracking = () => {
                             </button>
                         </div>
                         <h3 className="text-xl font-heading text-light mb-6 border-b border-light/10 pb-4 flex justify-between items-center">
-                            <span>Order {orderData.id}</span>
+                            <span>Order #{orderData.orderNumber ? String(orderData.orderNumber).padStart(6, '0') : (orderData.id ? orderData.id.substring(orderData.id.length - 6) : '')}</span>
                             <span className="text-primary text-sm bg-primary/10 px-3 py-1 rounded-full">{orderData.status}</span>
                         </h3>
+
+                        {orderData.waybill && (
+                            <div className="mb-8 p-6 bg-white/5 border border-primary/20 rounded-sm space-y-4">
+                                <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-white/10 pb-3">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-lg">🚚</span>
+                                        <div>
+                                            <p className="text-xs uppercase tracking-wider text-light/50">Courier Partner</p>
+                                            <p className="text-sm font-bold text-light">Delhivery Express</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs uppercase tracking-wider text-light/50">AWB Tracking No.</p>
+                                        <p className="font-mono text-base font-bold text-primary">{orderData.waybill}</p>
+                                    </div>
+                                </div>
+
+                                {orderData.liveTracking && (
+                                    <div className="space-y-3 pt-1 text-xs">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-light/60">Current Courier Status:</span>
+                                            <span className="font-bold text-light bg-white/10 px-2.5 py-1 rounded-sm">{orderData.liveTracking.status || 'In Transit'}</span>
+                                        </div>
+                                        {orderData.liveTracking.expectedDate && (
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-light/60">Estimated Delivery:</span>
+                                                <span className="text-primary font-medium">{orderData.liveTracking.expectedDate}</span>
+                                            </div>
+                                        )}
+                                        {orderData.liveTracking.scans && orderData.liveTracking.scans.length > 0 && (
+                                            <div className="mt-4 pt-4 border-t border-white/10">
+                                                <p className="text-xs font-bold uppercase tracking-wider text-light/80 mb-3">Live Courier Updates</p>
+                                                <div className="space-y-3 pl-3 border-l border-primary/30 ml-1">
+                                                    {orderData.liveTracking.scans.map((s, idx) => (
+                                                        <div key={idx} className="relative">
+                                                            <span className="absolute -left-[17px] top-1 w-2 h-2 rounded-full bg-primary"></span>
+                                                            <p className="font-medium text-light text-xs">{s.status}</p>
+                                                            <p className="text-[11px] text-light/50">{s.location} {s.dateTime ? `• ${new Date(s.dateTime).toLocaleString()}` : ''}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <div className="relative border-l-2 border-light/10 ml-3 space-y-8 pl-8 py-2">
                             {orderData.timeline.map((step, idx) => (

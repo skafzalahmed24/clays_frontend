@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux'; // Removed
 import Icons from '../../components/ui/Icons';
 import PreviewableImage from '../../components/ui/PreviewableImage';
 import { useToast } from '../../context/ToastContext';
 import { useGetOrderDetailsQuery, useUpdateOrderStatusMutation, useCreateDelhiveryShipmentMutation } from '../../store/api/orderApiSlice';
+import { useLazyTrackWaybillQuery, useLazyGetShippingLabelQuery, useCancelShipmentMutation, useGetLiveRateMutation } from '../../store/api/shippingApiSlice';
 import Select from '../../components/ui/Select';
 import { useConfirm } from '../../context/ConfirmContext';
 
@@ -15,11 +15,44 @@ const AdminOrderDetails = () => {
     const { confirm } = useConfirm();
 
     // Fetch Details
-    const { data: order, isLoading: loading, error } = useGetOrderDetailsQuery(id);
+    const { data: order, isLoading: loading, error, refetch } = useGetOrderDetailsQuery(id);
 
     // Update Status Mutation
     const [updateStatus, { isLoading: isUpdating }] = useUpdateOrderStatusMutation();
     const [createShipment, { isLoading: isCreatingShipment }] = useCreateDelhiveryShipmentMutation();
+    const [trackWaybill, { isLoading: isTracking }] = useLazyTrackWaybillQuery();
+    const [getShippingLabel, { isLoading: isFetchingLabel }] = useLazyGetShippingLabelQuery();
+    const [cancelShipment, { isLoading: isCancellingShipment }] = useCancelShipmentMutation();
+    const [getLiveRate] = useGetLiveRateMutation();
+
+    const [trackingData, setTrackingData] = useState(null);
+    const [showTrackingModal, setShowTrackingModal] = useState(false);
+    const [delhiveryRateData, setDelhiveryRateData] = useState(null);
+    const [rateLoading, setRateLoading] = useState(false);
+
+    const fetchOrderDelhiveryRate = async () => {
+        if (!order?.shippingAddress?.postalCode) return;
+        setRateLoading(true);
+        try {
+            const res = await getLiveRate({
+                destPincode: order.shippingAddress.postalCode,
+                weightGrams: 500,
+                paymentMode: order.paymentMethod === 'COD' ? 'COD' : 'Prepaid',
+                codAmount: order.paymentMethod === 'COD' ? order.totalPrice : 0
+            }).unwrap();
+            setDelhiveryRateData(res);
+        } catch (err) {
+            console.warn('Could not fetch live rate calculation:', err);
+        } finally {
+            setRateLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (order?.shippingAddress?.postalCode) {
+            fetchOrderDelhiveryRate();
+        }
+    }, [order?.shippingAddress?.postalCode, order?.paymentMethod, order?.totalPrice]);
 
     useEffect(() => {
         if (error) {
@@ -49,17 +82,61 @@ const AdminOrderDetails = () => {
     const handleCreateShipment = async () => {
         const confirmed = await confirm(
             'Create Delhivery Shipment',
-            'Are you sure you want to generate a Delhivery shipment for this order? This will create an AWB tracking number.',
+            'Are you sure you want to generate a Delhivery shipment for this order? This will create an AWB tracking number with your registered warehouse pickup location.',
             { confirmText: 'Create Shipment', cancelText: 'Cancel' }
         );
 
         if (confirmed) {
             try {
                 await createShipment(id).unwrap();
-                showToast('Delhivery Shipment created successfully', 'success');
+                showToast('Delhivery Shipment created successfully! AWB generated.', 'success');
+                if (refetch) refetch();
             } catch (err) {
                 console.error(err);
                 showToast(err?.data?.message || 'Failed to create shipment', 'error');
+            }
+        }
+    };
+
+    const handleFetchTracking = async (waybill) => {
+        try {
+            const data = await trackWaybill(waybill).unwrap();
+            setTrackingData(data);
+            setShowTrackingModal(true);
+        } catch (err) {
+            showToast(err?.data?.message || 'Failed to fetch live tracking', 'error');
+        }
+    };
+
+    const handleDownloadLabel = async (waybill) => {
+        try {
+            const res = await getShippingLabel(waybill).unwrap();
+            if (res?.packages_found > 0 || res?.packages?.[0]?.pdf_download_link) {
+                const pdfLink = res.packages?.[0]?.pdf_download_link || `https://track.delhivery.com/api/p/packing_slip?wbns=${waybill}&pdf=true`;
+                window.open(pdfLink, '_blank');
+            } else {
+                window.open(`https://track.delhivery.com/api/p/packing_slip?wbns=${waybill}&pdf=true`, '_blank');
+            }
+            showToast('Opening shipping label...', 'success');
+        } catch (err) {
+            showToast(err?.data?.message || 'Failed to fetch label', 'error');
+        }
+    };
+
+    const handleCancelShipment = async (waybill) => {
+        const confirmed = await confirm(
+            'Cancel Delhivery Shipment',
+            `Are you sure you want to cancel the Delhivery shipment for AWB ${waybill}?`,
+            { confirmText: 'Cancel Shipment', cancelText: 'Keep Active' }
+        );
+
+        if (confirmed) {
+            try {
+                await cancelShipment(waybill).unwrap();
+                showToast('Delhivery shipment cancellation requested', 'success');
+                if (refetch) refetch();
+            } catch (err) {
+                showToast(err?.data?.message || 'Failed to cancel shipment', 'error');
             }
         }
     };
@@ -249,29 +326,156 @@ const AdminOrderDetails = () => {
 
                     {/* Shipping & Tracking */}
                     <div className="bg-dark-paper border border-white/10 rounded-lg overflow-hidden">
-                        <div className="p-4 bg-white/5 border-b border-white/10">
+                        <div className="p-4 bg-white/5 border-b border-white/10 flex justify-between items-center">
                             <h2 className="font-heading text-lg text-light">Shipping & Tracking</h2>
+                            <span className="text-[10px] uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 rounded font-bold">
+                                Delhivery
+                            </span>
                         </div>
                         <div className="p-4">
                             {order.shippingResult && order.shippingResult.waybill ? (
-                                <div className="space-y-2">
-                                    <p className="text-sm text-light/80">Courier: <span className="font-medium text-light">Delhivery</span></p>
-                                    <div className="text-sm text-light/80">
-                                        <span className="text-xs text-light/40 block">AWB / Tracking Number:</span>
-                                        <span className="font-mono text-lg font-bold text-primary">{order.shippingResult.waybill}</span>
+                                <div className="space-y-4">
+                                    <div className="p-3 bg-white/5 border border-white/10 rounded">
+                                        <span className="text-xs text-light/40 block uppercase tracking-wider">Waybill / AWB Number</span>
+                                        <span className="font-mono text-xl font-bold text-primary tracking-wider">{order.shippingResult.waybill}</span>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                            <span className="text-xs text-light/80 font-medium">
+                                                {order.shippingResult.status || 'Manifested'}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <p className="text-xs text-light/50 mt-1">Status: {order.shippingResult.status || 'Success'}</p>
+
+                                    <div className="grid grid-cols-1 gap-2 pt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleFetchTracking(order.shippingResult.waybill)}
+                                            disabled={isTracking}
+                                            className="w-full bg-primary/20 border border-primary/40 text-primary hover:bg-primary hover:text-dark font-medium text-xs uppercase tracking-wider py-2.5 rounded transition-all flex items-center justify-center gap-2"
+                                        >
+                                            {isTracking ? 'Fetching Status...' : '🔍 Live Delhivery Tracking'}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDownloadLabel(order.shippingResult.waybill)}
+                                            disabled={isFetchingLabel}
+                                            className="w-full bg-white/10 hover:bg-white hover:text-dark text-light border border-white/20 font-medium text-xs uppercase tracking-wider py-2.5 rounded transition-all flex items-center justify-center gap-2"
+                                        >
+                                            📄 Print Shipping Label / Packing Slip
+                                        </button>
+
+                                        {order.status !== 'Delivered' && order.status !== 'Cancelled' && (
+                                            <button
+                                                type="button"
+                                                onClick={() => handleCancelShipment(order.shippingResult.waybill)}
+                                                disabled={isCancellingShipment}
+                                                className="w-full text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20 text-xs py-2 rounded transition-all mt-1"
+                                            >
+                                                {isCancellingShipment ? 'Cancelling...' : 'Cancel Waybill'}
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    <p className="text-sm text-light/60">No shipment has been generated for this order yet.</p>
+                                    <p className="text-sm text-light/60">No Delhivery shipment generated yet.</p>
                                     <button
                                         onClick={handleCreateShipment}
                                         disabled={isCreatingShipment || order.status === 'Cancelled'}
                                         className="w-full bg-primary text-dark font-bold uppercase tracking-widest px-4 py-3 hover:bg-white transition-colors rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                     >
-                                        {isCreatingShipment ? 'Generating...' : 'Create Delhivery Shipment'}
+                                        {isCreatingShipment ? 'Generating AWB...' : '⚡ Generate Delhivery AWB'}
                                     </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Delhivery Live Courier Cost Breakdown */}
+                    <div className="bg-dark-paper border border-white/10 rounded-lg overflow-hidden">
+                        <div className="p-4 bg-white/5 border-b border-white/10 flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                                <span className="text-base">💰</span>
+                                <h2 className="font-heading text-lg text-light">Delhivery Cost Breakdown</h2>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={fetchOrderDelhiveryRate}
+                                disabled={rateLoading}
+                                className="text-[11px] text-primary hover:text-white bg-primary/10 border border-primary/30 px-2 py-1 rounded transition-colors"
+                            >
+                                {rateLoading ? 'Calculating...' : '🔄 Live Calculate'}
+                            </button>
+                        </div>
+                        <div className="p-4 space-y-4">
+                            {delhiveryRateData ? (
+                                <div className="space-y-3">
+                                    {/* Big Total Wallet Deduction */}
+                                    <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg flex items-center justify-between">
+                                        <div>
+                                            <span className="text-[10px] uppercase font-bold tracking-wider text-primary/80 block">
+                                                Delhivery Wallet Deduction
+                                            </span>
+                                            <span className="text-2xl font-mono font-bold text-primary">
+                                                ₹{delhiveryRateData.totalAmount?.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                            </span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-[10px] text-light/50 block">Payment Mode</span>
+                                            <span className={`text-xs font-bold px-2 py-0.5 rounded ${delhiveryRateData.paymentMode === 'COD' ? 'bg-amber-500/20 text-amber-300' : 'bg-green-500/20 text-green-300'}`}>
+                                                {delhiveryRateData.paymentMode}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Itemized Table */}
+                                    <div className="bg-white/5 rounded-lg p-3 space-y-2 text-xs">
+                                        <div className="flex justify-between text-light/70">
+                                            <span>Base Freight ({delhiveryRateData.chargedWeight}g):</span>
+                                            <span className="font-mono text-light">₹{delhiveryRateData.freightCharge?.toFixed(2)}</span>
+                                        </div>
+                                        {delhiveryRateData.codCharge > 0 && (
+                                            <div className="flex justify-between text-amber-300/90 font-medium">
+                                                <span>COD Collection Fee ({delhiveryRateData.codAmount ? `on ₹${delhiveryRateData.codAmount}` : ''}):</span>
+                                                <span className="font-mono">₹{delhiveryRateData.codCharge?.toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                        {delhiveryRateData.surcharges > 0 && (
+                                            <div className="flex justify-between text-light/70">
+                                                <span>Surcharges (Fuel / Peak):</span>
+                                                <span className="font-mono text-light">₹{delhiveryRateData.surcharges?.toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                        <div className="flex justify-between text-light/50 pt-1 border-t border-white/5">
+                                            <span>Taxable Subtotal:</span>
+                                            <span className="font-mono text-light/80">₹{delhiveryRateData.taxableSubtotal?.toFixed(2)}</span>
+                                        </div>
+                                        <div className="flex justify-between text-light/70">
+                                            <span>GST (18% CGST + SGST):</span>
+                                            <span className="font-mono text-light">₹{delhiveryRateData.taxAmount?.toFixed(2)}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Route Info */}
+                                    <div className="flex items-center justify-between text-[11px] text-light/50 px-1">
+                                        <span>Route: {delhiveryRateData.originPin} ➔ {delhiveryRateData.destPin}</span>
+                                        <span>Zone: <strong className="text-light">{delhiveryRateData.zone}</strong></span>
+                                    </div>
+
+                                    {order.paymentMethod === 'COD' && (
+                                        <p className="text-[11px] text-light/50 bg-white/5 p-2 rounded leading-relaxed">
+                                            💡 <strong className="text-light/70">COD Note:</strong> Delhivery charges ₹{delhiveryRateData.codCharge?.toFixed(2)} for handling cash. You can add an Extra COD Fee in Settings to collect this from buyers.
+                                        </p>
+                                    )}
+                                </div>
+                            ) : rateLoading ? (
+                                <div className="text-center py-4 text-xs text-light/50 animate-pulse">
+                                    Calculating live Delhivery courier charges...
+                                </div>
+                            ) : (
+                                <div className="text-center py-3 text-xs text-light/40">
+                                    Click "Live Calculate" to check Delhivery charges.
                                 </div>
                             )}
                         </div>
@@ -279,6 +483,65 @@ const AdminOrderDetails = () => {
 
                 </div>
             </div>
+
+            {/* Live Tracking Modal */}
+            {showTrackingModal && (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-dark-paper border border-white/10 rounded-lg max-w-xl w-full p-6 space-y-6 max-h-[85vh] overflow-y-auto">
+                        <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                            <div>
+                                <h3 className="font-heading text-lg text-light">Live Delhivery Tracking</h3>
+                                <p className="text-xs text-light/50 font-mono mt-0.5">AWB: {trackingData?.waybill}</p>
+                            </div>
+                            <button
+                                onClick={() => setShowTrackingModal(false)}
+                                className="text-light/60 hover:text-light text-xl p-1"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {trackingData && (
+                            <div className="space-y-4 text-sm">
+                                <div className="grid grid-cols-2 gap-4 p-4 bg-white/5 rounded">
+                                    <div>
+                                        <span className="text-xs text-light/40 block">Current Status</span>
+                                        <span className="font-bold text-primary">{trackingData.status}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-xs text-light/40 block">Expected Delivery</span>
+                                        <span className="text-light">{trackingData.expectedDate || '3 - 5 business days'}</span>
+                                    </div>
+                                    {trackingData.statusLocation && (
+                                        <div className="col-span-2">
+                                            <span className="text-xs text-light/40 block">Latest Location</span>
+                                            <span className="text-light">{trackingData.statusLocation}</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <h4 className="text-xs uppercase tracking-wider text-light/60 mb-3">Scan History</h4>
+                                    {(!trackingData.scans || trackingData.scans.length === 0) ? (
+                                        <p className="text-xs text-light/40 italic p-3 bg-white/5 rounded">Shipment is created and waiting for courier pickup.</p>
+                                    ) : (
+                                        <div className="space-y-3 border-l-2 border-primary/40 pl-4 ml-2">
+                                            {trackingData.scans.map((scan, sIdx) => (
+                                                <div key={sIdx} className="relative">
+                                                    <span className="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-primary"></span>
+                                                    <p className="font-medium text-light text-xs">{scan.status}</p>
+                                                    <p className="text-[11px] text-light/50">{scan.location} {scan.dateTime ? `• ${new Date(scan.dateTime).toLocaleString()}` : ''}</p>
+                                                    {scan.instructions && <p className="text-[10px] text-light/40 italic">{scan.instructions}</p>}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

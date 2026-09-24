@@ -7,6 +7,7 @@ import { addToWishlist, removeFromWishlist } from '../store/slices/wishlistSlice
 import { useGetSettingsQuery } from '../store/api/contentApiSlice';
 import { useGetProductsQuery, useGetProductDetailsQuery, useCreateReviewMutation, useUpdateReviewMutation } from '../store/api/productApiSlice';
 import { useCreateRequestMutation } from '../store/api/requestApiSlice';
+import { useLazyCheckPincodeQuery } from '../store/api/shippingApiSlice';
 import { getImageUrl } from '../utils/imageHelper';
 import { usePrice } from '../hooks/usePrice';
 import SEO from '../components/common/SEO';
@@ -56,6 +57,26 @@ const ProductDetails = () => {
     // Request Modal State
     const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
     const [requestEmail, setRequestEmail] = useState('');
+
+    // Delhivery Pincode Estimator State
+    const [checkPincode, { isLoading: isCheckingPin }] = useLazyCheckPincodeQuery();
+    const [pincodeInput, setPincodeInput] = useState('');
+    const [pincodeResult, setPincodeResult] = useState(null);
+
+    const handleCheckPincode = async (e) => {
+        if (e) e.preventDefault();
+        const clean = pincodeInput.trim().replace(/\D/g, '');
+        if (!clean || clean.length !== 6) {
+            showToast('Please enter a valid 6-digit PIN code', 'error');
+            return;
+        }
+        try {
+            const res = await checkPincode(clean).unwrap();
+            setPincodeResult(res);
+        } catch (err) {
+            setPincodeResult({ serviceable: false, message: err?.data?.message || 'Unable to check PIN code' });
+        }
+    };
 
     // Effect: Set initial image, email, and review data
     useEffect(() => {
@@ -336,6 +357,72 @@ const ProductDetails = () => {
                                         </button>
                                     </div>
                                 </div>
+                            )}
+                        </div>
+
+                        {/* Delivery & Pincode Serviceability Check */}
+                        <div className="mb-8 p-4 bg-white/5 border border-white/10 rounded-sm space-y-3">
+                            <div className="flex items-center gap-2">
+                                <span className="text-primary text-base">🚚</span>
+                                <span className="text-xs uppercase tracking-widest text-light font-bold">Delivery & Services</span>
+                            </div>
+                            
+                            <form onSubmit={handleCheckPincode} className="flex gap-2">
+                                <input
+                                    type="text"
+                                    maxLength="6"
+                                    placeholder="Enter 6-digit PIN code"
+                                    value={pincodeInput}
+                                    onChange={(e) => {
+                                        setPincodeInput(e.target.value.replace(/\D/g, ''));
+                                        if (pincodeResult) setPincodeResult(null);
+                                    }}
+                                    className="flex-1 bg-body/60 border border-white/10 text-light text-xs px-3 py-2.5 rounded-none focus:outline-none focus:border-primary font-mono"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={isCheckingPin || pincodeInput.length < 6}
+                                    className="bg-primary/20 hover:bg-primary hover:text-dark text-primary border border-primary/40 text-xs uppercase tracking-wider font-bold px-4 py-2.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                    {isCheckingPin ? 'Checking...' : 'Check'}
+                                </button>
+                            </form>
+
+                            {pincodeResult && (
+                                <div className={`text-xs p-3 rounded-none border space-y-1.5 animate-in fade-in ${
+                                    pincodeResult.serviceable 
+                                        ? 'bg-green-500/10 border-green-500/20 text-green-300' 
+                                        : 'bg-red-500/10 border-red-500/20 text-red-300'
+                                }`}>
+                                    {pincodeResult.serviceable ? (
+                                        <>
+                                            <p className="font-bold flex items-center gap-1.5 text-light">
+                                                ✓ Delivery available to {pincodeResult.city ? `${pincodeResult.city}, ` : ''}{pincodeResult.pincode}
+                                            </p>
+                                            <p className="text-light/70 text-[11px]">
+                                                Estimated delivery in <span className="text-primary font-medium">{pincodeResult.estimatedDays || '3 - 5 business days'}</span> via Delhivery Express.
+                                            </p>
+                                            <div className="flex flex-wrap gap-2 pt-1 text-[10px]">
+                                                {pincodeResult.cod ? (
+                                                    <span className="bg-white/10 text-light px-2 py-0.5 rounded-sm">💵 Cash on Delivery Available</span>
+                                                ) : (
+                                                    <span className="bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-sm">💳 Prepaid Orders Only</span>
+                                                )}
+                                                <span className="bg-white/10 text-light px-2 py-0.5 rounded-sm">🔄 Easy Returns</span>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <p className="text-red-300">
+                                            ✗ {pincodeResult.message || 'Delivery is currently not available to this PIN code.'}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+
+                            {!pincodeResult && (
+                                <p className="text-[11px] text-light/50">
+                                    Enter your PIN code to verify Cash on Delivery & fast delivery timelines.
+                                </p>
                             )}
                         </div>
 
