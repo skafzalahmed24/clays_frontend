@@ -391,6 +391,19 @@ const OrderDetails = () => {
                             <p className="text-dark/60 pt-1">{orderDetails.user?.email}</p>
                             {orderDetails.shippingAddress.phone && <p className="text-dark/60">{orderDetails.shippingAddress.phone}</p>}
                         </div>
+                        
+                        {orderDetails.shippingResult && orderDetails.shippingResult.waybill && (
+                            <div className="mt-6 pt-6 border-t border-dark/10">
+                                <h4 className="font-heading text-xs text-dark/60 uppercase tracking-widest mb-2">Tracking Information</h4>
+                                <div className="space-y-1">
+                                    <p className="text-sm text-dark/80">Courier: <span className="font-medium text-dark">Delhivery</span></p>
+                                    <p className="text-sm text-dark/80">
+                                        Tracking Number: <span className="font-mono text-primary font-bold">{orderDetails.shippingResult.waybill}</span>
+                                    </p>
+                                    <p className="text-xs text-dark/50 mt-1">Status: {orderDetails.shippingResult.status || 'Success'}</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div>
                         <h4 className="font-heading text-xs text-dark/60 uppercase tracking-widest mb-2">Payment Summary</h4>

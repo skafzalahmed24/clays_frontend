@@ -77,6 +77,13 @@ export const orderApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['Order'],
         }),
+        createDelhiveryShipment: builder.mutation({
+            query: (id) => ({
+                url: `/orders/${id}/shipment`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['Order'],
+        }),
     }),
 });
 
@@ -92,4 +99,5 @@ export const {
     useGetRazorpayConfigQuery,
     useCreateRazorpayOrderMutation,
     useVerifyRazorpayPaymentMutation,
+    useCreateDelhiveryShipmentMutation,
 } = orderApiSlice;

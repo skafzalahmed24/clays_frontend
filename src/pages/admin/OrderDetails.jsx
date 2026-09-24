@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Icons from '../../components/ui/Icons';
 import PreviewableImage from '../../components/ui/PreviewableImage';
 import { useToast } from '../../context/ToastContext';
-import { useGetOrderDetailsQuery, useUpdateOrderStatusMutation } from '../../store/api/orderApiSlice';
+import { useGetOrderDetailsQuery, useUpdateOrderStatusMutation, useCreateDelhiveryShipmentMutation } from '../../store/api/orderApiSlice';
 import Select from '../../components/ui/Select';
 import { useConfirm } from '../../context/ConfirmContext';
 
@@ -19,6 +19,7 @@ const AdminOrderDetails = () => {
 
     // Update Status Mutation
     const [updateStatus, { isLoading: isUpdating }] = useUpdateOrderStatusMutation();
+    const [createShipment, { isLoading: isCreatingShipment }] = useCreateDelhiveryShipmentMutation();
 
     useEffect(() => {
         if (error) {
@@ -41,6 +42,24 @@ const AdminOrderDetails = () => {
             } catch (err) {
                 console.error(err);
                 showToast('Failed to update status', 'error');
+            }
+        }
+    };
+
+    const handleCreateShipment = async () => {
+        const confirmed = await confirm(
+            'Create Delhivery Shipment',
+            'Are you sure you want to generate a Delhivery shipment for this order? This will create an AWB tracking number.',
+            { confirmText: 'Create Shipment', cancelText: 'Cancel' }
+        );
+
+        if (confirmed) {
+            try {
+                await createShipment(id).unwrap();
+                showToast('Delhivery Shipment created successfully', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast(err?.data?.message || 'Failed to create shipment', 'error');
             }
         }
     };
@@ -227,6 +246,37 @@ const AdminOrderDetails = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* Shipping & Tracking */}
+                    <div className="bg-dark-paper border border-white/10 rounded-lg overflow-hidden">
+                        <div className="p-4 bg-white/5 border-b border-white/10">
+                            <h2 className="font-heading text-lg text-light">Shipping & Tracking</h2>
+                        </div>
+                        <div className="p-4">
+                            {order.shippingResult && order.shippingResult.waybill ? (
+                                <div className="space-y-2">
+                                    <p className="text-sm text-light/80">Courier: <span className="font-medium text-light">Delhivery</span></p>
+                                    <div className="text-sm text-light/80">
+                                        <span className="text-xs text-light/40 block">AWB / Tracking Number:</span>
+                                        <span className="font-mono text-lg font-bold text-primary">{order.shippingResult.waybill}</span>
+                                    </div>
+                                    <p className="text-xs text-light/50 mt-1">Status: {order.shippingResult.status || 'Success'}</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    <p className="text-sm text-light/60">No shipment has been generated for this order yet.</p>
+                                    <button
+                                        onClick={handleCreateShipment}
+                                        disabled={isCreatingShipment || order.status === 'Cancelled'}
+                                        className="w-full bg-primary text-dark font-bold uppercase tracking-widest px-4 py-3 hover:bg-white transition-colors rounded-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    >
+                                        {isCreatingShipment ? 'Generating...' : 'Create Delhivery Shipment'}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
