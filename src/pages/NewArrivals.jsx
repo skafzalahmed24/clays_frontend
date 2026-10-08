@@ -11,9 +11,6 @@ import SEO from '../components/common/SEO';
 
 import { usePrice } from '../hooks/usePrice';
 
-import fallbackBanner from '../assets/hero.png';
-const bannerImg = MEGA_MENU_DATA["New Arrivals"]?.featured?.img || fallbackBanner;
-
 const NewArrivals = () => {
     const { format } = usePrice();
     const [selectedFilters, setSelectedFilters] = useState({});
@@ -67,8 +64,7 @@ const NewArrivals = () => {
     const header = pageData?.modules?.header || {
         title: "New Arrivals",
         eyebrow: "Just In",
-        subtitle: "Explore our latest masterpieces, crafted to define modern elegance.",
-        bannerImage: bannerImg
+        subtitle: "Discover our latest herbal hair care essentials, formulated with pure botanical extracts for healthy, thriving hair."
     };
 
     const loading = productsLoading || loadingPage;
@@ -95,13 +91,13 @@ const NewArrivals = () => {
         <div className="pt-0 min-h-screen bg-body">
             <SEO
                 title="New Arrivals"
-                description="Explore our latest masterpieces, crafted to define modern elegance."
+                description="Discover our latest herbal hair care essentials, formulated with pure botanical extracts for healthy, thriving hair."
             />
             <PageHeader
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={bannerImg}
+                backgroundImage={header.bannerImage}
             />
 
             {/* Breadcrumbs & Controls */}

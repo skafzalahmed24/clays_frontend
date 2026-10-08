@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useGetPageQuery } from '../store/api/contentApiSlice';
 import PageHeader from '../components/layout/PageHeader';
-import { MEGA_MENU_DATA } from '../utils/constants';
 import { SHIPPING_RETURNS_FALLBACK } from '../utils/defaultContent';
 
 const ShippingReturns = () => {
@@ -21,7 +20,7 @@ const ShippingReturns = () => {
                 title={header.title || "Shipping & Returns"}
                 eyebrow={header.eyebrow || "Customer Service"}
                 subtitle={header.subtitle || "Everything you need to know about our delivery and return policies."}
-                backgroundImage={header.bannerImage || MEGA_MENU_DATA["New Arrivals"]?.featured?.img}
+                backgroundImage={header.bannerImage}
             />
 
             <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 space-y-12">

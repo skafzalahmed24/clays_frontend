@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useVerifyOtpMutation, useResendOtpMutation } from '../store/api/authApiSlice';
 import PageHeader from '../components/layout/PageHeader';
-import bannerImg from '../assets/hero.png';
 import SEO from '../components/common/SEO';
 import Input from '../components/ui/Input';
 
@@ -13,6 +12,7 @@ import { logoutAdmin } from '../store/slices/adminAuthSlice';
 const VerifyOTP = () => {
     const [otp, setOtp] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [countdown, setCountdown] = useState(60);
     const [canResend, setCanResend] = useState(false);
     const navigate = useNavigate();
@@ -25,12 +25,9 @@ const VerifyOTP = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const emailParam = params.get('email');
-        if (emailParam) {
-            setEmail(emailParam);
-        } else {
-            // Fallback or redirect if no email
-            // navigate('/login');
-        }
+        const phoneParam = params.get('phone');
+        if (emailParam) setEmail(emailParam);
+        if (phoneParam) setPhone(phoneParam);
     }, [location]);
 
     useEffect(() => {
@@ -45,7 +42,11 @@ const VerifyOTP = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const userData = await verifyOtp({ email: email.toLowerCase(), otp }).unwrap();
+            const payload = { otp };
+            if (email) payload.email = email.toLowerCase();
+            if (phone) payload.phone = phone;
+
+            const userData = await verifyOtp(payload).unwrap();
             dispatch(logoutAdmin()); // Enforce single session locally
 
             // Broadcast to other tabs
@@ -54,7 +55,7 @@ const VerifyOTP = () => {
             channel.close();
 
             dispatch(setCredentials({ user: userData, token: userData.token }));
-            navigate('/account', { state: { message: 'Email verified! Welcome to Clarysays.' } });
+            navigate('/account', { state: { message: 'Account verified! Welcome to Clarysays.' } });
         } catch (err) {
             console.error('Verification failed', err);
         }
@@ -62,7 +63,11 @@ const VerifyOTP = () => {
 
     const handleResend = async () => {
         try {
-            await resendOtp({ email: email.toLowerCase() }).unwrap();
+            const payload = {};
+            if (email) payload.email = email.toLowerCase();
+            if (phone) payload.phone = phone;
+
+            await resendOtp(payload).unwrap();
             setCanResend(false);
             setCountdown(60);
         } catch (err) {
@@ -70,16 +75,17 @@ const VerifyOTP = () => {
         }
     };
 
+    const targetDestination = phone ? (email ? `${phone} / ${email}` : phone) : (email || 'your registered contact');
+
     return (
         <div className="pt-0 min-h-screen bg-body">
             <SEO
-                title="Verify Email"
-                description="Verify your email address."
+                title="Verify OTP"
+                description="Verify your account OTP."
             />
             <PageHeader
-                title="Verify Email"
-                subtitle="Enter the code sent to your email"
-                backgroundImage={bannerImg}
+                title="Verify OTP"
+                subtitle={`Enter the code sent to ${targetDestination}`}
             />
 
             <div className="max-w-[1920px] mx-auto px-6 md:px-12 py-16 flex justify-center">

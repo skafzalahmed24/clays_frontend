@@ -8,10 +8,9 @@ const CareGuide = () => {
     const { data } = useGetPageQuery('care-guide');
 
     const header = data?.modules?.header || {
-        title: "Jewellery Care Guide",
-        eyebrow: "Maintenance",
-        subtitle: "Tips to keep your precious pieces shining forever.",
-        bannerImage: MEGA_MENU_DATA["Necklaces"]?.featured?.img
+        title: "Herbal Hair Care Guide",
+        eyebrow: "Ayurvedic Rituals",
+        subtitle: "Tips and best practices to maximize the benefits of your Ayurvedic hair oils & routines."
     };
 
     const sections = data?.modules?.sections || CARE_GUIDE_FALLBACK;
@@ -26,7 +25,7 @@ const CareGuide = () => {
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={header.bannerImage || MEGA_MENU_DATA["Necklaces"]?.featured?.img}
+                backgroundImage={header.bannerImage}
             />
 
             <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 space-y-12">

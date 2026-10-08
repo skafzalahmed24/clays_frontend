@@ -5,7 +5,6 @@ import FilterSidebar from '../components/common/FilterSidebar';
 import { useGetPageQuery } from '../store/api/contentApiSlice';
 import { useGetProductsQuery } from '../store/api/productApiSlice';
 import ProductCard from '../components/ui/ProductCard';
-import { MEGA_MENU_DATA } from '../utils/constants';
 import SEO from '../components/common/SEO';
 import { usePrice } from '../hooks/usePrice';
 
@@ -28,8 +27,7 @@ const SearchResults = () => {
     const header = pageData?.modules?.header || {
         title: searchQuery ? `Search Results for "${searchQuery}"` : 'Search Results',
         eyebrow: "Search",
-        subtitle: "",
-        bannerImage: MEGA_MENU_DATA["New Arrivals"]?.featured?.img
+        subtitle: ""
     };
 
     const dynamicTitle = pageData?.seo?.title || (searchQuery ? `Search: ${searchQuery}` : 'Search Results');
@@ -112,7 +110,7 @@ const SearchResults = () => {
                 title={header.title.includes('searchQuery') || header.title === 'Search Results' ? (searchQuery ? `Search Results for "${searchQuery}"` : 'Search Results') : header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle || `Found ${results.length} item${results.length === 1 ? '' : 's'}`}
-                backgroundImage={header.bannerImage || MEGA_MENU_DATA["New Arrivals"]?.featured?.img}
+                backgroundImage={header.bannerImage}
             />
 
             {/* Mobile Filter Toggle */}

@@ -1,11 +1,11 @@
 export const SHIPPING_RETURNS_FALLBACK = [
     {
         title: "Shipping Policy",
-        content: "At Clarysays, we ensure that your jewellery reaches you in perfect condition. We offer free secure shipping on all orders within India.\n\n• All orders are shipped via insured couriers.\n• Standard delivery time is 5-7 business days.\n• Express delivery options are available at checkout for select PIN codes.\n• You will receive a tracking number via email once your order is dispatched.\n• We require a signature upon delivery for security purposes."
+        content: "At Clarysays, we ensure that your herbal hair care products reach you in fresh and perfect condition. We offer fast, reliable shipping on all orders across India.\n\n• All orders are dispatched via trusted logistics partners (Delhivery).\n• Standard delivery time is 3-5 business days.\n• Free shipping is available on qualifying order thresholds.\n• You will receive a tracking link via SMS/Email once your package is dispatched.\n• Cash on Delivery (COD) is supported for eligible PIN codes."
     },
     {
         title: "Return & Exchange Policy",
-        content: "We want you to love your purchase. If for any reason you are not completely satisfied, we offer a hassle-free return policy.\n\n30-Day Returns: You may return unworn, undamaged items within 30 days of delivery.\n\n• Items must be returned in their original packaging with all tags and certificates.\n• Custom-made or personalized jewellery is not eligible for return.\n• Refunds will be processed to the original method of payment within 7-10 business days after inspection.\n\nTo initiate a return, please contact our support team."
+        content: "We take pride in our 100% natural, herbal formulations. If you receive a damaged or incorrect package, we are here to help.\n\n• Report damaged or defective items within 48 hours of delivery with photos.\n• Unopened, sealed products can be returned within 7 days of delivery.\n• For hygiene reasons, opened or used hair oil bottles cannot be returned.\n• Refunds will be processed to the original payment method within 5-7 business days after return receipt.\n\nTo initiate a return or query, please contact our support team."
     }
 ];
 
@@ -45,28 +45,33 @@ export const TERMS_CONDITIONS_FALLBACK = [
 
 export const CARE_GUIDE_FALLBACK = [
     {
-        title: "Gold Jewellery",
-        content: "Gold is a timeless metal but can lose its luster over time if not cared for.",
+        title: "Herbal Hair Oil Application",
+        content: "Maximizing the benefits of your Clarysays Hair Fall Control & Nourishing Oils.",
         points: [
-            "Clean regularly with mild soap and warm water.",
-            "Use a soft-bristled brush to remove dirt from intricate designs.",
-            "Avoid exposure to harsh chemicals like chlorine or bleach.",
-            "Store separately in a soft cloth pouch to prevent scratches."
+            "Warm a small amount of oil between your palms before applying.",
+            "Gently massage into the scalp in circular motions for 5-10 minutes to boost micro-circulation.",
+            "Distribute evenly through the hair strands to seal in moisture and prevent split ends.",
+            "Leave on for at least 2 hours or overnight for deep Ayurvedic nourishment before washing."
         ]
     },
     {
-        title: "Diamond & Gemstones",
-        content: "Precious stones require special attention to maintain their brilliance.",
+        title: "Cleansing & Hair Wash Routine",
+        content: "Gentle natural care for healthy, resilient hair follicles.",
         points: [
-            "Clean diamonds with a mixture of ammonia and water or a specialized commercial cleaner.",
-            "Check prong settings annually to ensure stones are secure.",
-            "Avoid wearing gemstone jewellery while doing heavy manual work.",
-            "Store gemstones separately as harder stones can scratch softer ones."
+            "Wash with a gentle, sulfate-free herbal shampoo using lukewarm water.",
+            "Avoid hot water which can strip natural scalp oils and weaken hair roots.",
+            "Follow with a natural herbal conditioner or hair rinse if needed.",
+            "Gently pat dry with a soft micro-fiber towel instead of harsh rubbing."
         ]
     },
     {
-        title: "General Storage Tips",
-        content: "Always store your jewellery in a dry place. Humidity can cause tarnishing. Using anti-tarnish strips in your jewellery box is highly recommended for silver and gold plated items. Fasten chains and clasps before storing to prevent tangling.",
-        points: []
+        title: "Storage & Shelf Life",
+        content: "Preserving the potency of pure botanical extracts and cold-pressed oils.",
+        points: [
+            "Store bottles in a cool, dry place away from direct sunlight and heat.",
+            "Ensure the dropper or cap is securely fastened after each use.",
+            "Our oils are free from artificial preservatives; best used within 12 months of opening.",
+            "For external use only. Patch test recommended before first application."
+        ]
     }
 ];

@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForgotPasswordMutation } from '../store/api/authApiSlice';
 import PageHeader from '../components/layout/PageHeader';
-import bannerImg from '../assets/hero.png';
 import SEO from '../components/common/SEO';
 import Input from '../components/ui/Input';
 
 const ForgotPassword = () => {
-    const [email, setEmail] = useState('');
+    const [identifier, setIdentifier] = useState('');
     const navigate = useNavigate();
 
     const [forgotPassword, { isLoading, error }] = useForgotPasswordMutation();
@@ -15,9 +14,14 @@ const ForgotPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await forgotPassword({ email: email.toLowerCase() }).unwrap();
-            // Redirect to Reset Password page passing email
-            navigate(`/reset-password?email=${encodeURIComponent(email.toLowerCase())}`);
+            const isEmail = identifier.includes('@');
+            const payload = isEmail ? { email: identifier.trim().toLowerCase() } : { phone: identifier.trim() };
+            
+            await forgotPassword(payload).unwrap();
+            
+            // Redirect to Reset Password page passing identifier
+            const queryParam = isEmail ? `email=${encodeURIComponent(identifier.trim().toLowerCase())}` : `phone=${encodeURIComponent(identifier.trim())}`;
+            navigate(`/reset-password?${queryParam}`);
         } catch (err) {
             console.error('Failed to send reset code', err);
         }
@@ -31,8 +35,7 @@ const ForgotPassword = () => {
             />
             <PageHeader
                 title="Forgot Password"
-                subtitle="Enter your email to receive a reset code"
-                backgroundImage={bannerImg}
+                subtitle="Enter your email or Indian mobile (+91) to receive a reset OTP"
             />
 
             <div className="max-w-[1920px] mx-auto px-6 md:px-12 py-16 flex justify-center">
@@ -40,14 +43,14 @@ const ForgotPassword = () => {
                     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                         <div>
                             <label className="text-xs text-light/50 mb-2 block">
-                                Email Address
+                                Email Address or Mobile (+91)
                             </label>
                             <Input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value.replace(/\s/g, ''))}
+                                type="text"
+                                value={identifier}
+                                onChange={(e) => setIdentifier(e.target.value)}
                                 className="bg-light/5 border-light/10 text-light placeholder-light/20"
-                                placeholder="name@example.com"
+                                placeholder="name@example.com or +91 98765 43210"
                                 required
                             />
                         </div>

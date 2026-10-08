@@ -64,8 +64,13 @@ const LoginForm = () => {
             const errorMessage = payload?.message || (typeof payload === 'string' ? payload : resultAction.error.message) || 'Login failed';
 
             if (payload?.isVerified === false) {
-                navigate(`/verify-otp?email=${encodeURIComponent(formData.email.toLowerCase())}`, {
-                    state: { message: 'Your email is not verified. Please check your inbox for the code.' }
+                const userPhone = payload?.phone;
+                let redirectUrl = `/verify-otp?email=${encodeURIComponent(formData.email.toLowerCase())}`;
+                if (userPhone) {
+                    redirectUrl += `&phone=${encodeURIComponent(userPhone)}`;
+                }
+                navigate(redirectUrl, {
+                    state: { message: 'Your account is not verified. Please check your SMS/inbox for the verification OTP.' }
                 });
                 return;
             }

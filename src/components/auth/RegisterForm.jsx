@@ -16,6 +16,7 @@ const RegisterForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        phone: '',
         password: '',
         confirmPassword: ''
     });
@@ -23,7 +24,7 @@ const RegisterForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Disallow spaces for email and password fields
+        // Disallow spaces for email, password, and phone
         const newValue = (name === 'email' || name === 'password' || name === 'confirmPassword') ? value.replace(/\s/g, '') : value;
 
         setFormData({ ...formData, [name]: newValue });
@@ -35,13 +36,19 @@ const RegisterForm = () => {
         e.preventDefault();
 
         if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-            setLocalError('Please fill in all fields');
+            setLocalError('Please fill in all required fields');
             return;
         }
 
         // Email Validation
         if (!REGEX.EMAIL.test(formData.email)) {
             setLocalError('Please enter a valid email address');
+            return;
+        }
+
+        // Phone validation if entered
+        if (formData.phone && !/^(\+91[\s\-]?)?[6-9]\d{9}$|^91[6-9]\d{9}$|^0[6-9]\d{9}$/.test(formData.phone.trim())) {
+            setLocalError('Please enter a valid 10-digit Indian mobile number (+91)');
             return;
         }
 
@@ -56,12 +63,23 @@ const RegisterForm = () => {
             return;
         }
 
-        const resultAction = await dispatch(registerUser({ name: formData.name, email: formData.email.toLowerCase(), password: formData.password }));
+        const resultAction = await dispatch(registerUser({
+            name: formData.name,
+            email: formData.email.toLowerCase(),
+            phone: formData.phone ? formData.phone.trim() : undefined,
+            password: formData.password
+        }));
+
         if (registerUser.fulfilled.match(resultAction)) {
-            // The payload structure is { status: 1, message, data: { email, ... } }
             const userEmail = resultAction.payload?.data?.email || formData.email;
-            showToast('Account created! Please verify your email.', 'success');
-            navigate(`/verify-otp?email=${encodeURIComponent(userEmail)}`);
+            const userPhone = resultAction.payload?.data?.phone || formData.phone;
+            showToast('Account created! Please verify the OTP.', 'success');
+            
+            let verifyUrl = `/verify-otp?email=${encodeURIComponent(userEmail)}`;
+            if (userPhone) {
+                verifyUrl += `&phone=${encodeURIComponent(userPhone)}`;
+            }
+            navigate(verifyUrl);
         } else {
             if (resultAction.payload) {
                 setLocalError(resultAction.payload);
@@ -92,6 +110,17 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 icon={Icons.Email}
                 required
+                theme="light"
+            />
+
+            <Input
+                label="Mobile Number (India +91) - Optional"
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="+91 98765 43210"
+                icon={Icons.Phone}
                 theme="light"
             />
 

@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { useGetAttributesQuery } from '../store/api/attributeApiSlice';
 import PageHeader from '../components/layout/PageHeader';
 import Image from '../components/ui/Image';
-import heroImg from '../assets/hero.png';
 import { useGetPageQuery } from '../store/api/contentApiSlice';
 import SEO from '../components/common/SEO';
 
@@ -13,9 +12,8 @@ const Categories = () => {
 
     const header = pageData?.modules?.header || {
         title: "Browse Categories",
-        eyebrow: "Discover Our Assets",
-        subtitle: "Explore our exquisite catalog of fine jewellery, crafted to perfection for every occasion.",
-        bannerImage: heroImg
+        eyebrow: "Our Collections",
+        subtitle: "Explore our collection of pure herbal oils, shampoos, and natural hair care formulations."
     };
 
     return (
@@ -28,7 +26,7 @@ const Categories = () => {
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={header.bannerImage || heroImg}
+                backgroundImage={header.bannerImage}
             />
 
             {/* Categories Grid */}

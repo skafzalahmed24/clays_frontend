@@ -16,26 +16,41 @@ const Hero = () => {
         return () => clearInterval(timer);
     }, [heroSlides]);
 
-    if (loading) return <div className="min-h-[400px] md:h-[580px] bg-body flex items-center justify-center text-primary">Loading...</div>;
+    if (loading) return (
+        <div className="w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] bg-body flex items-center justify-center text-primary">
+            Loading...
+        </div>
+    );
 
     if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
         return (
-            <section className="relative min-h-[400px] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
-                <div className="text-center">
-                    <h1 className="text-4xl text-primary font-heading">Welcome to Clarysays</h1>
+            <section className="relative w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] flex items-center justify-center overflow-hidden bg-body">
+                <div className="text-center px-4">
+                    <h1 className="text-2xl sm:text-4xl text-primary font-heading">Welcome to Clarysays</h1>
                 </div>
             </section>
-        )
+        );
     }
 
+    const currentSlideData = heroSlides[currentSlide] || heroSlides[0];
+    const hasTitle = Boolean(currentSlideData?.title && currentSlideData.title.trim() !== '');
+    const hasSubtitle = Boolean(currentSlideData?.subtitle && currentSlideData.subtitle.trim() !== '');
+
     return (
-        <section className="relative min-h-[60vh] md:h-[580px] flex items-center justify-center overflow-hidden bg-body">
+        <section className="relative w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] flex items-center justify-center overflow-hidden bg-[#0d0d0d]">
             {heroSlides.map((slide, index) => (
                 <div
-                    key={slide._id}
-                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                    key={slide._id || index}
+                    className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
                 >
-                    {/* Updated to support video slides */}
+                    {/* Full slide clickable link */}
+                    <Link
+                        to={slide.link || "/shop"}
+                        className="absolute inset-0 z-10 block cursor-pointer"
+                        aria-label={slide.title || 'Shop Collection'}
+                    />
+
+                    {/* Media element: Video or Responsive Picture */}
                     {REGEX.IS_VIDEO.test(slide.media) ? (
                         <video
                             src={getMediaUrl(slide.media)}
@@ -46,54 +61,65 @@ const Hero = () => {
                             playsInline
                         />
                     ) : (
-                        <picture>
+                        <picture className="w-full h-full block">
                             {slide.mobileMedia && (
                                 <source media="(max-width: 767px)" srcSet={getMediaUrl(slide.mobileMedia)} />
                             )}
                             <source media="(min-width: 768px)" srcSet={getMediaUrl(slide.media)} />
-                            <img src={getMediaUrl(slide.media)} alt={slide.title || 'Hero Banner'} className="w-full h-full object-cover object-top" />
+                            <img
+                                src={getMediaUrl(slide.media)}
+                                alt={slide.title || 'Hero Banner'}
+                                className="w-full h-full object-cover object-top md:object-[center_top]"
+                                loading={index === 0 ? "eager" : "lazy"}
+                            />
                         </picture>
                     )}
                 </div>
             ))}
 
-            {/* Content */}
-            <div className="relative z-10 w-full px-6 md:px-12 mt-8">
-                <div className="lg:w-2/3">
-                    <div className="min-h-[180px] flex flex-col justify-center">
-                        {heroSlides.map((slide, index) => (
-                            index === currentSlide && (
-                                <div key={slide._id} className="animate-fade-in-up">
-                                    <h1 className="text-4xl md:text-7xl font-heading font-bold text-primary mb-6 leading-tight drop-shadow-lg">
-                                        {slide.title}
-                                    </h1>
-                                    <p className="text-lg md:text-2xl text-text-main/80 mb-10 max-w-lg font-light drop-shadow-md">
-                                        {slide.subtitle}
-                                    </p>
-                                    {slide.showButton !== false && (
-                                        <Link to={slide.link || "/shop"}>
-                                            <button className="bg-primary w-fit hover:bg-light text-dark font-heading font-bold py-4 px-12 transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(var(--color-primary-rgb),0.4)]">
-                                                Explore Collection
-                                            </button>
-                                        </Link>
-                                    )}
-                                </div>
-                            )
-                        ))}
+            {/* Optional text overlay if title/subtitle are configured in admin */}
+            {(hasTitle || hasSubtitle) && (
+                <div className="relative z-20 w-full px-4 sm:px-8 md:px-14 lg:px-20 pointer-events-none">
+                    <div className="max-w-xl lg:max-w-2xl">
+                        <div className="flex flex-col justify-center">
+                            {heroSlides.map((slide, index) => (
+                                index === currentSlide && (
+                                    <div key={slide._id || index} className="animate-fade-in-up">
+                                        {hasTitle && (
+                                            <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-primary mb-1.5 sm:mb-3 md:mb-5 leading-tight drop-shadow-lg">
+                                                {slide.title}
+                                            </h1>
+                                        )}
+                                        {hasSubtitle && (
+                                            <p className="text-xs sm:text-base md:text-xl text-text-main/90 mb-3 sm:mb-6 max-w-lg font-light drop-shadow line-clamp-2 sm:line-clamp-none">
+                                                {slide.subtitle}
+                                            </p>
+                                        )}
+                                    </div>
+                                )
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
-            {/* Carousel Indicators */}
-            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
-                {heroSlides.map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentSlide(index)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-primary w-8' : 'bg-primary/30 hover:bg-primary'}`}
-                    />
-                ))}
-            </div>
+            {/* Carousel Indicators (Dots) */}
+            {heroSlides.length > 1 && (
+                <div className="absolute bottom-2 sm:bottom-4 md:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center space-x-1.5 sm:space-x-2.5 z-30 pointer-events-auto">
+                    {heroSlides.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentSlide(index)}
+                            aria-label={`Go to slide ${index + 1}`}
+                            className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
+                                index === currentSlide
+                                    ? 'bg-primary w-5 sm:w-8'
+                                    : 'bg-primary/40 hover:bg-primary w-1.5 sm:w-2'
+                            }`}
+                        />
+                    ))}
+                </div>
+            )}
         </section>
     );
 };

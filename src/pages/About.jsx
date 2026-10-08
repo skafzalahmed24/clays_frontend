@@ -5,7 +5,6 @@ import PageHeader from '../components/layout/PageHeader';
 import { BRAND_CONFIG } from '../utils/config';
 import storyImgDefault from '../assets/story.png';
 // eslint-disable-next-line
-import heroImg from '../assets/hero-3.png';
 import { API_URL, BASE_URL, getMediaUrl } from '../utils/apiConfig';
 import SEO from '../components/common/SEO';
 
@@ -45,7 +44,7 @@ function About() {
                 )}
                 eyebrow={aboutData.header?.eyebrow || "Since 19832345"}
                 subtitle={aboutData.header?.subtitle}
-                backgroundImage={aboutData.header?.bannerImage || heroImg}
+                backgroundImage={aboutData.header?.bannerImage}
             />
 
             {/* Our Story */}

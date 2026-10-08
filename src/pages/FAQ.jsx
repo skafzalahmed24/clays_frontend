@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useGetFAQsQuery, useGetPageQuery } from '../store/api/contentApiSlice';
 import PageHeader from '../components/layout/PageHeader';
-import { MEGA_MENU_DATA } from '../utils/constants';
 import SEO from '../components/common/SEO';
 
 const FAQ = () => {
@@ -22,8 +21,7 @@ const FAQ = () => {
     const header = pageData?.modules?.header || {
         title: "Frequently Asked Questions",
         eyebrow: "Help Center",
-        subtitle: "Answers to common questions about our products and services.",
-        bannerImage: MEGA_MENU_DATA["Rings"]?.featured?.img
+        subtitle: "Answers to common questions about our products and services."
     };
 
     return (
@@ -36,7 +34,7 @@ const FAQ = () => {
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={header.bannerImage || MEGA_MENU_DATA["Rings"]?.featured?.img}
+                backgroundImage={header.bannerImage}
             />
 
             <div className="max-w-3xl mx-auto px-6 md:px-12 py-16">

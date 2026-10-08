@@ -6,7 +6,6 @@ import FilterSidebar from '../components/common/FilterSidebar';
 import PageHeader from '../components/layout/PageHeader';
 import ProductCard from '../components/ui/ProductCard';
 import Select from '../components/ui/Select';
-import bannerImg from '../assets/hero.png'; // Using hero.png for banner
 import SEO from '../components/common/SEO';
 
 import { usePrice } from '../hooks/usePrice';
@@ -64,8 +63,7 @@ const Offers = () => {
     const header = pageData?.modules?.header || {
         title: "Exclusive Offers",
         eyebrow: "Limited Time",
-        subtitle: "Discover exceptional value on our most coveted pieces.",
-        bannerImage: bannerImg
+        subtitle: "Discover exceptional value on our pure herbal hair care formulas and seasonal bundles."
     };
 
     const loading = productsLoading || loadingPage;
@@ -96,7 +94,7 @@ const Offers = () => {
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={bannerImg}
+                backgroundImage={header.bannerImage}
             />
 
             {/* Breadcrumbs & Controls */}

@@ -6,7 +6,6 @@ import PageHeader from '../components/layout/PageHeader';
 import ProductCard from '../components/ui/ProductCard';
 import Select from '../components/ui/Select';
 import SEO from '../components/common/SEO';
-import bannerImg from '../assets/hero.png'; // Using hero image as fallback
 
 import { useGetProductsQuery } from '../store/api/productApiSlice';
 import { useGetPageQuery } from '../store/api/contentApiSlice';
@@ -118,7 +117,7 @@ const Shop = () => {
     const pageHeader = pageData?.modules?.header || {
         title: "Shop All",
         eyebrow: "Our Catalog",
-        subtitle: "Explore our complete catalog of handcrafted luxury jewelry."
+        subtitle: "Explore our complete collection of pure herbal hair oils, shampoos, and Ayurvedic wellness care."
     };
 
     // Verify Data Types
@@ -129,13 +128,13 @@ const Shop = () => {
         <div className="pt-0 min-h-screen bg-body">
             <SEO
                 title={pageData?.seo?.title || "Shop All"}
-                description={pageData?.seo?.description || "Explore our complete catalog of handcrafted luxury jewelry."}
+                description={pageData?.seo?.description || "Explore our complete collection of pure herbal hair oils, shampoos, and Ayurvedic wellness care."}
             />
             <PageHeader
                 title={safeTitle}
                 eyebrow={typeof pageHeader.eyebrow === 'string' ? pageHeader.eyebrow : "Our Catalog"}
-                subtitle={typeof pageHeader.subtitle === 'string' ? pageHeader.subtitle : "Explore our catalog"}
-                backgroundImage={pageHeader.bannerImage || bannerImg}
+                subtitle={typeof pageHeader.subtitle === 'string' ? pageHeader.subtitle : "Explore our complete collection of pure herbal hair oils, shampoos, and Ayurvedic wellness care."}
+                backgroundImage={pageHeader?.bannerImage}
             />
 
             <div className="bg-body/95 backdrop-blur-md border-b border-light/5 sticky top-[64px] z-30 transition-shadow duration-300 shadow-2xl shadow-dark/50">

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import PageHeader from '../components/layout/PageHeader';
-import heroImg from '../assets/hero.png';
 import Icons from '../components/ui/Icons';
 import Skeleton from '../components/ui/Skeleton';
 import { useGetPageQuery } from '../store/api/contentApiSlice';
@@ -25,8 +24,7 @@ const OrderTracking = () => {
     const header = pageData?.modules?.header || {
         title: "Track Your Order",
         eyebrow: "Order Management",
-        subtitle: "Enter your order details below to check the current status.",
-        bannerImage: heroImg
+        subtitle: "Enter your order details below to check the current status."
     };
 
     const handleTrack = async (e, overrideId) => {
@@ -85,7 +83,7 @@ const OrderTracking = () => {
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={header.bannerImage || heroImg}
+                backgroundImage={header.bannerImage}
             />
 
             <div className="max-w-2xl mx-auto px-6 py-16">

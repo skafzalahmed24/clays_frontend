@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useResetPasswordMutation } from '../store/api/authApiSlice';
 import PageHeader from '../components/layout/PageHeader';
-import bannerImg from '../assets/hero.png';
 import SEO from '../components/common/SEO';
 import Input from '../components/ui/Input';
 
@@ -11,6 +10,7 @@ const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [message, setMessage] = useState('');
 
     const navigate = useNavigate();
@@ -21,10 +21,12 @@ const ResetPassword = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const emailParam = params.get('email');
-        if (emailParam) {
-            setEmail(emailParam);
-        } else {
-            setMessage('Email is missing. Please restart the forgot password process.');
+        const phoneParam = params.get('phone');
+        if (emailParam) setEmail(emailParam);
+        if (phoneParam) setPhone(phoneParam);
+
+        if (!emailParam && !phoneParam) {
+            setMessage('Contact information is missing. Please restart the forgot password process.');
         }
     }, [location]);
 
@@ -36,7 +38,11 @@ const ResetPassword = () => {
         }
 
         try {
-            await resetPassword({ email, otp, password }).unwrap();
+            const payload = { otp, password };
+            if (email) payload.email = email.toLowerCase();
+            if (phone) payload.phone = phone;
+
+            await resetPassword(payload).unwrap();
             navigate('/login', { state: { message: 'Password reset successful! Please login.' } });
         } catch (err) {
             console.error('Reset failed', err);
@@ -52,7 +58,6 @@ const ResetPassword = () => {
             <PageHeader
                 title="Reset Password"
                 subtitle="Enter verification code and your new password"
-                backgroundImage={bannerImg}
             />
 
             <div className="max-w-[1920px] mx-auto px-6 md:px-12 py-16 flex justify-center">

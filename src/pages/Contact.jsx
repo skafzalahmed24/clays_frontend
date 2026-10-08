@@ -8,7 +8,6 @@ import Icons from '../components/ui/Icons';
 import Input from '../components/ui/Input';
 import Select from '../components/ui/Select';
 import Textarea from '../components/ui/Textarea';
-import heroImg from '../assets/hero.png';
 import SEO from '../components/common/SEO';
 
 const Contact = () => {
@@ -34,7 +33,7 @@ const Contact = () => {
                 title={header.title || "Contact Us"}
                 subtitle={header.subtitle || "We are here to assist you. Whether you have a question about a product, need styling advice, or want to discuss a custom commission."}
                 eyebrow={header.eyebrow}
-                backgroundImage={header.bannerImage || heroImg}
+                backgroundImage={header.bannerImage}
             />
 
             <div className="max-w-7xl mx-auto px-6 pb-24">

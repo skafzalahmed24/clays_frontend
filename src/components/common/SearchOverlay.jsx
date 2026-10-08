@@ -104,7 +104,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                         <input
                             ref={inputRef}
                             type="text"
-                            placeholder={labels.placeholder || "Search for jewellery..."}
+                            placeholder={labels.placeholder || "Search for herbal hair care..."}
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             onKeyDown={handleKeyDown}

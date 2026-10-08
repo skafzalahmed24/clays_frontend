@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PageHeader from '../components/layout/PageHeader';
-import heroImg from '../assets/hero-3.png';
 import { Link } from 'react-router-dom';
 import { getMediaUrl } from '../utils/apiConfig';
 import client from '../api/client';
@@ -16,8 +15,7 @@ const Journal = () => {
 
     const header = pageData?.modules?.header || {
         title: "Stories & Style",
-        eyebrow: "The Clarysays Journal",
-        bannerImage: heroImg
+        eyebrow: "The Clarysays Journal"
     };
 
     useEffect(() => {
@@ -44,7 +42,7 @@ const Journal = () => {
                 title={header.title}
                 eyebrow={header.eyebrow}
                 subtitle={header.subtitle}
-                backgroundImage={header.bannerImage || heroImg}
+                backgroundImage={header.bannerImage}
             />
 
             {/* Blog Grid */}
