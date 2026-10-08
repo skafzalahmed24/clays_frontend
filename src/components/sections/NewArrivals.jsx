@@ -35,7 +35,7 @@ const NewArrivals = () => {
 
     return (
         <section className="py-6 md:py-8 bg-body relative overflow-hidden">
-            <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 relative z-10">
+            <div className="w-full max-w-[1920px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 relative z-10">
                 {/* Header with Title and View All side-by-side */}
                 <div className="flex justify-between items-end mb-6 gap-4 border-b border-black/10 pb-4">
                     <div>
@@ -56,15 +56,13 @@ const NewArrivals = () => {
                 `}} />
                 <div 
                     ref={scrollContainerRef}
-                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-6 md:mx-0 hide-scrollbar" 
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-4 hide-scrollbar" 
                 >
-                    <div className="w-2 md:hidden flex-shrink-0"></div>
                     {formattedProducts.map(product => (
-                        <div key={product._id || product.id} className="snap-start flex-none w-[60vw] sm:w-[40vw] md:w-[25vw] lg:w-[18vw] max-w-[280px]">
+                        <div key={product._id || product.id} className="snap-start flex-none w-[56vw] sm:w-[38vw] md:w-[25vw] lg:w-[18vw] max-w-[280px]">
                             <ProductCard product={product} />
                         </div>
                     ))}
-                    <div className="w-2 md:hidden flex-shrink-0"></div>
                 </div>
 
                 {/* Navigation Arrows below products */}

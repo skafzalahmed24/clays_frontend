@@ -36,7 +36,7 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
 
     return (
         <section className="py-6 md:py-8 bg-body relative overflow-hidden">
-            <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 relative z-10">
+            <div className="w-full max-w-[1920px] mx-auto px-6 sm:px-8 md:px-12 lg:px-16 relative z-10">
                 {/* Header with Title and View All side-by-side */}
                 <div className="flex justify-between items-end mb-6 gap-4 border-b border-black/10 pb-4">
                     <div>
@@ -98,9 +98,8 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
                     <div>
                         <div 
                             ref={scrollContainerRef}
-                            className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 -mx-6 md:mx-0 py-4 hide-scrollbar justify-start md:justify-center"
+                            className="flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-4 py-4 hide-scrollbar justify-start md:justify-center"
                         >
-                            <div className="w-2 md:hidden flex-shrink-0"></div>
                             {categories.map((cat) => (
                                 <div
                                     key={cat.id}
@@ -131,7 +130,6 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
                                     </div>
                                 </div>
                             ))}
-                            <div className="w-2 md:hidden flex-shrink-0"></div>
                         </div>
 
                         {/* Navigation Arrows below carousel */}
