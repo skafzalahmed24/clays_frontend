@@ -17,22 +17,18 @@ const Hero = () => {
     }, [heroSlides]);
 
     if (loading) return (
-        <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 pt-2 sm:pt-4">
-            <div className="w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] bg-body flex items-center justify-center text-primary rounded-sm">
-                Loading...
-            </div>
+        <div className="w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] bg-body flex items-center justify-center text-primary">
+            Loading...
         </div>
     );
 
     if (!heroSlides || !Array.isArray(heroSlides) || heroSlides.length === 0) {
         return (
-            <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 pt-2 sm:pt-4">
-                <section className="relative w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] flex items-center justify-center overflow-hidden bg-body rounded-sm">
-                    <div className="text-center px-4">
-                        <h1 className="text-2xl sm:text-4xl text-primary font-heading">Welcome to Clarysays</h1>
-                    </div>
-                </section>
-            </div>
+            <section className="relative w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] flex items-center justify-center overflow-hidden bg-body">
+                <div className="text-center px-4">
+                    <h1 className="text-2xl sm:text-4xl text-primary font-heading">Welcome to Clarysays</h1>
+                </div>
+            </section>
         );
     }
 
@@ -41,8 +37,7 @@ const Hero = () => {
     const hasSubtitle = Boolean(currentSlideData?.subtitle && currentSlideData.subtitle.trim() !== '');
 
     return (
-        <div className="w-full max-w-[1920px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 pt-2 sm:pt-4">
-            <section className="relative w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] flex items-center justify-center overflow-hidden bg-[#0d0d0d] rounded-sm sm:rounded-md shadow-md">
+        <section className="relative w-full aspect-[16/9] sm:aspect-[16/8.5] md:aspect-[16/7.5] lg:aspect-[1920/820] xl:aspect-[1920/800] flex items-center justify-center overflow-hidden bg-[#0d0d0d]">
                 {heroSlides.map((slide, index) => (
                     <div
                         key={slide._id || index}
@@ -126,8 +121,7 @@ const Hero = () => {
                     </div>
                 )}
             </section>
-        </div>
-    );
+        );
 };
 
 export default Hero;
