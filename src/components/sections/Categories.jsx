@@ -35,38 +35,45 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
     if (categories.length === 0) return null;
 
     return (
-        <section className="py-8 md:py-12 bg-body relative overflow-hidden">
+        <section className="py-6 md:py-8 bg-body relative overflow-hidden">
             <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 relative z-10">
                 {/* Header with Title and Optional Controls */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 border-b border-black/10 pb-4">
+                <div className="flex flex-col md:flex-row justify-between items-end mb-6 gap-4 border-b border-black/10 pb-4">
                     <div>
-                        <span className="text-primary text-[10px] md:text-xs uppercase tracking-[0.3em] font-medium block mb-1">
-                            Curated Collections
-                        </span>
-                        <h2 className="text-xl md:text-3xl font-serif text-dark font-normal tracking-wide uppercase">
+                        <h2 className="text-xl md:text-2xl font-heading text-dark font-bold tracking-widest uppercase">
                             {title}
                         </h2>
-                        <div className="w-12 h-0.5 bg-primary mt-2"></div>
+                        <div className="w-12 h-1 bg-primary mt-2"></div>
                     </div>
 
-                    {!isFewItems && (
-                        <div className="flex items-center gap-2 self-end md:self-auto">
-                            <button
-                                onClick={scrollLeft}
-                                className="p-2 border border-black/15 text-dark hover:text-primary hover:border-primary transition-all rounded-full bg-white shadow-sm"
-                                aria-label="Previous category"
+                    <div className="flex items-center gap-4">
+                        {!isFewItems && (
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={scrollLeft}
+                                    className="p-1 border border-black/10 text-black/30 hover:text-primary hover:border-primary/50 transition-colors rounded-sm"
+                                    aria-label="Previous"
+                                >
+                                    <Icons.ChevronLeft className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={scrollRight}
+                                    className="p-1 border border-black/10 text-black/30 hover:text-primary hover:border-primary/50 transition-colors rounded-sm"
+                                    aria-label="Next"
+                                >
+                                    <Icons.ChevronRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        )}
+                        {showViewAll && (
+                            <Link
+                                to="/categories"
+                                className="text-[10px] font-bold uppercase tracking-[0.2em] border border-primary px-4 py-2 hover:bg-primary hover:text-dark transition-colors inline-block"
                             >
-                                <Icons.ChevronLeft className="w-4 h-4" />
-                            </button>
-                            <button
-                                onClick={scrollRight}
-                                className="p-2 border border-black/15 text-dark hover:text-primary hover:border-primary transition-all rounded-full bg-white shadow-sm"
-                                aria-label="Next category"
-                            >
-                                <Icons.ChevronRight className="w-4 h-4" />
-                            </button>
-                        </div>
-                    )}
+                                View All
+                            </Link>
+                        )}
+                    </div>
                 </div>
 
                 <style dangerouslySetInnerHTML={{__html: `
@@ -144,18 +151,6 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
                             </div>
                         ))}
                         <div className="w-2 md:hidden flex-shrink-0"></div>
-                    </div>
-                )}
-
-                {/* View More Button */}
-                {showViewAll && (
-                    <div className="mt-8 md:mt-10 text-center">
-                        <Link
-                            to="/categories"
-                            className="inline-block px-8 md:px-12 py-3 bg-transparent border border-primary text-dark hover:bg-primary hover:text-white transition-all duration-300 font-heading font-semibold tracking-[0.2em] text-xs uppercase rounded-sm shadow-sm"
-                        >
-                            View All Categories
-                        </Link>
                     </div>
                 )}
             </div>
