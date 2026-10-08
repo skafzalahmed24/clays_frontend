@@ -20,9 +20,9 @@ const IngredientSpotlight = () => {
                     </div>
 
                     {/* Content Side */}
-                    <div className="flex flex-col justify-center px-4 md:px-12">
+                    <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left px-4 md:px-12">
                         <h2 className="text-3xl md:text-5xl font-heading font-bold tracking-widest uppercase mb-6 text-dark">The Gold Standard</h2>
-                        <div className="w-16 h-1 bg-primary mb-8"></div>
+                        <div className="w-16 h-1 bg-primary mb-8 mx-auto md:mx-0"></div>
                         <p className="text-dark/70 text-lg font-light leading-relaxed mb-6">
                             Experience the pinnacle of luxury skincare. Our signature serum is infused with pure 24k gold flakes, known since ancient times for its powerful anti-aging and illuminating properties.
                         </p>

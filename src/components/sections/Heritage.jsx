@@ -33,10 +33,10 @@ const Heritage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
                     
                     {/* Content Side */}
-                    <div className="flex flex-col justify-center px-4 md:px-12 order-last md:order-first">
+                    <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left px-4 md:px-12 order-last md:order-first">
                         <span className="text-primary text-sm uppercase tracking-[0.3em] font-bold mb-4">{content.subtitle}</span>
                         <h2 className="text-3xl md:text-5xl font-heading font-bold tracking-widest uppercase mb-6 text-dark">{content.title}</h2>
-                        <div className="w-16 h-1 bg-primary mb-8"></div>
+                        <div className="w-16 h-1 bg-primary mb-8 mx-auto md:mx-0"></div>
                         <p className="text-dark/70 text-lg font-light leading-relaxed mb-10">
                             {content.description}
                         </p>

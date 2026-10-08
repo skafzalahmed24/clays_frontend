@@ -36,12 +36,12 @@ const FeaturedProducts = () => {
     return (
         <section className="py-6 md:py-8 bg-body relative overflow-hidden">
             <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 relative z-10">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-6 gap-4 border-b border-black/10 pb-4">
-                    <div>
+                <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-6 gap-4 border-b border-black/10 pb-4">
+                    <div className="flex flex-col items-center md:items-start text-center md:text-left">
                         <h2 className="text-xl md:text-2xl font-heading text-dark font-bold tracking-widest uppercase">Featured Products</h2>
-                        <div className="w-12 h-1 bg-primary mt-2"></div>
+                        <div className="w-12 h-1 bg-primary mt-2 mx-auto md:mx-0"></div>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-center md:justify-end gap-4">
                         <div className="flex gap-2">
                             <button onClick={scrollLeft} className="p-1 border border-black/10 text-black/30 hover:text-primary hover:border-primary/50 transition-colors rounded-sm" aria-label="Previous">
                                 <Icons.ChevronLeft className="w-4 h-4" />
