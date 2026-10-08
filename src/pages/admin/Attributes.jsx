@@ -43,6 +43,8 @@ const AdminAttributes = () => {
     const [newDescription, setNewDescription] = useState('');
     const [newImage, setNewImage] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
+    const [newBannerImage, setNewBannerImage] = useState(null);
+    const [bannerPreview, setBannerPreview] = useState('');
     const [newParentCategory, setNewParentCategory] = useState('');
 
     // Edit State
@@ -57,17 +59,30 @@ const AdminAttributes = () => {
         }
     };
 
+    const handleBannerChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setNewBannerImage(file);
+            setBannerPreview(URL.createObjectURL(file));
+        }
+    };
+
     const resetForm = () => {
         setNewItem('');
         setNewColorCode('#000000');
         setNewDescription('');
         setNewImage(null);
         setImagePreview('');
+        setNewBannerImage(null);
+        setBannerPreview('');
         setNewParentCategory('');
         setIsEditing(false);
         setEditItem(null);
         if (document.getElementById('fileInput')) {
             document.getElementById('fileInput').value = '';
+        }
+        if (document.getElementById('bannerFileInput')) {
+            document.getElementById('bannerFileInput').value = '';
         }
     };
 
@@ -89,21 +104,20 @@ const AdminAttributes = () => {
             setNewColorCode(item.hex);
         } else if (activeTab === 'categories') {
             setNewItem(item.name);
-            setImagePreview(item.img); // Use existing URL
+            setImagePreview(item.img || '');
+            setBannerPreview(item.bannerImage || '');
         } else if (activeTab === 'subCategories') {
             setNewItem(item.name);
             setNewParentCategory(item.value || '');
         } else {
-            // For others (materials, occasions), item is now an object {id, name, value}
-            // We just edit the name
             setNewItem(item.name);
         }
     };
 
-    const uploadFileHandler = async () => {
-        if (!newImage) return null;
+    const uploadSingleFile = async (file) => {
+        if (!file) return null;
         const formData = new FormData();
-        formData.append('file', newImage);
+        formData.append('file', file);
         try {
             const result = await uploadImage(formData).unwrap();
             return result;
@@ -117,24 +131,33 @@ const AdminAttributes = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // VALDATION
+        // VALIDATION
         if (!newItem.trim()) {
             showToast('Name is required', 'error');
             return;
         }
 
         // Image validation for Categories
-        if ((activeTab === 'categories') && !imagePreview && !newImage) {
-            showToast('Image is required', 'error');
+        if (activeTab === 'categories' && !imagePreview && !newImage) {
+            showToast('Category Thumbnail Image is required', 'error');
             return;
         }
 
         let imgUrl = imagePreview;
-        // If there's a new file selected, upload it
         if (newImage) {
-            const uploadedPath = await uploadFileHandler();
+            const uploadedPath = await uploadSingleFile(newImage);
             if (uploadedPath) {
                 imgUrl = uploadedPath;
+            } else {
+                return; // Upload failed
+            }
+        }
+
+        let bannerUrl = bannerPreview;
+        if (newBannerImage) {
+            const uploadedBanner = await uploadSingleFile(newBannerImage);
+            if (uploadedBanner) {
+                bannerUrl = uploadedBanner;
             } else {
                 return; // Upload failed
             }
@@ -155,19 +178,18 @@ const AdminAttributes = () => {
             }
             commonPayload.value = newParentCategory;
         } else if (activeTab === 'categories') {
-            commonPayload.img = imgUrl || 'https://via.placeholder.com/150';
-            // Categories don't need 'value' field usually but backend schema might stick it
+            commonPayload.img = imgUrl || '';
+            commonPayload.bannerImage = bannerUrl || '';
         }
 
         try {
             if (isEditing) {
                 await updateAttribute({ id: editItem.id, ...commonPayload }).unwrap();
-                showToast(`${activeTab.slice(0, -1)} updated`, 'success');
+                showToast(`${activeTab.slice(0, -1)} updated successfully`, 'success');
             } else {
                 await addAttribute(commonPayload).unwrap();
                 showToast(`${newItem} added to ${activeTab}`, 'success');
             }
-
 
             resetForm();
         } catch (error) {
@@ -177,12 +199,10 @@ const AdminAttributes = () => {
     };
 
     const handleDelete = async (item) => {
-        // Items are now always objects with IDs
         if (await confirm(`Delete ${item.name}`, `Are you sure you want to delete ${item.name}?`, { isDangerous: true, confirmText: 'Delete' })) {
             try {
                 await deleteAttribute(item.id).unwrap();
                 showToast('Item deleted', 'success');
-
             } catch (error) {
                 showToast('Failed to delete item', 'error');
             }
@@ -201,7 +221,10 @@ const AdminAttributes = () => {
         <div className="animate-in fade-in duration-500">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
-                <h1 className="font-heading text-3xl text-light">Attributes</h1>
+                <div>
+                    <h1 className="font-heading text-3xl text-light">Attributes</h1>
+                    <p className="text-light/50 text-xs mt-1">Manage categories, sub-categories, colors, and product filters</p>
+                </div>
             </div>
 
             {/* Tabs */}
@@ -223,119 +246,165 @@ const AdminAttributes = () => {
 
             {/* Content */}
             <div className="bg-dark-paper border border-white/10 rounded-lg p-6">
-                <form onSubmit={handleSubmit} className="mb-8 p-4 bg-white/5 rounded-sm border border-white/5">
-                    <h3 className="text-sm font-bold uppercase text-light/80 mb-4">{isEditing ? 'Edit Item' : 'Add New Item'}</h3>
+                <form onSubmit={handleSubmit} className="mb-8 p-5 bg-white/5 rounded-sm border border-white/5">
+                    <h3 className="text-sm font-bold uppercase text-light/80 mb-4">{isEditing ? `Edit ${activeTab.slice(0, -1)}` : `Add New ${activeTab.slice(0, -1)}`}</h3>
 
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-start">
-                            {/* Inputs based on type */}
-                            <div className="flex-1 space-y-4">
+                    <div className="flex flex-col gap-6">
+                        <div className="space-y-4">
+                            {/* Name Input */}
+                            <div className="space-y-1">
+                                <label className="text-xs text-light/60 block font-medium">Name *</label>
+                                <Input
+                                    value={newItem}
+                                    onChange={(e) => setNewItem(e.target.value)}
+                                    placeholder={activeTab === 'categories' ? "e.g. Hair Care, Skin Care" : "Name *"}
+                                    required
+                                    className="bg-black/40 border-white/10 text-light focus:border-primary"
+                                />
+                            </div>
+
+                            {/* SubCategory Parent Selection */}
+                            {activeTab === 'subCategories' && (
                                 <div className="space-y-1">
-                                    <label className="text-xs text-light/60 block">Name *</label>
-                                    <Input
-                                        value={newItem}
-                                        onChange={(e) => setNewItem(e.target.value)}
-                                        placeholder="Name *"
+                                    <label className="text-xs text-light/60 block font-medium">Parent Category *</label>
+                                    <select
+                                        value={newParentCategory}
+                                        onChange={(e) => setNewParentCategory(e.target.value)}
+                                        className="w-full bg-black/40 border border-white/10 p-3 rounded text-light focus:outline-none focus:border-primary transition-colors disabled:opacity-50"
                                         required
-                                    />
+                                    >
+                                        <option value="" className="bg-dark text-light/50">Select Parent Category</option>
+                                        {(attributes.categories || []).map(cat => (
+                                            <option key={cat.id} value={cat.name} className="bg-dark text-light">{cat.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
+                            )}
 
-                                {activeTab === 'subCategories' && (
-                                    <div className="space-y-1">
-                                        <label className="text-xs text-light/60 block">Parent Category *</label>
-                                        <select
-                                            value={newParentCategory}
-                                            onChange={(e) => setNewParentCategory(e.target.value)}
-                                            className="w-full bg-transparent border-b border-white/20 pb-2 text-light placeholder-light/30 focus:outline-none focus:border-primary transition-colors disabled:opacity-50 appearance-none rounded-none"
-                                            required
-                                        >
-                                            <option value="" className="bg-dark text-light/50">Select Parent Category</option>
-                                            {(attributes.categories || []).map(cat => (
-                                                <option key={cat.id} value={cat.name} className="bg-dark text-light">{cat.name}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                )}
-
-                                {activeTab === 'categories' && (
-                                    <div className="space-y-2">
-                                        <label className="text-xs text-light/60 block">Image *</label>
-                                        <div className="flex gap-4 items-center">
+                            {/* Category Images (Thumbnail + Banner) */}
+                            {activeTab === 'categories' && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                                    {/* 1. Category Circle / Icon Thumbnail */}
+                                    <div className="p-4 bg-black/30 border border-white/10 rounded-sm space-y-3">
+                                        <div>
+                                            <label className="text-xs font-bold uppercase tracking-wider text-light block">
+                                                Category Thumbnail (Icon/Circle) *
+                                            </label>
+                                            <p className="text-[11px] text-light/40 mt-0.5">
+                                                Displayed in homepage round category circles and shop grids.
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-4">
                                             <input
                                                 id="fileInput"
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={handleImageChange}
-                                                className="text-sm text-light/60"
+                                                className="text-xs text-light/70 file:mr-3 file:py-2 file:px-3 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-primary file:text-dark hover:file:bg-white file:cursor-pointer cursor-pointer"
                                             />
                                             {imagePreview && (
-                                                <div className="w-16 h-16 rounded-sm overflow-hidden border border-white/10 shrink-0">
+                                                <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/50 shrink-0 bg-black/40">
                                                     <PreviewableImage
                                                         src={imagePreview}
-                                                        alt="Preview"
+                                                        alt="Thumbnail Preview"
                                                         containerClassName="w-full h-full"
                                                     />
                                                 </div>
                                             )}
                                         </div>
                                     </div>
-                                )}
-                            </div>
 
-                            {activeTab === 'colors' && (
-                                <div className="space-y-1">
-                                    <label className="text-xs text-light/60 block">Color</label>
-                                    <input
-                                        type="color"
-                                        value={newColorCode}
-                                        onChange={(e) => setNewColorCode(e.target.value)}
-                                        className="w-12 h-11 p-1 bg-white/5 border border-white/20 rounded-sm cursor-pointer"
-                                        title="Choose Color"
-                                    />
+                                    {/* 2. Category Header Banner Image */}
+                                    <div className="p-4 bg-black/30 border border-white/10 rounded-sm space-y-3">
+                                        <div>
+                                            <label className="text-xs font-bold uppercase tracking-wider text-light block flex items-center justify-between">
+                                                <span>Category Page Banner (Header)</span>
+                                                <span className="text-[10px] text-primary lowercase tracking-normal font-normal">Optional</span>
+                                            </label>
+                                            <p className="text-[11px] text-light/40 mt-0.5">
+                                                Full-width top header banner on category product listing.
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <input
+                                                id="bannerFileInput"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleBannerChange}
+                                                className="text-xs text-light/70 file:mr-3 file:py-2 file:px-3 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-white/20 file:text-white hover:file:bg-primary hover:file:text-dark file:cursor-pointer cursor-pointer"
+                                            />
+                                            {bannerPreview ? (
+                                                <div className="relative w-24 h-12 rounded-sm overflow-hidden border border-white/20 shrink-0 bg-black/40">
+                                                    <PreviewableImage
+                                                        src={bannerPreview}
+                                                        alt="Banner Preview"
+                                                        containerClassName="w-full h-full"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <span className="text-[10px] text-light/30 italic">No banner (uses dark style)</span>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             )}
 
-                            <div className="flex flex-col gap-2">
+                            {/* Color Picker */}
+                            {activeTab === 'colors' && (
                                 <div className="space-y-1">
-                                    <label className="text-xs text-transparent block select-none">Action</label>
-                                    <button
-                                        type="submit"
-                                        disabled={!newItem.trim() || isAdding || isUpdating || isUploading}
-                                        className="bg-primary text-dark font-bold uppercase tracking-widest px-6 py-3 hover:bg-white transition-colors rounded-sm disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                                    >
-                                        {isAdding || isUpdating || isUploading ? 'Saving...' : (isEditing ? 'Update' : 'Add')}
-                                    </button>
+                                    <label className="text-xs text-light/60 block">Color *</label>
+                                    <div className="flex items-center gap-3">
+                                        <input
+                                            type="color"
+                                            value={newColorCode}
+                                            onChange={(e) => setNewColorCode(e.target.value)}
+                                            className="w-12 h-11 p-1 bg-white/5 border border-white/20 rounded-sm cursor-pointer"
+                                            title="Choose Color"
+                                        />
+                                        <span className="font-mono text-xs text-light/70 uppercase">{newColorCode}</span>
+                                    </div>
                                 </div>
-                                {isEditing && (
-                                    <button
-                                        type="button"
-                                        onClick={resetForm}
-                                        className="text-xs text-light/50 hover:text-light underline"
-                                    >
-                                        Cancel
-                                    </button>
-                                )}
-                            </div>
+                            )}
+                        </div>
+
+                        {/* Submit Actions */}
+                        <div className="flex items-center gap-3 pt-2 border-t border-white/5">
+                            <button
+                                type="submit"
+                                disabled={!newItem.trim() || isAdding || isUpdating || isUploading}
+                                className="bg-primary text-dark font-bold uppercase tracking-widest px-8 py-3 hover:bg-white transition-colors rounded-sm disabled:opacity-50 disabled:cursor-not-allowed text-xs"
+                            >
+                                {isAdding || isUpdating || isUploading ? 'Saving...' : (isEditing ? 'Update Item' : 'Add Item')}
+                            </button>
+                            {isEditing && (
+                                <button
+                                    type="button"
+                                    onClick={resetForm}
+                                    className="px-6 py-3 text-xs text-light/60 hover:text-white uppercase tracking-wider transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                            )}
                         </div>
                     </div>
                 </form>
 
-                <h3 className="text-sm font-bold uppercase text-light/80 mb-4">Previously Added Items</h3>
+                <h3 className="text-sm font-bold uppercase text-light/80 mb-4">Previously Added Items ({attributes[activeTab].length})</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {attributes[activeTab].map((item, idx) => {
-                        // All items are now objects
                         const name = item.name;
                         const hex = (activeTab === 'colors') ? item.hex : null;
                         const img = (activeTab === 'categories') ? item.img : null;
+                        const bannerImg = (activeTab === 'categories') ? item.bannerImage : null;
                         const parent = (activeTab === 'subCategories') ? item.value : null;
 
                         return (
                             <div
                                 key={item.id || idx}
-                                className={`flex items-center justify-between p-3 bg-white/5 border rounded-sm group transition-all ${isEditing && editItem.id === item.id ? 'border-primary' : 'border-white/5 hover:border-white/20'
+                                className={`flex items-center justify-between p-3.5 bg-white/5 border rounded-sm group transition-all ${isEditing && editItem.id === item.id ? 'border-primary shadow-lg shadow-primary/10' : 'border-white/5 hover:border-white/20'
                                     }`}
                             >
-                                <div className="flex items-center gap-3 overflow-hidden">
+                                <div className="flex items-center gap-3 overflow-hidden min-w-0">
                                     {hex && (
                                         <div
                                             className="w-10 h-10 rounded-sm border border-white/20 shrink-0 shadow-inner"
@@ -343,7 +412,7 @@ const AdminAttributes = () => {
                                         ></div>
                                     )}
                                     {img && (
-                                        <div className="w-10 h-10 rounded-sm overflow-hidden border border-white/10 shrink-0">
+                                        <div className="w-11 h-11 rounded-full overflow-hidden border border-white/20 shrink-0 bg-black/50">
                                             <PreviewableImage
                                                 src={img}
                                                 alt={name}
@@ -351,19 +420,27 @@ const AdminAttributes = () => {
                                             />
                                         </div>
                                     )}
-                                    <div className="overflow-hidden">
+                                    <div className="overflow-hidden min-w-0">
                                         <div className="flex flex-col">
-                                            <span className="text-light font-medium truncate">{name}</span>
+                                            <span className="text-light font-medium truncate text-sm">{name}</span>
                                             {hex && <span className="text-light/40 text-[10px] font-mono uppercase leading-tight">{hex}</span>}
                                         </div>
                                         {parent && <span className="text-primary text-xs block truncate mt-1 border border-primary/30 rounded px-1.5 py-0.5 inline-block">Parent: {parent}</span>}
+                                        {activeTab === 'categories' && (
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className="text-[10px] text-light/40 bg-white/5 px-1.5 py-0.5 rounded">Icon: Yes</span>
+                                                <span className={`text-[10px] px-1.5 py-0.5 rounded ${bannerImg ? 'text-primary bg-primary/10' : 'text-light/30 bg-white/5'}`}>
+                                                    {bannerImg ? 'Banner: Custom' : 'Banner: Dark (Default)'}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
-                                <div className="flex gap-1">
+                                <div className="flex gap-1 shrink-0 ml-2">
                                     <button
                                         onClick={() => handleEditClick(item)}
-                                        className="p-2 hover:bg-white/5 rounded-md"
+                                        className="p-2 hover:bg-white/5 rounded-md transition-colors"
                                         style={{ color: 'var(--color-primary)' }}
                                         title="Edit"
                                         type="button"
@@ -372,7 +449,7 @@ const AdminAttributes = () => {
                                     </button>
                                     <button
                                         onClick={() => handleDelete(item)}
-                                        className="p-2 hover:bg-red-500/10 rounded-md"
+                                        className="p-2 hover:bg-red-500/10 rounded-md transition-colors"
                                         style={{ color: '#f87171' }}
                                         title="Delete"
                                         type="button"

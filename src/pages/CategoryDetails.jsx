@@ -116,9 +116,9 @@ const CategoryDetails = () => {
             {/* Hero Section */}
             <PageHeader
                 title={pageTitle}
-                eyebrow={decodedSubCategoryName ? category.name : "Discover"}
+                eyebrow={decodedSubCategoryName ? (category?.name || decodedCategoryName) : "Discover"}
                 subtitle={pageSubtitle}
-                backgroundImage={category.img}
+                backgroundImage={category?.bannerImage}
             />
 
             {/* Breadcrumbs & Controls */}
@@ -129,7 +129,7 @@ const CategoryDetails = () => {
                         <span className="mx-3 text-light/20">/</span>
                         <Link to="/categories" className="hover:text-primary transition-colors">Categories</Link>
                         <span className="mx-3 text-light/20">/</span>
-                        <Link to={`/category/${encodeURIComponent(category.name)}`} className="hover:text-primary transition-colors">{category.name}</Link>
+                        <Link to={`/category/${encodeURIComponent(category?.name || decodedCategoryName)}`} className="hover:text-primary transition-colors">{category?.name || decodedCategoryName}</Link>
                         {decodedSubCategoryName && (
                             <>
                                 <span className="mx-3 text-light/20">/</span>
