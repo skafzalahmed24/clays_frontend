@@ -37,43 +37,23 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
     return (
         <section className="py-6 md:py-8 bg-body relative overflow-hidden">
             <div className="w-full max-w-[1920px] mx-auto px-6 md:px-12 relative z-10">
-                {/* Header with Title and Optional Controls */}
-                <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-6 gap-4 border-b border-black/10 pb-4">
-                    <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                {/* Header with Title and View All side-by-side */}
+                <div className="flex justify-between items-end mb-6 gap-4 border-b border-black/10 pb-4">
+                    <div>
                         <h2 className="text-xl md:text-2xl font-heading text-dark font-bold tracking-widest uppercase">
                             {title}
                         </h2>
-                        <div className="w-12 h-1 bg-primary mt-2 mx-auto md:mx-0"></div>
+                        <div className="w-12 h-1 bg-primary mt-2"></div>
                     </div>
 
-                    <div className="flex items-center justify-center md:justify-end gap-4">
-                        {!isFewItems && (
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={scrollLeft}
-                                    className="p-1 border border-black/10 text-black/30 hover:text-primary hover:border-primary/50 transition-colors rounded-sm"
-                                    aria-label="Previous"
-                                >
-                                    <Icons.ChevronLeft className="w-4 h-4" />
-                                </button>
-                                <button
-                                    onClick={scrollRight}
-                                    className="p-1 border border-black/10 text-black/30 hover:text-primary hover:border-primary/50 transition-colors rounded-sm"
-                                    aria-label="Next"
-                                >
-                                    <Icons.ChevronRight className="w-4 h-4" />
-                                </button>
-                            </div>
-                        )}
-                        {showViewAll && (
-                            <Link
-                                to="/categories"
-                                className="text-[10px] font-bold uppercase tracking-[0.2em] border border-primary px-4 py-2 hover:bg-primary hover:text-dark transition-colors inline-block"
-                            >
-                                View All
-                            </Link>
-                        )}
-                    </div>
+                    {showViewAll && (
+                        <Link
+                            to="/categories"
+                            className="text-[10px] font-bold uppercase tracking-[0.2em] border border-primary px-3 sm:px-4 py-2 hover:bg-primary hover:text-dark transition-colors inline-block whitespace-nowrap"
+                        >
+                            View All
+                        </Link>
+                    )}
                 </div>
 
                 <style dangerouslySetInnerHTML={{__html: `
@@ -115,42 +95,62 @@ const Categories = ({ title = "Shop By Categories", showViewAll = true }) => {
                         ))}
                     </div>
                 ) : (
-                    <div 
-                        ref={scrollContainerRef}
-                        className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 -mx-6 md:mx-0 py-4 hide-scrollbar justify-start md:justify-center"
-                    >
-                        <div className="w-2 md:hidden flex-shrink-0"></div>
-                        {categories.map((cat) => (
-                            <div
-                                key={cat.id}
-                                className="snap-start flex-none w-[42vw] sm:w-[28vw] md:w-[22vw] lg:w-[16vw] max-w-[220px]"
-                            >
+                    <div>
+                        <div 
+                            ref={scrollContainerRef}
+                            className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 -mx-6 md:mx-0 py-4 hide-scrollbar justify-start md:justify-center"
+                        >
+                            <div className="w-2 md:hidden flex-shrink-0"></div>
+                            {categories.map((cat) => (
                                 <div
-                                    className="cursor-pointer group flex flex-col items-center"
-                                    onClick={() => navigate(`/category/${encodeURIComponent(cat.name.toLowerCase())}`)}
+                                    key={cat.id}
+                                    className="snap-start flex-none w-[42vw] sm:w-[28vw] md:w-[22vw] lg:w-[16vw] max-w-[220px]"
                                 >
-                                    <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full p-1.5 border-2 border-primary/25 group-hover:border-primary transition-all duration-500 shadow-md group-hover:shadow-[0_8px_30px_rgba(212,175,55,0.22)] bg-white">
-                                        <div className="w-full h-full rounded-full overflow-hidden relative bg-black/5">
-                                            <img
-                                                src={getMediaUrl(cat.img)}
-                                                alt={cat.name}
-                                                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                                                onError={(e) => { e.target.src = 'https://via.placeholder.com/400x500?text=No+Image'; }}
-                                            />
-                                            <div className="absolute inset-0 bg-dark/0 group-hover:bg-dark/15 transition-colors duration-300"></div>
+                                    <div
+                                        className="cursor-pointer group flex flex-col items-center"
+                                        onClick={() => navigate(`/category/${encodeURIComponent(cat.name.toLowerCase())}`)}
+                                    >
+                                        <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full p-1.5 border-2 border-primary/25 group-hover:border-primary transition-all duration-500 shadow-md group-hover:shadow-[0_8px_30px_rgba(212,175,55,0.22)] bg-white">
+                                            <div className="w-full h-full rounded-full overflow-hidden relative bg-black/5">
+                                                <img
+                                                    src={getMediaUrl(cat.img)}
+                                                    alt={cat.name}
+                                                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                                                    onError={(e) => { e.target.src = 'https://via.placeholder.com/400x500?text=No+Image'; }}
+                                                />
+                                                <div className="absolute inset-0 bg-dark/0 group-hover:bg-dark/15 transition-colors duration-300"></div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <h3 className="mt-3 text-xs md:text-sm font-heading font-bold text-dark tracking-[0.18em] uppercase transition-colors duration-300 group-hover:text-primary text-center">
-                                        {cat.name}
-                                    </h3>
-                                    <span className="text-[10px] text-primary uppercase tracking-[0.2em] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-0.5">
-                                        View →
-                                    </span>
+                                        <h3 className="mt-3 text-xs md:text-sm font-heading font-bold text-dark tracking-[0.18em] uppercase transition-colors duration-300 group-hover:text-primary text-center">
+                                            {cat.name}
+                                        </h3>
+                                        <span className="text-[10px] text-primary uppercase tracking-[0.2em] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-0.5">
+                                            View →
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                        <div className="w-2 md:hidden flex-shrink-0"></div>
+                            ))}
+                            <div className="w-2 md:hidden flex-shrink-0"></div>
+                        </div>
+
+                        {/* Navigation Arrows below carousel */}
+                        <div className="flex justify-center items-center gap-3 mt-4 md:mt-6">
+                            <button
+                                onClick={scrollLeft}
+                                className="p-2 border border-black/15 text-dark hover:text-primary hover:border-primary transition-all rounded-full bg-white shadow-sm hover:shadow-md"
+                                aria-label="Previous category"
+                            >
+                                <Icons.ChevronLeft className="w-4 h-4" />
+                            </button>
+                            <button
+                                onClick={scrollRight}
+                                className="p-2 border border-black/15 text-dark hover:text-primary hover:border-primary transition-all rounded-full bg-white shadow-sm hover:shadow-md"
+                                aria-label="Next category"
+                            >
+                                <Icons.ChevronRight className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
