@@ -15,7 +15,6 @@ const RegisterForm = () => {
 
     const [formData, setFormData] = useState({
         name: '',
-        email: '',
         phone: '',
         password: '',
         confirmPassword: ''
@@ -24,10 +23,32 @@ const RegisterForm = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // Disallow spaces for email, password, and phone
-        const newValue = (name === 'email' || name === 'password' || name === 'confirmPassword') ? value.replace(/\s/g, '') : value;
+        // Disallow spaces for password and confirmPassword
+        const newValue = (name === 'password' || name === 'confirmPassword') ? value.replace(/\s/g, '') : value;
 
         setFormData({ ...formData, [name]: newValue });
+        if (localError) setLocalError('');
+        if (authError) dispatch(clearError());
+    };
+
+    const handlePhoneChange = (e) => {
+        let val = e.target.value;
+        // Handle pastes or inputs with +91 or 91
+        if (val.startsWith('+91')) {
+            val = val.slice(3);
+        } else if (val.startsWith('+')) {
+            setLocalError('Only Indian (+91) mobile numbers are accepted');
+            return;
+        }
+        let digitsOnly = val.replace(/\D/g, '');
+        if (digitsOnly.startsWith('91') && digitsOnly.length > 10) {
+            digitsOnly = digitsOnly.slice(2);
+        } else if (digitsOnly.startsWith('0') && digitsOnly.length > 10) {
+            digitsOnly = digitsOnly.slice(1);
+        }
+        // Limit to 10 digits
+        digitsOnly = digitsOnly.slice(0, 10);
+        setFormData(prev => ({ ...prev, phone: digitsOnly }));
         if (localError) setLocalError('');
         if (authError) dispatch(clearError());
     };
@@ -35,20 +56,15 @@ const RegisterForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-            setLocalError('Please fill in all required fields');
+        if (!formData.name || !formData.phone || !formData.password || !formData.confirmPassword) {
+            setLocalError('Please fill in all required fields (Name, Mobile Number, Password)');
             return;
         }
 
-        // Email Validation
-        if (!REGEX.EMAIL.test(formData.email)) {
-            setLocalError('Please enter a valid email address');
-            return;
-        }
-
-        // Phone validation if entered
-        if (formData.phone && !/^(\+91[\s\-]?)?[6-9]\d{9}$|^91[6-9]\d{9}$|^0[6-9]\d{9}$/.test(formData.phone.trim())) {
-            setLocalError('Please enter a valid 10-digit Indian mobile number (+91)');
+        // Strictly Indian mobile number (+91): exactly 10 digits starting with 6, 7, 8, or 9
+        const cleanDigits = formData.phone.replace(/\D/g, '');
+        if (cleanDigits.length !== 10 || !/^[6-9]\d{9}$/.test(cleanDigits)) {
+            setLocalError('Please enter a valid 10-digit Indian mobile number (+91) starting with 6, 7, 8, or 9');
             return;
         }
 
@@ -63,28 +79,25 @@ const RegisterForm = () => {
             return;
         }
 
+        const fullPhone = `+91${cleanDigits}`;
+
         const resultAction = await dispatch(registerUser({
-            name: formData.name,
-            email: formData.email.toLowerCase(),
-            phone: formData.phone ? formData.phone.trim() : undefined,
+            name: formData.name.trim(),
+            phone: fullPhone,
             password: formData.password
         }));
 
         if (registerUser.fulfilled.match(resultAction)) {
-            const userEmail = resultAction.payload?.data?.email || formData.email;
-            const userPhone = resultAction.payload?.data?.phone || formData.phone;
-            showToast('Account created! Please verify the OTP.', 'success');
+            const userPhone = resultAction.payload?.phone || fullPhone;
+            showToast('Account created! Please verify your mobile number with the OTP.', 'success');
             
-            let verifyUrl = `/verify-otp?email=${encodeURIComponent(userEmail)}`;
-            if (userPhone) {
-                verifyUrl += `&phone=${encodeURIComponent(userPhone)}`;
-            }
-            navigate(verifyUrl);
+            // Redirect to verify-otp page with mobile phone
+            navigate(`/verify-otp?phone=${encodeURIComponent(userPhone)}`, { replace: true });
         } else {
             if (resultAction.payload) {
                 setLocalError(resultAction.payload);
             } else {
-                setLocalError(resultAction.error.message || 'Registration failed');
+                setLocalError(resultAction.error?.message || 'Registration failed');
             }
         }
     };
@@ -102,27 +115,32 @@ const RegisterForm = () => {
                 theme="light"
             />
 
-            <Input
-                label="Email Address *"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                icon={Icons.Email}
-                required
-                theme="light"
-            />
-
-            <Input
-                label="Mobile Number (India +91) - Optional"
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="+91 98765 43210"
-                icon={Icons.Phone}
-                theme="light"
-            />
+            {/* Indian Mobile Number with locked +91 country code */}
+            <div>
+                <label htmlFor="phone" className="block text-xs font-medium text-gray-700 mb-1.5">
+                    Mobile Number (India +91) <span className="text-red-500">*</span>
+                </label>
+                <div className="relative flex rounded-lg shadow-sm">
+                    <div className="inline-flex items-center px-3.5 rounded-l-lg border border-r-0 border-gray-200 bg-gray-100 text-gray-700 text-sm font-medium select-none space-x-1.5">
+                        <span role="img" aria-label="India Flag">🇮🇳</span>
+                        <span>+91</span>
+                    </div>
+                    <input
+                        type="tel"
+                        name="phone"
+                        id="phone"
+                        value={formData.phone}
+                        onChange={handlePhoneChange}
+                        placeholder="98765 43210"
+                        maxLength={10}
+                        required
+                        className="block w-full px-4 py-3 border border-gray-200 rounded-r-lg bg-gray-50 text-gray-900 placeholder-gray-400 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 hover:border-gray-300 transition-all duration-300 focus:outline-none text-base"
+                    />
+                </div>
+                <p className="mt-1 text-[11px] text-gray-500">
+                    Only Indian mobile numbers (+91) with 10 digits starting with 6, 7, 8, or 9 are accepted.
+                </p>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input

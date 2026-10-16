@@ -5,9 +5,9 @@ import { authApiSlice } from '../api/authApiSlice';
 // Thunks
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
-    async ({ email, password }, { rejectWithValue }) => {
+    async (credentials, { rejectWithValue }) => {
         try {
-            const { data } = await client.post('/auth/login', { email, password });
+            const { data } = await client.post('/auth/login', credentials);
             // Save token separately for API client
 
             if (data.data.refreshToken) {
@@ -22,16 +22,16 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
     'auth/registerUser',
-    async ({ name, email, password }, { rejectWithValue }) => {
+    async ({ name, phone, password }, { rejectWithValue }) => {
         try {
-            const { data } = await client.post('/auth/register', { name, email, password });
+            const { data } = await client.post('/auth/register', { name, phone, password });
 
-            if (data.data.refreshToken) {
+            if (data.data?.refreshToken) {
                 localStorage.setItem('refreshToken', data.data.refreshToken);
             }
             return data.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Registration failed');
+            return rejectWithValue(error.response?.data?.message || error.response?.data || 'Registration failed');
         }
     }
 );
@@ -107,9 +107,9 @@ const authSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state) => {
                 state.loading = false;
-                state.user = action.payload;
+                state.error = null;
             })
             .addCase(registerUser.rejected, (state, action) => {
                 state.loading = false;

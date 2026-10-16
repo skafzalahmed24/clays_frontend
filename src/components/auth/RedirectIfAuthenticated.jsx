@@ -3,9 +3,10 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const RedirectIfAuthenticated = () => {
-    const { user } = useSelector(state => state.auth);
+    const { user, token } = useSelector(state => state.auth);
 
-    if (user) {
+    // Only redirect if user is fully verified and authenticated with an active session token
+    if (user && user.isVerified && token) {
         return <Navigate to="/account" replace />;
     }
 

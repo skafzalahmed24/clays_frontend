@@ -9,6 +9,10 @@ export const REGEX = {
     // Password: Min 8 chars, 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Char
     PASSWORD_STRONG: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
 
+    // Indian Mobile Number (+91 strictly): 10 digits starting with 6, 7, 8, 9
+    INDIAN_PHONE: /^(\+91[\s-]?)?[6-9]\d{9}$|^91[6-9]\d{9}$|^0[6-9]\d{9}$/,
+    INDIAN_PHONE_10_DIGITS: /^[6-9]\d{9}$/,
+
     // Coupon Code: Uppercase Alphanumeric and Underscores only
     COUPON_CODE: /^[A-Z0-9_]+$/,
 
