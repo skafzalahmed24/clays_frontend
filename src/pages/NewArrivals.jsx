@@ -55,7 +55,8 @@ const NewArrivals = () => {
         return productsData.map(p => ({
             ...p,
             id: p._id || p.id,
-            displayPrice: format(p.price)
+            displayPrice: format(p.price),
+            originalPrice: p.originalPrice ? format(p.originalPrice) : null
         }));
     }, [productsData, format]);
 

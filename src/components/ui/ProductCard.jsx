@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getImageUrl } from '../../utils/imageHelper';
@@ -7,11 +7,13 @@ import TextHighlight from './TextHighlight';
 import { addToCart, removeFromCart } from '../../store/slices/cartSlice';
 import { addToWishlist, removeFromWishlist } from '../../store/slices/wishlistSlice';
 import { useToast } from '../../context/ToastContext';
+import { usePrice } from '../../hooks/usePrice';
 
 const ProductCard = ({ product, onNavigate, searchQuery }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // For redirecting to login
     const { showToast } = useToast();
+    const { format } = usePrice();
     const [localLoading, setLocalLoading] = useState(false);
 
     // Selectors
@@ -20,6 +22,21 @@ const ProductCard = ({ product, onNavigate, searchQuery }) => {
     const { user } = useSelector(state => state.auth);
 
     const productId = product.id || product._id;
+
+    const displayPrice = product.displayPrice || (product.price ? format(product.price) : '');
+
+    const formattedComparePrice = useMemo(() => {
+        if (!product.originalPrice || typeof product.originalPrice === 'object') return null;
+
+        if (typeof product.originalPrice === 'string' && /[^\d.,\s]/.test(product.originalPrice)) {
+            return product.originalPrice;
+        }
+
+        const numPrice = Number(product.originalPrice);
+        if (isNaN(numPrice) || numPrice <= 0) return null;
+
+        return format(numPrice);
+    }, [product.originalPrice, format]);
 
     const isInCart = Array.isArray(cartItems) && cartItems.some(item => {
         const itemId = item.product?._id || item.product?.id || item.id || item._id;
@@ -128,9 +145,9 @@ const ProductCard = ({ product, onNavigate, searchQuery }) => {
                     </h3>
                 </Link>
                 <div className="flex justify-center items-baseline gap-3">
-                    <span className="text-primary font-medium tracking-wide">{product.displayPrice}</span>
-                    {product.originalPrice && typeof product.originalPrice !== 'object' && (
-                        <span className="text-light/30 text-xs line-through font-light">{product.originalPrice}</span>
+                    <span className="text-primary font-medium tracking-wide">{displayPrice}</span>
+                    {formattedComparePrice && (
+                        <span className="text-light/30 text-xs line-through font-light">{formattedComparePrice}</span>
                     )}
                 </div>
                 {/* Colors */}

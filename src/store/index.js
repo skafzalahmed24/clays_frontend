@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistStore, persistReducer, createTransform } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 import authReducer from './slices/authSlice';
@@ -18,10 +18,49 @@ const encryptor = encryptTransform({
     },
 });
 
+// Transform to prevent transient UI state (loading, error) from persisting in localStorage
+const authFilterTransform = createTransform(
+    (inboundState, key) => {
+        if (key === 'adminAuth') {
+            return {
+                ...inboundState,
+                loading: false,
+                error: null,
+            };
+        }
+        if (key === 'auth') {
+            return {
+                ...inboundState,
+                loading: false,
+                error: null,
+            };
+        }
+        return inboundState;
+    },
+    (outboundState, key) => {
+        if (key === 'adminAuth') {
+            return {
+                ...outboundState,
+                loading: false,
+                error: null,
+            };
+        }
+        if (key === 'auth') {
+            return {
+                ...outboundState,
+                loading: false,
+                error: null,
+            };
+        }
+        return outboundState;
+    },
+    { whitelist: ['adminAuth', 'auth'] }
+);
+
 const persistConfig = {
     key: 'root',
     storage,
-    transforms: [encryptor],
+    transforms: [authFilterTransform, encryptor],
     whitelist: ['auth', 'adminAuth', 'cart', 'wishlist'] // Persist these slices
 };
 

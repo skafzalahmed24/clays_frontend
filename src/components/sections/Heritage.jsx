@@ -22,6 +22,7 @@ const Heritage = () => {
         title: "Mastery in Every Cut",
         subtitle: "Since 1985",
         description: `Our heritage is built on a foundation of uncompromised quality and artistic vision. Every piece of ${BRAND_CONFIG.brandName} jewelry tells a story of tradition, passion, and the pursuit of perfection.`,
+        description2: "Every gem is hand-selected, cut with mathematical precision, and set in responsibly sourced precious metals designed to endure for generations.",
         image: null,
         link: '/about',
         linkText: 'Read Our Story'
@@ -34,12 +35,21 @@ const Heritage = () => {
                     
                     {/* Content Side */}
                     <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left px-4 md:px-12 order-last md:order-first">
-                        <span className="text-primary text-sm uppercase tracking-[0.3em] font-bold mb-4">{content.subtitle}</span>
+                        {content.subtitle && (
+                            <span className="text-primary text-sm uppercase tracking-[0.3em] font-bold mb-4">{content.subtitle}</span>
+                        )}
                         <h2 className="text-3xl md:text-5xl font-heading font-bold tracking-widest uppercase mb-6 text-dark">{content.title}</h2>
                         <div className="w-16 h-1 bg-primary mb-8 mx-auto md:mx-0"></div>
-                        <p className="text-dark/70 text-lg font-light leading-relaxed mb-10">
-                            {content.description}
-                        </p>
+                        {content.description && (
+                            <p className={`text-dark/70 text-lg font-light leading-relaxed ${content.description2 ? 'mb-6' : 'mb-10'} whitespace-pre-line`}>
+                                {content.description}
+                            </p>
+                        )}
+                        {content.description2 && (
+                            <p className="text-dark/70 text-lg font-light leading-relaxed mb-10 whitespace-pre-line">
+                                {content.description2}
+                            </p>
+                        )}
                         <Link
                             to={content.link || '/about'}
                             className="bg-transparent border border-primary text-dark hover:bg-primary hover:text-white font-heading font-bold uppercase tracking-widest py-4 px-10 transition-all duration-300 w-full md:w-fit block text-center"

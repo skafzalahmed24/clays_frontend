@@ -53,7 +53,7 @@ const FilterSidebar = ({ selectedFilters, onFilterChange, isOpen, onClose, hideC
             label: 'Occasion',
             options: (attributes.occasions || []).map(o => o.name)
         }
-    ].filter(filter => !hideCategories || filter.id !== 'category');
+    ].filter(filter => (!hideCategories || filter.id !== 'category') && (filter.id === 'price' || (filter.options && filter.options.length > 0)));
 
     // State to track expanded sections
     const [expandedSections, setExpandedSections] = useState({

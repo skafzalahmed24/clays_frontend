@@ -15,10 +15,7 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
 
     const attributes = attributesData || {
         categories: [],
-        subCategories: [],
-        colors: [],
-        materials: [],
-        occasions: []
+        subCategories: []
     };
 
     const [uploadImage] = useUploadImageMutation();
@@ -38,12 +35,7 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
         inStock: true,
         isNewArrival: true,
         isFeatured: false,
-        color: '',
-        material: '',
-
-        occasion: '',
         sku: '',
-        tags: '',
         weight: '',
         dimensions: { length: '', width: '', height: '' },
         meta: { title: '', description: '' },
@@ -57,7 +49,6 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
         if (initialData) {
             setFormData(prev => ({
                 ...prev,
-                tags: Array.isArray(initialData.tags) ? initialData.tags.join(', ') : (initialData.tags || ''),
                 dimensions: initialData.dimensions || { length: '', width: '', height: '' },
                 meta: initialData.meta || { title: '', description: '' }
             }));
@@ -226,7 +217,7 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
 
             const finalData = {
                 ...formData,
-                tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
+                tags: initialData?.tags || [],
                 images: finalImages,
                 img: finalImages.length > 0 ? finalImages[0] : ''
             };
@@ -504,83 +495,6 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
                                     onClick={() => navigate('/admin/attributes', { state: { tab: 'subCategories' } })}
                                     className="p-3 bg-white/5 border border-white/10 rounded-sm hover:bg-primary hover:text-dark transition-colors text-light/60 mb-[1px]"
                                     title="Manage Sub Categories"
-                                >
-                                    <Icons.Plus className="w-4 h-4" />
-                                </button>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Tags (Comma Separated)</label>
-                                <Input
-                                    name="tags"
-                                    value={formData.tags}
-                                    onChange={handleChange}
-                                    placeholder="e.g. Summer, Gift, Sale"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="bg-dark-paper border border-white/10 p-6 rounded-lg space-y-6">
-                            <h2 className="text-lg font-heading text-light uppercase tracking-widest border-b border-light/10 pb-4">Attributes</h2>
-
-                            <div className="flex gap-2 items-end">
-                                <div className="flex-1">
-                                    <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Color</label>
-                                    <Select
-                                        name="color"
-                                        value={formData.color}
-                                        onChange={handleChange}
-                                        placeholder="Select Color"
-                                        options={(attributes.colors && Array.isArray(attributes.colors) ? attributes.colors : []).map(col => ({ value: col.name, label: col.name }))}
-                                    />
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => navigate('/admin/attributes', { state: { tab: 'colors' } })}
-                                    className="p-3 bg-white/5 border border-white/10 rounded-sm hover:bg-primary hover:text-dark transition-colors text-light/60 mb-[1px]"
-                                    title="Manage Colors"
-                                >
-                                    <Icons.Plus className="w-4 h-4" />
-                                </button>
-                            </div>
-
-                            <div className="flex gap-2 items-end">
-                                <div className="flex-1">
-                                    <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Material</label>
-                                    <Select
-                                        name="material"
-                                        value={formData.material}
-                                        onChange={handleChange}
-                                        placeholder="Select Material"
-                                        options={(attributes.materials && Array.isArray(attributes.materials) ? attributes.materials : []).map(mat => ({ value: mat.name, label: mat.name }))}
-                                    />
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => navigate('/admin/attributes', { state: { tab: 'materials' } })}
-                                    className="p-3 bg-white/5 border border-white/10 rounded-sm hover:bg-primary hover:text-dark transition-colors text-light/60 mb-[1px]"
-                                    title="Manage Materials"
-                                >
-                                    <Icons.Plus className="w-4 h-4" />
-                                </button>
-                            </div>
-
-                            <div className="flex gap-2 items-end">
-                                <div className="flex-1">
-                                    <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Occasion</label>
-                                    <Select
-                                        name="occasion"
-                                        value={formData.occasion}
-                                        onChange={handleChange}
-                                        placeholder="Select Occasion"
-                                        options={(attributes.occasions && Array.isArray(attributes.occasions) ? attributes.occasions : []).map(occ => ({ value: occ.name, label: occ.name }))}
-                                    />
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => navigate('/admin/attributes', { state: { tab: 'occasions' } })}
-                                    className="p-3 bg-white/5 border border-white/10 rounded-sm hover:bg-primary hover:text-dark transition-colors text-light/60 mb-[1px]"
-                                    title="Manage Occasions"
                                 >
                                     <Icons.Plus className="w-4 h-4" />
                                 </button>

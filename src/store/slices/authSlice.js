@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { REHYDRATE } from 'redux-persist';
 import client from '../../api/client';
 import { authApiSlice } from '../api/authApiSlice';
 
@@ -79,15 +80,21 @@ const authSlice = createSlice({
         },
         clearError: (state) => {
             state.error = null;
+            state.loading = false;
         },
         logOutLocal: (state) => {
             state.user = null;
+            state.loading = false;
             state.error = null;
             localStorage.removeItem('refreshToken');
         }
     },
     extraReducers: (builder) => {
         builder
+            .addCase(REHYDRATE, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
             // Login
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;

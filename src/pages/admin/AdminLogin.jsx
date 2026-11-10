@@ -12,13 +12,14 @@ import Icons from '../../components/ui/Icons';
 const AdminLogin = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { loading, error: authError, adminInfo } = useSelector(state => state.adminAuth);
+    const { error: authError, adminInfo } = useSelector(state => state.adminAuth);
     const { showToast } = useToast();
 
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+    const [submitting, setSubmitting] = useState(false);
     const [localError, setLocalError] = useState('');
 
     // Forgot Password State
@@ -29,8 +30,10 @@ const AdminLogin = () => {
     const [newPassword, setNewPassword] = useState('');
     const [resetLocalError, setResetLocalError] = useState('');
     const [resetSuccess, setResetSuccess] = useState('');
+    const [forgotLoading, setForgotLoading] = useState(false);
+    const [resetLoading, setResetLoading] = useState(false);
 
-    // Clear errors on mount
+    // Clear errors and reset stuck state on mount
     useEffect(() => {
         dispatch(clearAdminError());
     }, [dispatch]);
@@ -60,6 +63,7 @@ const AdminLogin = () => {
             return;
         }
 
+        setSubmitting(true);
         try {
             // Clear User session before attempting Admin login
             dispatch(logOutLocal());
@@ -80,6 +84,8 @@ const AdminLogin = () => {
         } catch (err) {
             setLocalError('An unexpected error occurred.');
             console.error(err);
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -88,6 +94,7 @@ const AdminLogin = () => {
         e.preventDefault();
         setResetLocalError('');
         setResetSuccess('');
+        setForgotLoading(true);
 
         try {
             await client.post('/admin/forgot-password', { email: resetEmail });
@@ -95,6 +102,8 @@ const AdminLogin = () => {
             setResetStep(2);
         } catch (err) {
             setResetLocalError(err.response?.data?.message || 'Failed to send OTP');
+        } finally {
+            setForgotLoading(false);
         }
     };
 
@@ -108,6 +117,7 @@ const AdminLogin = () => {
             return;
         }
 
+        setResetLoading(true);
         try {
             await client.post('/admin/reset-password', {
                 email: resetEmail,
@@ -120,6 +130,8 @@ const AdminLogin = () => {
             setResetStep(1);
         } catch (err) {
             setResetLocalError(err.response?.data?.message || 'Failed to reset password');
+        } finally {
+            setResetLoading(false);
         }
     };
 
@@ -176,10 +188,10 @@ const AdminLogin = () => {
 
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={submitting}
                         className="w-full bg-primary text-dark font-heading py-3 uppercase tracking-widest hover:brightness-110 hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? 'Authenticating...' : 'Access Dashboard'}
+                        {submitting ? 'Authenticating...' : 'Access Dashboard'}
                     </button>
 
                     <div className="text-center pt-4">
@@ -236,10 +248,10 @@ const AdminLogin = () => {
                                 />
                                 <button
                                     type="submit"
-                                    disabled={loading}
+                                    disabled={forgotLoading}
                                     className="w-full bg-primary text-dark font-bold py-2 hover:bg-white transition-colors disabled:opacity-50"
                                 >
-                                    {loading ? 'Sending...' : 'Send OTP'}
+                                    {forgotLoading ? 'Sending...' : 'Send OTP'}
                                 </button>
                             </form>
                         ) : (
@@ -263,10 +275,10 @@ const AdminLogin = () => {
                                 />
                                 <button
                                     type="submit"
-                                    disabled={loading}
+                                    disabled={resetLoading}
                                     className="w-full bg-primary text-dark font-bold py-2 hover:bg-white transition-colors disabled:opacity-50"
                                 >
-                                    {loading ? 'Resetting...' : 'Update Password'}
+                                    {resetLoading ? 'Resetting...' : 'Update Password'}
                                 </button>
                             </form>
                         )}

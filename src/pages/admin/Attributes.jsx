@@ -25,21 +25,23 @@ const AdminAttributes = () => {
     const attributes = {
         categories: [],
         subCategories: [],
-        colors: [],
-        materials: [],
-        occasions: [],
         ...(attributesData || {})
     };
+
+    const tabs = [
+        { id: 'categories', label: 'Categories' },
+        { id: 'subCategories', label: 'Sub Categories' }
+    ];
 
     const { showToast } = useToast();
     const { confirm } = useConfirm();
     const location = useLocation();
-    const [activeTab, setActiveTab] = useState(location.state?.tab || 'categories');
-
+    const [activeTab, setActiveTab] = useState(
+        tabs.some(t => t.id === location.state?.tab) ? location.state.tab : 'categories'
+    );
 
     // Form State
     const [newItem, setNewItem] = useState('');
-    const [newColorCode, setNewColorCode] = useState('#000000');
     const [newDescription, setNewDescription] = useState('');
     const [newImage, setNewImage] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
@@ -69,7 +71,6 @@ const AdminAttributes = () => {
 
     const resetForm = () => {
         setNewItem('');
-        setNewColorCode('#000000');
         setNewDescription('');
         setNewImage(null);
         setImagePreview('');
@@ -89,7 +90,7 @@ const AdminAttributes = () => {
     // Sync tab if navigation state changes
     // eslint-disable-next-line
     useEffect(() => {
-        if (location.state?.tab && location.state.tab !== activeTab) {
+        if (location.state?.tab && tabs.some(t => t.id === location.state.tab) && location.state.tab !== activeTab) {
             setActiveTab(location.state.tab);
             resetForm();
         }
@@ -99,10 +100,7 @@ const AdminAttributes = () => {
         setIsEditing(true);
         setEditItem(item);
 
-        if (activeTab === 'colors') {
-            setNewItem(item.name);
-            setNewColorCode(item.hex);
-        } else if (activeTab === 'categories') {
+        if (activeTab === 'categories') {
             setNewItem(item.name);
             setImagePreview(item.img || '');
             setBannerPreview(item.bannerImage || '');
@@ -169,9 +167,7 @@ const AdminAttributes = () => {
             value: newItem // Default value
         };
 
-        if (activeTab === 'colors') {
-            commonPayload.value = newColorCode;
-        } else if (activeTab === 'subCategories') {
+        if (activeTab === 'subCategories') {
             if (!newParentCategory) {
                 showToast('Parent Category is required', 'error');
                 return;
@@ -209,21 +205,13 @@ const AdminAttributes = () => {
         }
     };
 
-    const tabs = [
-        { id: 'categories', label: 'Categories' },
-        { id: 'subCategories', label: 'Sub Categories' },
-        { id: 'colors', label: 'Colors' },
-        { id: 'materials', label: 'Materials' },
-        { id: 'occasions', label: 'Occasions' }
-    ];
-
     return (
         <div className="animate-in fade-in duration-500">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-8">
                 <div>
                     <h1 className="font-heading text-3xl text-light">Attributes</h1>
-                    <p className="text-light/50 text-xs mt-1">Manage categories, sub-categories, colors, and product filters</p>
+                    <p className="text-light/50 text-xs mt-1">Manage categories and sub-categories</p>
                 </div>
             </div>
 
@@ -349,22 +337,6 @@ const AdminAttributes = () => {
                                 </div>
                             )}
 
-                            {/* Color Picker */}
-                            {activeTab === 'colors' && (
-                                <div className="space-y-1">
-                                    <label className="text-xs text-light/60 block">Color *</label>
-                                    <div className="flex items-center gap-3">
-                                        <input
-                                            type="color"
-                                            value={newColorCode}
-                                            onChange={(e) => setNewColorCode(e.target.value)}
-                                            className="w-12 h-11 p-1 bg-white/5 border border-white/20 rounded-sm cursor-pointer"
-                                            title="Choose Color"
-                                        />
-                                        <span className="font-mono text-xs text-light/70 uppercase">{newColorCode}</span>
-                                    </div>
-                                </div>
-                            )}
                         </div>
 
                         {/* Submit Actions */}
@@ -389,11 +361,10 @@ const AdminAttributes = () => {
                     </div>
                 </form>
 
-                <h3 className="text-sm font-bold uppercase text-light/80 mb-4">Previously Added Items ({attributes[activeTab].length})</h3>
+                <h3 className="text-sm font-bold uppercase text-light/80 mb-4">Previously Added Items ({(attributes[activeTab] || []).length})</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {attributes[activeTab].map((item, idx) => {
+                    {(attributes[activeTab] || []).map((item, idx) => {
                         const name = item.name;
-                        const hex = (activeTab === 'colors') ? item.hex : null;
                         const img = (activeTab === 'categories') ? item.img : null;
                         const bannerImg = (activeTab === 'categories') ? item.bannerImage : null;
                         const parent = (activeTab === 'subCategories') ? item.value : null;
@@ -405,12 +376,6 @@ const AdminAttributes = () => {
                                     }`}
                             >
                                 <div className="flex items-center gap-3 overflow-hidden min-w-0">
-                                    {hex && (
-                                        <div
-                                            className="w-10 h-10 rounded-sm border border-white/20 shrink-0 shadow-inner"
-                                            style={{ backgroundColor: hex }}
-                                        ></div>
-                                    )}
                                     {img && (
                                         <div className="w-11 h-11 rounded-full overflow-hidden border border-white/20 shrink-0 bg-black/50">
                                             <PreviewableImage
@@ -423,7 +388,6 @@ const AdminAttributes = () => {
                                     <div className="overflow-hidden min-w-0">
                                         <div className="flex flex-col">
                                             <span className="text-light font-medium truncate text-sm">{name}</span>
-                                            {hex && <span className="text-light/40 text-[10px] font-mono uppercase leading-tight">{hex}</span>}
                                         </div>
                                         {parent && <span className="text-primary text-xs block truncate mt-1 border border-primary/30 rounded px-1.5 py-0.5 inline-block">Parent: {parent}</span>}
                                         {activeTab === 'categories' && (
@@ -461,7 +425,7 @@ const AdminAttributes = () => {
                         );
                     })}
 
-                    {attributes[activeTab].length === 0 && (
+                    {(!attributes[activeTab] || attributes[activeTab].length === 0) && (
                         <div className="col-span-full text-center py-8 text-light/30 italic">
                             No items found. Add some above!
                         </div>

@@ -5,6 +5,7 @@ import {
     useGetTestimonialsQuery, useAddTestimonialMutation, useDeleteTestimonialMutation,
     useGetSocialFeedQuery, useAddSocialPostMutation, useDeleteSocialPostMutation,
     useGetHeritageQuery, useUpdateHeritageMutation,
+    useGetGoldStandardQuery, useUpdateGoldStandardMutation,
     useGetTrustBadgesQuery, useAddTrustBadgeMutation, useDeleteTrustBadgeMutation,
     useGetFAQsQuery, useAddFAQMutation, useDeleteFAQMutation,
 
@@ -39,6 +40,7 @@ const AdminContent = () => {
     const { data: testimonials } = useGetTestimonialsQuery();
     const { data: socialFeed } = useGetSocialFeedQuery();
     const { data: heritage } = useGetHeritageQuery();
+    const { data: goldStandard } = useGetGoldStandardQuery();
     const { data: trustBadges } = useGetTrustBadgesQuery();
 
 
@@ -66,6 +68,7 @@ const AdminContent = () => {
     const [addSocialPost, { isLoading: isAddingSocial }] = useAddSocialPostMutation();
     const [deleteSocialPost] = useDeleteSocialPostMutation();
     const [updateHeritage, { isLoading: isUpdatingHeritage }] = useUpdateHeritageMutation();
+    const [updateGoldStandard, { isLoading: isUpdatingGoldStandard }] = useUpdateGoldStandardMutation();
     const [addTrustBadge, { isLoading: isAddingTrustBadge }] = useAddTrustBadgeMutation();
     const [deleteTrustBadge] = useDeleteTrustBadgeMutation();
     const [addFAQ, { isLoading: isAddingFAQ }] = useAddFAQMutation();
@@ -84,6 +87,7 @@ const AdminContent = () => {
     const testimonialListRef = useRef(null);
     const socialListRef = useRef(null);
     const heritageFormRef = useRef(null);
+    const goldStandardFormRef = useRef(null);
     const trustBadgeListRef = useRef(null);
     const faqListRef = useRef(null);
     const aboutFormRef = useRef(null);
@@ -102,7 +106,7 @@ const AdminContent = () => {
 
     // --- Heritage State ---
     const [heritageForm, setHeritageForm] = useState({
-        title: '', subtitle: '', description: '', image: '', link: '', linkText: ''
+        title: '', subtitle: '', description: '', description2: '', image: '', link: '', linkText: ''
     });
     const [heritageImageFile, setHeritageImageFile] = useState(null);
 
@@ -115,6 +119,7 @@ const AdminContent = () => {
                         title: heritage.title || '',
                         subtitle: heritage.subtitle || '',
                         description: heritage.description || '',
+                        description2: heritage.description2 || '',
                         image: heritage.image || '',
                         link: heritage.link || '',
                         linkText: heritage.linkText || ''
@@ -124,6 +129,31 @@ const AdminContent = () => {
             });
         }
     }, [heritage]);
+
+    // --- The Gold Standard State ---
+    const [goldStandardForm, setGoldStandardForm] = useState({
+        title: '', subtitle: '', description: '', description2: '', image: '', link: '', linkText: ''
+    });
+    const [goldStandardImageFile, setGoldStandardImageFile] = useState(null);
+
+    useEffect(() => {
+        if (goldStandard) {
+            setGoldStandardForm(prev => {
+                if (prev.title === '' && prev.subtitle === '') {
+                    return {
+                        title: goldStandard.title || '',
+                        subtitle: goldStandard.subtitle || '',
+                        description: goldStandard.description || '',
+                        description2: goldStandard.description2 || '',
+                        image: goldStandard.image || '',
+                        link: goldStandard.link || '',
+                        linkText: goldStandard.linkText || ''
+                    };
+                }
+                return prev;
+            });
+        }
+    }, [goldStandard]);
 
 
 
@@ -334,6 +364,35 @@ const AdminContent = () => {
                 scrollToList(heritageFormRef);
                 // Optimistic update
                 setHeritageForm(prev => ({
+                    ...prev,
+                    image: data.image || prev.image
+                }));
+            })
+            .catch(err => showToast(err?.data?.message || err.message, 'error'));
+    };
+
+    const handleUpdateGoldStandard = async (e) => {
+        e.preventDefault();
+
+        // VALIDATION
+        if (!goldStandardForm.title.trim()) {
+            showToast('Title is required', 'error');
+            return;
+        }
+
+        let imageUrl = goldStandardForm.image;
+        if (goldStandardImageFile) {
+            imageUrl = await handleFileUpload(goldStandardImageFile);
+        }
+
+        updateGoldStandard({ ...goldStandardForm, image: imageUrl || '' })
+            .unwrap()
+            .then((data) => {
+                showToast('The Gold Standard section updated', 'success');
+                setGoldStandardImageFile(null);
+                scrollToList(goldStandardFormRef);
+                // Optimistic update
+                setGoldStandardForm(prev => ({
                     ...prev,
                     image: data.image || prev.image
                 }));
@@ -1090,65 +1149,180 @@ const AdminContent = () => {
                 )}
 
                 {activeTab === 'heritage' && (
-                    <div ref={heritageFormRef} className="bg-dark-paper border border-white/10 rounded-lg p-6">
-                        <h2 className="text-xl font-heading text-light mb-4">Edit Heritage Section</h2>
-                        <form onSubmit={handleUpdateHeritage} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-light/60 text-sm mb-1">Title *</label>
-                                    <Input
-                                        type="text"
-                                        value={heritageForm.title}
-                                        onChange={e => setHeritageForm({ ...heritageForm, title: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-light/60 text-sm mb-1">Subtitle (Since Year)</label>
-                                    <Input
-                                        type="text"
-                                        value={heritageForm.subtitle}
-                                        onChange={e => setHeritageForm({ ...heritageForm, subtitle: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-light/60 text-sm mb-1">Link</label>
-                                    <Input
-                                        type="text"
-                                        value={heritageForm.link}
-                                        onChange={e => setHeritageForm({ ...heritageForm, link: e.target.value })}
-                                    />
-                                </div>
+                    <div className="space-y-8">
+                        {/* The Gold Standard Section */}
+                        <div ref={goldStandardFormRef} className="bg-dark-paper border border-white/10 rounded-lg p-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-heading text-light">Edit The Gold Standard Section</h2>
+                                <span className="text-xs uppercase tracking-wider text-primary font-mono bg-primary/10 px-2.5 py-1 rounded">Spotlight</span>
                             </div>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-light/60 text-sm mb-1">Description</label>
-                                    <Textarea
-                                        rows="4"
-                                        value={heritageForm.description}
-                                        onChange={e => setHeritageForm({ ...heritageForm, description: e.target.value })}
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-light/60 text-sm mb-1">Current Image</label>
-                                    {heritageForm.image && (
-                                        <PreviewableImage 
-                                            src={getMediaUrl(heritageForm.image)} 
-                                            alt="Heritage" 
-                                            containerClassName="h-20"
-                                            className="h-full object-cover rounded mb-2"
+                            <form onSubmit={handleUpdateGoldStandard} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Title *</label>
+                                        <Input
+                                            type="text"
+                                            value={goldStandardForm.title}
+                                            onChange={e => setGoldStandardForm({ ...goldStandardForm, title: e.target.value })}
+                                            placeholder="The Gold Standard"
                                         />
-                                    )}
-                                    <input
-                                        type="file"
-                                        className="bg-body border border-white/10 rounded p-2 text-light w-full"
-                                        onChange={e => setHeritageImageFile(e.target.files[0])}
-                                    />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Subtitle</label>
+                                        <Input
+                                            type="text"
+                                            value={goldStandardForm.subtitle}
+                                            onChange={e => setGoldStandardForm({ ...goldStandardForm, subtitle: e.target.value })}
+                                            placeholder="Excellence in Material"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Button Text</label>
+                                        <Input
+                                            type="text"
+                                            value={goldStandardForm.linkText}
+                                            onChange={e => setGoldStandardForm({ ...goldStandardForm, linkText: e.target.value })}
+                                            placeholder="Discover Our Craft"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Button Link</label>
+                                        <Input
+                                            type="text"
+                                            value={goldStandardForm.link}
+                                            onChange={e => setGoldStandardForm({ ...goldStandardForm, link: e.target.value })}
+                                            placeholder="/collections"
+                                        />
+                                    </div>
                                 </div>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Description (Paragraph 1)</label>
+                                        <Textarea
+                                            rows="3"
+                                            value={goldStandardForm.description}
+                                            onChange={e => setGoldStandardForm({ ...goldStandardForm, description: e.target.value })}
+                                            placeholder="At Clays, gold isn't just a medium..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Description (Paragraph 2)</label>
+                                        <Textarea
+                                            rows="3"
+                                            value={goldStandardForm.description2}
+                                            onChange={e => setGoldStandardForm({ ...goldStandardForm, description2: e.target.value })}
+                                            placeholder="Each piece is hand-poured, forged..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Current Image</label>
+                                        {goldStandardForm.image && (
+                                            <PreviewableImage 
+                                                src={getMediaUrl(goldStandardForm.image)} 
+                                                alt="The Gold Standard" 
+                                                containerClassName="h-20"
+                                                className="h-full object-cover rounded mb-2"
+                                            />
+                                        )}
+                                        <input
+                                            type="file"
+                                            className="bg-body border border-white/10 rounded p-2 text-light w-full"
+                                            onChange={e => setGoldStandardImageFile(e.target.files[0])}
+                                        />
+                                    </div>
+                                </div>
+                                <button type="submit" disabled={isUpdatingGoldStandard || isUploading} className="bg-primary text-dark font-bold rounded p-3 md:col-span-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    {isUpdatingGoldStandard || isUploading ? 'Updating...' : 'Update The Gold Standard Section'}
+                                </button>
+                            </form>
+                        </div>
+
+                        {/* Existing Heritage Section */}
+                        <div ref={heritageFormRef} className="bg-dark-paper border border-white/10 rounded-lg p-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-heading text-light">Edit Heritage Section</h2>
+                                <span className="text-xs uppercase tracking-wider text-primary font-mono bg-primary/10 px-2.5 py-1 rounded">Mastery in Every Cut</span>
                             </div>
-                            <button type="submit" disabled={isUpdatingHeritage || isUploading} className="bg-primary text-dark font-bold rounded p-3 md:col-span-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                                {isUpdatingHeritage || isUploading ? 'Updating...' : 'Update Heritage Section'}
-                            </button>
-                        </form>
+                            <form onSubmit={handleUpdateHeritage} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Title *</label>
+                                        <Input
+                                            type="text"
+                                            value={heritageForm.title}
+                                            onChange={e => setHeritageForm({ ...heritageForm, title: e.target.value })}
+                                            placeholder="Mastery in Every Cut"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Subtitle (Since Year)</label>
+                                        <Input
+                                            type="text"
+                                            value={heritageForm.subtitle}
+                                            onChange={e => setHeritageForm({ ...heritageForm, subtitle: e.target.value })}
+                                            placeholder="Since 1985"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Button Text</label>
+                                        <Input
+                                            type="text"
+                                            value={heritageForm.linkText}
+                                            onChange={e => setHeritageForm({ ...heritageForm, linkText: e.target.value })}
+                                            placeholder="Read Our Story"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Button Link</label>
+                                        <Input
+                                            type="text"
+                                            value={heritageForm.link}
+                                            onChange={e => setHeritageForm({ ...heritageForm, link: e.target.value })}
+                                            placeholder="/about"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Description (Paragraph 1)</label>
+                                        <Textarea
+                                            rows="3"
+                                            value={heritageForm.description}
+                                            onChange={e => setHeritageForm({ ...heritageForm, description: e.target.value })}
+                                            placeholder="Our heritage is built on a foundation..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Description (Paragraph 2)</label>
+                                        <Textarea
+                                            rows="3"
+                                            value={heritageForm.description2}
+                                            onChange={e => setHeritageForm({ ...heritageForm, description2: e.target.value })}
+                                            placeholder="Every gem is hand-selected, cut with mathematical precision..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Current Image</label>
+                                        {heritageForm.image && (
+                                            <PreviewableImage 
+                                                src={getMediaUrl(heritageForm.image)} 
+                                                alt="Heritage" 
+                                                containerClassName="h-20"
+                                                className="h-full object-cover rounded mb-2"
+                                            />
+                                        )}
+                                        <input
+                                            type="file"
+                                            className="bg-body border border-white/10 rounded p-2 text-light w-full"
+                                            onChange={e => setHeritageImageFile(e.target.files[0])}
+                                        />
+                                    </div>
+                                </div>
+                                <button type="submit" disabled={isUpdatingHeritage || isUploading} className="bg-primary text-dark font-bold rounded p-3 md:col-span-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    {isUpdatingHeritage || isUploading ? 'Updating...' : 'Update Heritage Section'}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 )}
 

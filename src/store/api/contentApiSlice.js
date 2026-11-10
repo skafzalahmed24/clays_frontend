@@ -87,6 +87,20 @@ export const contentApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ['Heritage'],
         }),
 
+        // The Gold Standard / Spotlight
+        getGoldStandard: builder.query({
+            query: () => '/content/gold-standard',
+            providesTags: ['GoldStandard'],
+        }),
+        updateGoldStandard: builder.mutation({
+            query: (data) => ({
+                url: '/content/gold-standard',
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['GoldStandard'],
+        }),
+
         // Trust Badges
         getTrustBadges: builder.query({
             query: () => '/content/trust-badges',
@@ -197,6 +211,7 @@ export const {
     useGetTestimonialsQuery, useAddTestimonialMutation, useDeleteTestimonialMutation,
     useGetSocialFeedQuery, useAddSocialPostMutation, useDeleteSocialPostMutation,
     useGetHeritageQuery, useUpdateHeritageMutation,
+    useGetGoldStandardQuery, useUpdateGoldStandardMutation,
     useGetTrustBadgesQuery, useAddTrustBadgeMutation, useDeleteTrustBadgeMutation,
     useGetFAQsQuery, useAddFAQMutation, useDeleteFAQMutation,
     useGetSettingsQuery, useUpdateSettingsMutation,

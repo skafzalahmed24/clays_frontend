@@ -24,7 +24,8 @@ const SearchOverlay = ({ isOpen, onClose }) => {
             const mapped = productsArray.map(p => ({
                 ...p,
                 id: p._id,
-                displayPrice: `₹ ${p.price.toLocaleString()}`
+                displayPrice: `₹ ${p.price.toLocaleString()}`,
+                originalPrice: p.originalPrice ? `₹ ${p.originalPrice.toLocaleString()}` : null
             }));
             setProducts(mapped);
         }

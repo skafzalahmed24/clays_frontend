@@ -81,7 +81,8 @@ const ProductDetails = () => {
                 .map(p => ({
                     ...p,
                     id: p._id,
-                    displayPrice: format(p.price)
+                    displayPrice: format(p.price),
+                    originalPrice: p.originalPrice ? format(p.originalPrice) : null
                 }));
         }
         return [];
@@ -356,8 +357,8 @@ const ProductDetails = () => {
                                                 <ul className="list-disc pl-5 space-y-1">
                                                     {/* <li>SKU: {product.sku || 'N/A'}</li> */}
                                                     <li>Collection: {product.collection || 'Luxury'}</li>
-                                                    <li>Material: {product.attributes?.material || product.material || 'N/A'}</li>
-                                                    <li>Color: {product.attributes?.color || product.color || 'N/A'}</li>
+                                                    {(product.attributes?.material || product.material) && <li>Material: {product.attributes?.material || product.material}</li>}
+                                                    {(product.attributes?.color || product.color) && <li>Color: {product.attributes?.color || product.color}</li>}
                                                     {product.attributes?.gemType && <li>Gem Type: {product.attributes.gemType}</li>}
                                                     {product.attributes?.size && <li>Size: {product.attributes.size}</li>}
                                                     {product.weight && <li>Weight: {product.weight}g</li>}

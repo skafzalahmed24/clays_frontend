@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { REHYDRATE } from 'redux-persist';
 import axios from 'axios';
 import { API_URL } from '../../utils/apiConfig';
 
@@ -10,7 +11,8 @@ export const loginAdmin = createAsyncThunk(
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                withCredentials: true
+                withCredentials: true,
+                timeout: 15000
             };
             const { data } = await axios.post(
                 `${API_URL}/admin/login`,
@@ -64,15 +66,24 @@ const adminAuthSlice = createSlice({
         },
         clearAdminError: (state) => {
             state.error = null;
+            state.loading = false;
+        },
+        resetAdminLoading: (state) => {
+            state.loading = false;
         },
         logOutLocal: (state) => {
             state.adminInfo = null;
+            state.loading = false;
             state.error = null;
             localStorage.removeItem('adminRefreshToken');
         }
     },
     extraReducers: (builder) => {
         builder
+            .addCase(REHYDRATE, (state) => {
+                state.loading = false;
+                state.error = null;
+            })
             .addCase(loginAdmin.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -87,9 +98,11 @@ const adminAuthSlice = createSlice({
             })
             .addCase(logoutAdmin.fulfilled, (state) => {
                 state.adminInfo = null;
+                state.loading = false;
+                state.error = null;
             });
     },
 });
 
-export const { clearAdminError, setAdminCredentials, logOutLocal } = adminAuthSlice.actions;
+export const { clearAdminError, resetAdminLoading, setAdminCredentials, logOutLocal } = adminAuthSlice.actions;
 export default adminAuthSlice.reducer;
