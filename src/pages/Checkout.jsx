@@ -96,16 +96,27 @@ const Checkout = () => {
 
     // Dynamic Shipping from Settings
     const shippingConf = settings?.shippingConfig || {};
+    const isCodAvailable = shippingConf.codAvailable !== false;
     const freeThreshold = typeof shippingConf.freeShippingThreshold === 'number' ? shippingConf.freeShippingThreshold : 999;
     const defaultFee = typeof shippingConf.defaultShippingFee === 'number' ? shippingConf.defaultShippingFee : 50;
 
-    let shipping = subtotal >= freeThreshold ? 0 : defaultFee;
-    if (paymentMethod === 'COD' && shippingConf.codExtraFee) {
-        shipping += Number(shippingConf.codExtraFee);
-    }
+    // Reset payment method if COD becomes disabled
+    useEffect(() => {
+        if (!isCodAvailable && paymentMethod === 'COD') {
+            setPaymentMethod('Razorpay');
+        }
+    }, [isCodAvailable, paymentMethod]);
 
-    // Calculate total dynamically based on discount
-    const total = Math.max(0, subtotal + shipping + taxPrice - discount);
+    // Base shipping fee (free above threshold)
+    const shipping = subtotal >= freeThreshold ? 0 : defaultFee;
+
+    // Cash on Delivery (COD) fee calculated separately
+    const codFee = (isCodAvailable && paymentMethod === 'COD' && Number(shippingConf.codExtraFee) > 0)
+        ? Number(shippingConf.codExtraFee)
+        : 0;
+
+    // Calculate total dynamically based on discount, shipping, and codFee
+    const total = Math.max(0, subtotal + shipping + codFee + taxPrice - discount);
 
     // Handlers
     const handleInputChange = (e) => {
@@ -241,13 +252,21 @@ const Checkout = () => {
     const handlePaymentSubmit = async (e) => {
         e.preventDefault();
 
+        if (paymentMethod === 'COD' && !isCodAvailable) {
+            showToast('Cash on Delivery is currently disabled. Please choose an online payment method.', 'error');
+            setPaymentMethod('Razorpay');
+            return;
+        }
+
         setLoading(true);
 
-        const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
-        if (!res) {
-            showToast('Razorpay SDK failed to load. Are you online?', 'error');
-            setLoading(false);
-            return;
+        if (paymentMethod === 'Razorpay') {
+            const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+            if (!res) {
+                showToast('Razorpay SDK failed to load. Are you online?', 'error');
+                setLoading(false);
+                return;
+            }
         }
 
         // Get selected address data
@@ -272,7 +291,10 @@ const Checkout = () => {
                 };
             }),
             shippingAddress: {
+                firstName: selectedAddress.firstName,
+                lastName: selectedAddress.lastName,
                 address: selectedAddress.address,
+                apartment: selectedAddress.apartment || '',
                 city: selectedAddress.city,
                 postalCode: selectedAddress.postalCode,
                 phone: selectedAddress.phone,
@@ -281,6 +303,7 @@ const Checkout = () => {
             itemsPrice: subtotal,
             taxPrice: taxPrice,
             shippingPrice: shipping,
+            codFee: codFee,
             totalPrice: total,
             paymentMethod: paymentMethod,
             coupon: appliedCoupon ? {
@@ -425,6 +448,12 @@ const Checkout = () => {
                     <span>Shipping</span>
                     <span className="text-dark">{shipping === 0 ? 'Free' : format(shipping)}</span>
                 </div>
+                {codFee > 0 && (
+                    <div className="flex justify-between text-sm text-dark/70">
+                        <span>Cash on Delivery (COD) Fee</span>
+                        <span className="text-dark font-medium">{format(codFee)}</span>
+                    </div>
+                )}
                 {taxPrice > 0 && (
                     <div className="flex justify-between text-sm text-dark/70">
                         <span>Tax ({taxRate}%)</span>
@@ -552,7 +581,7 @@ const Checkout = () => {
                                     <p className="text-sm text-dark/60">All transactions are secure and encrypted.</p>
 
                                     <div className="border border-dark/20 rounded-sm overflow-hidden flex flex-col">
-                                        <label className={`p-4 cursor-pointer flex items-center gap-3 border-b border-dark/10 transition-colors ${paymentMethod === 'Razorpay' ? 'bg-dark/5' : 'hover:bg-dark/5'}`}>
+                                        <label className={`p-4 cursor-pointer flex items-center gap-3 ${isCodAvailable ? 'border-b border-dark/10' : ''} transition-colors ${paymentMethod === 'Razorpay' ? 'bg-dark/5' : 'hover:bg-dark/5'}`}>
                                             <input 
                                                 type="radio" 
                                                 name="paymentMethod" 
@@ -564,26 +593,30 @@ const Checkout = () => {
                                             <span className="font-medium text-dark">Razorpay (Cards, UPI, NetBanking)</span>
                                         </label>
                                         {paymentMethod === 'Razorpay' && (
-                                            <div className="p-6 bg-dark/5 text-sm text-dark/70 border-b border-dark/10">
+                                            <div className={`p-6 bg-dark/5 text-sm text-dark/70 ${isCodAvailable ? 'border-b border-dark/10' : ''}`}>
                                                 After clicking "Pay now", you will be securely redirected to Razorpay to complete your purchase.
                                             </div>
                                         )}
 
-                                        <label className={`p-4 cursor-pointer flex items-center gap-3 transition-colors ${paymentMethod === 'COD' ? 'bg-dark/5' : 'hover:bg-dark/5'}`}>
-                                            <input 
-                                                type="radio" 
-                                                name="paymentMethod" 
-                                                value="COD" 
-                                                checked={paymentMethod === 'COD'} 
-                                                onChange={() => setPaymentMethod('COD')}
-                                                className="w-4 h-4 text-primary bg-dark border-dark/20 focus:ring-primary accent-primary" 
-                                            />
-                                            <span className="font-medium text-dark">Cash on Delivery (COD)</span>
-                                        </label>
-                                        {paymentMethod === 'COD' && (
-                                            <div className="p-6 bg-dark/5 text-sm text-dark/70">
-                                                Pay with cash when your order is delivered to your address.
-                                            </div>
+                                        {isCodAvailable && (
+                                            <>
+                                                <label className={`p-4 cursor-pointer flex items-center gap-3 transition-colors ${paymentMethod === 'COD' ? 'bg-dark/5' : 'hover:bg-dark/5'}`}>
+                                                    <input 
+                                                        type="radio" 
+                                                        name="paymentMethod" 
+                                                        value="COD" 
+                                                        checked={paymentMethod === 'COD'} 
+                                                        onChange={() => setPaymentMethod('COD')}
+                                                        className="w-4 h-4 text-primary bg-dark border-dark/20 focus:ring-primary accent-primary" 
+                                                    />
+                                                    <span className="font-medium text-dark">Cash on Delivery (COD)</span>
+                                                </label>
+                                                {paymentMethod === 'COD' && (
+                                                    <div className="p-6 bg-dark/5 text-sm text-dark/70">
+                                                        Pay with cash when your order is delivered to your address.
+                                                    </div>
+                                                )}
+                                            </>
                                         )}
                                     </div>
                                 </div>

@@ -249,6 +249,12 @@ const AdminOrderDetails = () => {
                                 <span>Shipping</span>
                                 <span>{order.shippingPrice === 0 ? 'Free' : `₹${order.shippingPrice}`}</span>
                             </div>
+                            {order.codFee > 0 && (
+                                <div className="flex justify-between text-sm text-light/70">
+                                    <span>Cash on Delivery (COD) Fee</span>
+                                    <span>₹{order.codFee}</span>
+                                </div>
+                            )}
                             <div className="flex justify-between text-lg font-bold text-primary pt-2 border-t border-white/5">
                                 <span>Total</span>
                                 <span>₹{order.totalPrice?.toLocaleString()}</span>
@@ -294,7 +300,10 @@ const AdminOrderDetails = () => {
                             <h2 className="font-heading text-lg text-light">Shipping Address</h2>
                         </div>
                         <div className="p-4 text-sm text-light/80 leading-relaxed">
-                            <p>{order.shippingAddress?.address}</p>
+                            <p className="font-medium text-light">{order.shippingAddress?.address}</p>
+                            {order.shippingAddress?.apartment && (
+                                <p className="text-light/70"><span className="text-light/40">Apt/Suite: </span>{order.shippingAddress.apartment}</p>
+                            )}
                             <p>{order.shippingAddress?.city}, {order.shippingAddress?.postalCode}</p>
                             <p>{order.shippingAddress?.country}</p>
 

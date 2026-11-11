@@ -26,7 +26,7 @@ const TrustBarriers = () => {
                         className="flex items-center gap-3 px-10 flex-shrink-0"
                     >
                         <span className="text-primary text-xl">
-                            {badge.icon || '✦'}
+                            ✦
                         </span>
                         <span className="font-heading text-sm tracking-[0.2em] uppercase text-light/80">
                             {badge.text}

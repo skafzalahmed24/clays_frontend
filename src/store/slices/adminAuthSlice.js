@@ -61,8 +61,12 @@ const adminAuthSlice = createSlice({
     },
     reducers: {
         setAdminCredentials: (state, action) => {
-            state.adminInfo = action.payload;
-
+            state.adminInfo = action.payload ? {
+                ...action.payload,
+                role: (action.payload?.role && typeof action.payload.role === 'string')
+                    ? action.payload.role.toLowerCase()
+                    : 'admin'
+            } : null;
         },
         clearAdminError: (state) => {
             state.error = null;
@@ -90,7 +94,12 @@ const adminAuthSlice = createSlice({
             })
             .addCase(loginAdmin.fulfilled, (state, action) => {
                 state.loading = false;
-                state.adminInfo = action.payload;
+                state.adminInfo = action.payload ? {
+                    ...action.payload,
+                    role: (action.payload?.role && typeof action.payload.role === 'string')
+                        ? action.payload.role.toLowerCase()
+                        : 'admin'
+                } : null;
             })
             .addCase(loginAdmin.rejected, (state, action) => {
                 state.loading = false;

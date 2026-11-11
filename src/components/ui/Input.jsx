@@ -1,7 +1,7 @@
 import React, { forwardRef, useState } from 'react';
 import Icons from './Icons';
 
-const Input = forwardRef(({ label, type = 'text', name, value, onChange, icon: Icon, required = false, placeholder, error, className, noSpaces = false, theme = 'dark', ...props }, ref) => {
+const Input = forwardRef(({ label, labelClassName, wrapperClassName, type = 'text', name, value, onChange, icon: Icon, required = false, placeholder, error, className, noSpaces = false, theme = 'dark', ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = type === 'password';
     const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;

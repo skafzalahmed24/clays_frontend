@@ -56,13 +56,16 @@ const ProductDetails = () => {
     // Request Modal State
     const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
     const [requestEmail, setRequestEmail] = useState('');
+    const [requestPhone, setRequestPhone] = useState('');
+    const [requestPincode, setRequestPincode] = useState('');
 
     // Effect: Set initial image, email, and review data
     useEffect(() => {
         if (product) {
             setSelectedImage(getImageUrl(product.img));
             if (user) {
-                setRequestEmail(user.email);
+                setRequestEmail(user.email || '');
+                setRequestPhone(user.phone || '');
             }
             if (product.userReview) {
                 setRating(product.userReview.rating);
@@ -92,6 +95,10 @@ const ProductDetails = () => {
     const isInWishlist = useMemo(() => {
         return wishlist?.some(item => item.id === productId || item.product === productId || item._id === productId);
     }, [wishlist, productId]);
+
+    const isInStock = useMemo(() => {
+        return Boolean(product?.inStock !== false && product?.stock > 0);
+    }, [product]);
 
     const isInCart = useMemo(() => {
         return cartItems
@@ -179,18 +186,64 @@ const ProductDetails = () => {
 
     const handleRequestSubmit = async (e) => {
         e.preventDefault();
+        if (!requestEmail?.trim()) {
+            showToast('Please enter your email', 'error');
+            return;
+        }
+        if (!requestPhone?.trim()) {
+            showToast('Please enter your phone number', 'error');
+            return;
+        }
+        if (!requestPincode?.trim()) {
+            showToast('Please enter your pincode', 'error');
+            return;
+        }
         try {
             await createRequest({
                 productId: product._id,
                 productName: product.name,
                 productImg: product.img,
-                userEmail: requestEmail
+                userEmail: requestEmail.trim(),
+                phone: requestPhone.trim(),
+                pincode: requestPincode.trim()
             }).unwrap();
-            showToast('Request submitted successfully!', 'success');
+            showToast('Request submitted successfully! We will notify you once back in stock.', 'success');
             setIsRequestModalOpen(false);
+            if (!user) {
+                setRequestEmail('');
+                setRequestPhone('');
+                setRequestPincode('');
+            }
         } catch (err) {
             showToast(err?.data?.message || 'Failed to submit request', 'error');
         }
+    };
+
+    const renderPolicyContent = (content, fallbackText) => {
+        const text = (content || fallbackText || '').trim();
+        if (!text) return null;
+
+        // Split into non-empty lines
+        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        if (lines.length === 0) return null;
+
+        // Bullet regex matching: •, -, *, ✦, ▪, –, —, or digits like 1., 1), etc.
+        const bulletRegex = /^([•\-*✦▪–—]|\d+[\.\)])\s*/;
+        const hasBulletMarkers = lines.some(l => bulletRegex.test(l));
+
+        if (hasBulletMarkers || lines.length > 1) {
+            return (
+                <ul className="list-disc pl-5 space-y-2 marker:text-primary">
+                    {lines.map((line, idx) => (
+                        <li key={idx} className="leading-relaxed">
+                            {line.replace(bulletRegex, '')}
+                        </li>
+                    ))}
+                </ul>
+            );
+        }
+
+        return <p className="leading-relaxed whitespace-pre-line">{text}</p>;
     };
 
     if (isLoading) return (
@@ -287,7 +340,7 @@ const ProductDetails = () => {
 
                         {/* Actions */}
                         <div className="space-y-6 mb-12">
-                            {product.stock > 0 ? (
+                            {isInStock ? (
                                 <div className="flex items-center gap-3 md:gap-6">
                                     <div className="flex items-center border border-light/20 h-12">
                                         <button
@@ -318,20 +371,25 @@ const ProductDetails = () => {
                                 </div>
                             ) : (
                                 <div>
-                                    <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-sm text-red-200 text-sm flex items-center gap-2">
-                                        <Icons.Close className="w-4 h-4 text-red-400" />
-                                        Out of Stock
+                                    <div className="mb-4 p-4 bg-red-50 border-2 border-red-700/60 rounded-sm text-red-900 text-sm flex items-center justify-between shadow-sm">
+                                        <div className="flex items-center gap-2.5">
+                                            <span className="w-2.5 h-2.5 rounded-full bg-red-600"></span>
+                                            <span className="font-heading uppercase tracking-wider font-bold text-red-900 text-sm">
+                                                Out of Stock
+                                            </span>
+                                        </div>
+                                        <span className="text-xs text-red-800 font-medium">Currently unavailable</span>
                                     </div>
                                     <div className="flex items-center gap-3 md:gap-6">
                                         <button
                                             onClick={() => setIsRequestModalOpen(true)}
-                                            className="flex-1 h-12 flex items-center justify-center uppercase tracking-[0.2em] text-sm font-bold bg-white/10 text-light hover:bg-white/20 transition-colors border border-white/10 whitespace-nowrap"
+                                            className="flex-1 h-12 flex items-center justify-center uppercase tracking-[0.2em] text-sm font-bold bg-dark text-white hover:bg-primary hover:text-dark transition-all duration-300 border-2 border-dark hover:border-primary shadow-md whitespace-nowrap rounded-sm"
                                         >
                                             Request Stock
                                         </button>
                                         <button
                                             onClick={toggleWishlist}
-                                            className={`w-12 h-12 flex-shrink-0 flex items-center justify-center border transition-colors ${isInWishlist ? 'border-primary bg-primary/10 text-primary' : 'border-light/20 text-light/50 hover:text-primary hover:border-primary'}`}
+                                            className={`w-12 h-12 flex-shrink-0 flex items-center justify-center border-2 transition-colors rounded-sm ${isInWishlist ? 'border-primary bg-primary/20 text-primary' : 'border-dark/30 text-dark hover:text-primary hover:border-primary'}`}
                                         >
                                             <Icons.HeartFilled className="w-5 h-5 drop-shadow-sm" />
                                         </button>
@@ -351,7 +409,7 @@ const ProductDetails = () => {
                                         <span className="text-sm uppercase tracking-widest text-light/80 group-hover:text-primary transition-colors">{section}</span>
                                         <span className="text-light/50">{activeTab === section ? '−' : '+'}</span>
                                     </button>
-                                    <div className={`overflow-hidden transition-all duration-300 ${activeTab === section ? 'max-h-96 pb-6' : 'max-h-0'}`}>
+                                    <div className={`overflow-hidden transition-all duration-300 ${activeTab === section ? 'max-h-[1000px] pb-6' : 'max-h-0'}`}>
                                         <div className="text-light/60 text-sm leading-loose">
                                             {section === 'Product Details' && (
                                                 <ul className="list-disc pl-5 space-y-1">
@@ -367,8 +425,14 @@ const ProductDetails = () => {
                                                     )}
                                                 </ul>
                                             )}
-                                            {section === 'Shipping & Returns' && (settings?.productPolicies?.shipping || `Free shipping on orders above ${format(50000)}. Easy 7-day returns for unworn items with original tags.`)}
-                                            {section === 'Care Instructions' && (settings?.productPolicies?.care || "Keep away from perfumes and sprays. Store in the provided luxury box when not in use.")}
+                                            {section === 'Shipping & Returns' && renderPolicyContent(
+                                                settings?.productPolicies?.shipping,
+                                                `Free shipping on orders above ${format(50000)}. Easy 7-day returns for unworn items with original tags.`
+                                            )}
+                                            {section === 'Care Instructions' && renderPolicyContent(
+                                                settings?.productPolicies?.care,
+                                                "Keep away from perfumes and sprays. Store in the provided luxury box when not in use."
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -521,22 +585,51 @@ const ProductDetails = () => {
                         <p className="text-light/60 text-sm mb-6">
                             We'll notify you when this item is back in stock.
                         </p>
-                        <form onSubmit={handleRequestSubmit}>
-                            <div className="mb-6">
-                                <label className="block text-xs uppercase tracking-wider text-light/50 mb-2">Email Address</label>
+                        <form onSubmit={handleRequestSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-xs uppercase tracking-wider text-light/60 mb-2 font-medium">
+                                    Email Address <span className="text-red-400">*</span>
+                                </label>
                                 <Input
                                     type="email"
                                     value={requestEmail}
                                     onChange={(e) => setRequestEmail(e.target.value)}
                                     required
-                                    className="bg-body"
+                                    className="bg-body border-light/20 text-light focus:border-primary"
                                     placeholder="Enter your email"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs uppercase tracking-wider text-light/60 mb-2 font-medium">
+                                    Phone Number <span className="text-red-400">*</span>
+                                </label>
+                                <Input
+                                    type="tel"
+                                    value={requestPhone}
+                                    onChange={(e) => setRequestPhone(e.target.value)}
+                                    required
+                                    className="bg-body border-light/20 text-light focus:border-primary"
+                                    placeholder="Enter your phone number"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs uppercase tracking-wider text-light/60 mb-2 font-medium">
+                                    Pincode <span className="text-red-400">*</span>
+                                </label>
+                                <Input
+                                    type="text"
+                                    value={requestPincode}
+                                    onChange={(e) => setRequestPincode(e.target.value)}
+                                    required
+                                    maxLength={10}
+                                    className="bg-body border-light/20 text-light focus:border-primary"
+                                    placeholder="Enter your delivery pincode"
                                 />
                             </div>
                             <button
                                 type="submit"
                                 disabled={loadingRequest}
-                                className="w-full py-3 bg-primary text-dark font-bold uppercase tracking-wider text-sm hover:bg-white transition-colors"
+                                className="w-full mt-2 py-3 bg-primary text-dark font-bold uppercase tracking-wider text-sm hover:bg-white transition-colors rounded-sm"
                             >
                                 {loadingRequest ? 'Submitting...' : 'Notify Me'}
                             </button>

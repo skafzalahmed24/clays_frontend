@@ -87,16 +87,24 @@ const AdminCustomerDetails = () => {
                         {customer.addresses && customer.addresses.length > 0 ? (
                             <div className="space-y-4">
                                 {customer.addresses.map((addr) => (
-                                    <div key={addr._id} className="p-4 bg-white/5 rounded border border-white/5">
-                                        <div className="flex justify-between mb-2">
+                                    <div key={addr._id || addr.id} className="p-4 bg-white/5 rounded border border-white/5">
+                                        <div className="flex justify-between items-center mb-2">
                                             <span className="text-sm font-bold text-light">{addr.firstName} {addr.lastName}</span>
-                                            {addr.isDefault && <span className="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded">Default</span>}
+                                            {addr.isDefault && <span className="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded font-medium">Default</span>}
                                         </div>
-                                        <p className="text-xs text-light/60">{addr.address}</p>
-                                        <p className="text-xs text-light/60">{addr.city}, {addr.postalCode}</p>
+                                        <div className="space-y-0.5 my-1 text-xs text-light/70">
+                                            <p className="text-light/90 font-medium">{addr.address}</p>
+                                            {addr.apartment && (
+                                                <p className="text-primary/90 flex items-center gap-1.5">
+                                                    <span className="text-light/40">Apt/Suite:</span>
+                                                    <span className="text-light">{addr.apartment}</span>
+                                                </p>
+                                            )}
+                                            <p className="text-light/60">{addr.city}, {addr.postalCode}</p>
+                                        </div>
                                         <div className="mt-2 pt-2 border-t border-white/5 space-y-1">
                                             <p className="text-xs text-light/60 flex items-center justify-between">
-                                                <span>Mobile:</span> <span className="text-light">{addr.phone}</span>
+                                                <span>Mobile:</span> <span className="text-light font-mono">{addr.phone}</span>
                                             </p>
                                             <p className="text-xs text-light/60 flex items-center justify-between">
                                                 <span>Email:</span> <span className="text-light">{addr.email}</span>

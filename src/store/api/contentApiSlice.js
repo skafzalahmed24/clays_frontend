@@ -101,6 +101,34 @@ export const contentApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ['GoldStandard'],
         }),
 
+        // Our Vision / Philosophy
+        getOurVision: builder.query({
+            query: () => '/content/our-vision',
+            providesTags: ['OurVision'],
+        }),
+        updateOurVision: builder.mutation({
+            query: (data) => ({
+                url: '/content/our-vision',
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['OurVision'],
+        }),
+
+        // Discover Section / Routine
+        getDiscoverSection: builder.query({
+            query: () => '/content/discover',
+            providesTags: ['DiscoverSection'],
+        }),
+        updateDiscoverSection: builder.mutation({
+            query: (data) => ({
+                url: '/content/discover',
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['DiscoverSection'],
+        }),
+
         // Trust Badges
         getTrustBadges: builder.query({
             query: () => '/content/trust-badges',
@@ -212,6 +240,8 @@ export const {
     useGetSocialFeedQuery, useAddSocialPostMutation, useDeleteSocialPostMutation,
     useGetHeritageQuery, useUpdateHeritageMutation,
     useGetGoldStandardQuery, useUpdateGoldStandardMutation,
+    useGetOurVisionQuery, useUpdateOurVisionMutation,
+    useGetDiscoverSectionQuery, useUpdateDiscoverSectionMutation,
     useGetTrustBadgesQuery, useAddTrustBadgeMutation, useDeleteTrustBadgeMutation,
     useGetFAQsQuery, useAddFAQMutation, useDeleteFAQMutation,
     useGetSettingsQuery, useUpdateSettingsMutation,

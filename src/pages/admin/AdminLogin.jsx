@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginAdmin, clearAdminError } from '../../store/slices/adminAuthSlice';
+import { loginAdmin, clearAdminError, logOutLocal as logOutAdminLocal } from '../../store/slices/adminAuthSlice';
 import { logoutUser, logOutLocal } from '../../store/slices/authSlice';
 import { useToast } from '../../context/ToastContext';
 import { BRAND_CONFIG } from '../../utils/config';
@@ -14,6 +14,12 @@ const AdminLogin = () => {
     const dispatch = useDispatch();
     const { error: authError, adminInfo } = useSelector(state => state.adminAuth);
     const { showToast } = useToast();
+
+    const isAuthorizedAdmin = Boolean(
+        adminInfo &&
+        (adminInfo.token || adminInfo._id) &&
+        (!adminInfo.role || adminInfo.role.toLowerCase() === 'admin' || adminInfo.role.toLowerCase() === 'superadmin')
+    );
 
     const [formData, setFormData] = useState({
         email: '',
@@ -38,12 +44,12 @@ const AdminLogin = () => {
         dispatch(clearAdminError());
     }, [dispatch]);
 
-    // Check if already logged in
+    // Check if already logged in with valid admin credentials
     useEffect(() => {
-        if (adminInfo) {
-            navigate('/admin');
+        if (isAuthorizedAdmin) {
+            navigate('/admin', { replace: true });
         }
-    }, [adminInfo, navigate]);
+    }, [isAuthorizedAdmin, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -77,7 +83,7 @@ const AdminLogin = () => {
                 channel.close();
 
                 showToast(`Welcome Admin`, 'success');
-                navigate('/admin');
+                navigate('/admin', { replace: true });
             } else {
                 setLocalError(resultAction.payload || 'Login failed');
             }
@@ -160,7 +166,6 @@ const AdminLogin = () => {
                         icon={Icons.Email}
                         required
                         className="bg-black/20 border-white/10 focus:border-primary/50 text-white"
-                        labelClassName="text-white/60"
                     />
 
                     <Input
@@ -171,7 +176,6 @@ const AdminLogin = () => {
                         onChange={handleChange}
                         required
                         className="bg-black/20 border-white/10 focus:border-primary/50 text-white"
-                        labelClassName="text-white/60"
                     />
 
                     {/* Error Message */}

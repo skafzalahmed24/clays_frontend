@@ -337,7 +337,7 @@ const AdminSettings = () => {
 
             {/* Tabs */}
             <div className="flex border-b border-white/10 mb-8 overflow-x-auto pb-1 gap-2">
-                {['General', 'Location', 'Shipping', 'Social', 'Payment', 'Interface', 'Policies', 'Preferences'].map((tab) => (
+                {['General', 'Location', 'Shipping', 'Payment', 'Preferences'].map((tab) => (
                     <button
                         key={tab}
                         className={`px-4 py-3 font-medium text-sm transition-all relative whitespace-nowrap rounded-t-md ${activeTab === tab.toLowerCase()
@@ -783,37 +783,7 @@ const AdminSettings = () => {
                     </div>
                 )}
 
-                {activeTab === 'social' && (
-                    <div className="space-y-6 animate-in fade-in">
-                        <div>
-                            <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Instagram URL</label>
-                            <Input
-                                name="socialLinks.instagram"
-                                value={formData.socialLinks.instagram}
-                                onChange={handleChange}
-                                placeholder="https://instagram.com/..."
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Facebook URL</label>
-                            <Input
-                                name="socialLinks.facebook"
-                                value={formData.socialLinks.facebook}
-                                onChange={handleChange}
-                                placeholder="https://facebook.com/..."
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">YouTube URL</label>
-                            <Input
-                                name="socialLinks.youtube"
-                                value={formData.socialLinks.youtube}
-                                onChange={handleChange}
-                                placeholder="https://youtube.com/..."
-                            />
-                        </div>
-                    </div>
-                )}
+
 
                 {activeTab === 'payment' && (
                     <div className="space-y-6 animate-in fade-in">
@@ -832,199 +802,9 @@ const AdminSettings = () => {
 
 
 
-                {activeTab === 'interface' && (
-                    <div className="space-y-8 animate-in fade-in">
 
 
-                        {/* Announcement Bar */}
-                        <div className="p-4 border border-white/5 rounded">
-                            <h3 className="text-lg text-primary mb-3">Header Announcement Bar</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <label className="text-xs text-light/70 uppercase">Announcement Text</label>
-                                    <Input
-                                        type="text"
-                                        value={formData.announcement?.text || ''}
-                                        onChange={(e) => setFormData({ ...formData, announcement: { ...formData.announcement, text: e.target.value } })}
-                                    />
-                                </div>
-                                <div className="space-y-1">
-                                    <label className="text-xs text-light/70 uppercase">Link URL</label>
-                                    <Input
-                                        type="text"
-                                        value={formData.announcement?.link || ''}
-                                        onChange={(e) => setFormData({ ...formData, announcement: { ...formData.announcement, link: e.target.value } })}
-                                    />
-                                </div>
-                            </div>
-                        </div>
 
-                        {/* Interface Text Labels */}
-                        <div className="p-4 border border-white/5 rounded">
-                            <h3 className="text-lg text-primary mb-3">UI & Text Labels</h3>
-                            <div className="space-y-6">
-                                {/* Search UI */}
-                                <div className="space-y-3 border-b border-light/5 pb-4">
-                                    <div className="mb-2">
-                                        <h4 className="text-sm font-bold text-light/80">Search Overlay</h4>
-                                        <p className="text-xs text-light/50">Customize text shown in the global search bar and results overlay.</p>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">Placeholder Text</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.search?.placeholder || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, search: { ...prev.uiLabels.search, placeholder: e.target.value } } }))}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">No Results Message</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.search?.noResults || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, search: { ...prev.uiLabels.search, noResults: e.target.value } } }))}
-                                            />
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label className="block text-light/60 text-xs mb-1">Popular Search Terms (comma separated)</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.search?.popularTerms?.join(', ') || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, search: { ...prev.uiLabels.search, popularTerms: e.target.value.split(',').map(s => s.trim()) } } }))}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Cart UI */}
-                                <div className="space-y-3 border-b border-light/5 pb-4">
-                                    <div className="mb-2">
-                                        <h4 className="text-sm font-bold text-light/80">Shopping Cart</h4>
-                                        <p className="text-xs text-light/50">Text displayed in the slide-out cart drawer.</p>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">Empty Message</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.cart?.emptyMessage || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, cart: { ...prev.uiLabels.cart, emptyMessage: e.target.value } } }))}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">Start Shopping Button</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.cart?.startShoppingBtn || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, cart: { ...prev.uiLabels.cart, startShoppingBtn: e.target.value } } }))}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">Checkout Disclaimer</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.cart?.disclaimer || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, cart: { ...prev.uiLabels.cart, disclaimer: e.target.value } } }))}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Auth UI */}
-                                <div className="space-y-3 border-b border-light/5 pb-4">
-                                    <div className="mb-2">
-                                        <h4 className="text-sm font-bold text-light/80">Authentication</h4>
-                                        <p className="text-xs text-light/50">Headings and subtitles for Login and Register screens.</p>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">Login Title</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.auth?.loginTitle || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, auth: { ...prev.uiLabels.auth, loginTitle: e.target.value } } }))}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">Register Title</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.auth?.registerTitle || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, auth: { ...prev.uiLabels.auth, registerTitle: e.target.value } } }))}
-                                            />
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label className="block text-light/60 text-xs mb-1">Login Subtitle</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.auth?.loginSubtitle || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, auth: { ...prev.uiLabels.auth, loginSubtitle: e.target.value } } }))}
-                                            />
-                                        </div>
-                                        <div className="md:col-span-2">
-                                            <label className="block text-light/60 text-xs mb-1">Register Subtitle</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.auth?.registerSubtitle || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, auth: { ...prev.uiLabels.auth, registerSubtitle: e.target.value } } }))}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Product UI */}
-                                <div className="space-y-3">
-                                    <div className="mb-2">
-                                        <h4 className="text-sm font-bold text-light/80">Product Page</h4>
-                                        <p className="text-xs text-light/50">Section titles on the detailed product view.</p>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">Related Products Title</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.product?.relatedTitle || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, product: { ...prev.uiLabels.product, relatedTitle: e.target.value } } }))}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-light/60 text-xs mb-1">Reviews Title</label>
-                                            <Input
-                                                type="text"
-                                                value={formData.uiLabels?.product?.reviewsTitle || ''}
-                                                onChange={(e) => setFormData(prev => ({ ...prev, uiLabels: { ...prev.uiLabels, product: { ...prev.uiLabels.product, reviewsTitle: e.target.value } } }))}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'policies' && (
-                    <div className="space-y-6 animate-in fade-in">
-                        <div className="space-y-4">
-                            <div className="space-y-1">
-                                <label className="text-xs text-light/70 uppercase">Shipping & Returns Text</label>
-                                <Textarea
-                                    rows="4"
-                                    value={formData.productPolicies?.shipping || ''}
-                                    onChange={(e) => setFormData({ ...formData, productPolicies: { ...formData.productPolicies, shipping: e.target.value } })}
-                                />
-                            </div>
-                            <div className="space-y-1">
-                                <label className="text-xs text-light/70 uppercase">Care Instructions (Default)</label>
-                                <Textarea
-                                    rows="4"
-                                    value={formData.productPolicies?.care || ''}
-                                    onChange={(e) => setFormData({ ...formData, productPolicies: { ...formData.productPolicies, care: e.target.value } })}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
 
 
 

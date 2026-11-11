@@ -46,7 +46,7 @@ const baseQuery = fetchBaseQuery({
         // This prevents using a User token for Admin actions if both are logged in
         const adminEndpoints = [
             'createProduct', 'updateProduct', 'deleteProduct',
-            'getUsers', 'getOrders', 'deliverOrder', 'updateOrderStatus',
+            'getUsers', 'getUserDetails', 'getOrders', 'deliverOrder', 'updateOrderStatus',
             'getAnalytics',
             'getRequests', 'updateRequest', 'deleteRequest',
             'addAttribute', 'updateAttribute', 'deleteAttribute',
@@ -203,6 +203,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Product', 'Order', 'User', 'Category', 'Attribute', 'Blog', 'Review', 'Contact'],
+    tagTypes: ['Product', 'Order', 'User', 'Category', 'Attribute', 'Blog', 'Review', 'Contact', 'Heritage', 'GoldStandard', 'OurVision', 'DiscoverSection', 'TrustBadges'],
     endpoints: () => ({}),
 });

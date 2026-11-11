@@ -115,6 +115,9 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
                 ...prev,
                 [name]: type === 'checkbox' ? checked : value
             };
+            if (name === 'inStock' && !checked) {
+                next.stock = 0;
+            }
             if (name === 'category') {
                 next.subCategory = ''; // Reset subCategory when parent category changes
             }
@@ -217,6 +220,7 @@ const ProductForm = ({ initialData, onSubmit, title }) => {
 
             const finalData = {
                 ...formData,
+                stock: formData.inStock ? (parseInt(formData.stock) || 0) : 0,
                 tags: initialData?.tags || [],
                 images: finalImages,
                 img: finalImages.length > 0 ? finalImages[0] : ''

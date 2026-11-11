@@ -432,6 +432,12 @@ const OrderDetails = () => {
                                 <span>Shipping</span>
                                 <span>{orderDetails.shippingPrice === 0 ? 'Free' : format(orderDetails.shippingPrice)}</span>
                             </div>
+                            {orderDetails.codFee > 0 && (
+                                <div className="flex justify-between">
+                                    <span>Cash on Delivery (COD) Fee</span>
+                                    <span>{format(orderDetails.codFee)}</span>
+                                </div>
+                            )}
                             <div className="flex justify-between font-bold text-dark pt-2 border-t border-dark/5">
                                 <span>Total</span>
                                 <span className="text-primary">{format(orderDetails.totalPrice)}</span>
@@ -604,7 +610,7 @@ const AddressesView = () => {
         try {
             if (editingAddress) {
                 await updateAddress({
-                    addressId: editingAddress._id,
+                    addressId: editingAddress._id || editingAddress.id,
                     ...formData
                 }).unwrap();
                 showToast('Address updated successfully', 'success');
@@ -787,7 +793,9 @@ const AddressesView = () => {
                                 </h4>
                                 <div className="text-sm text-text-main/70 space-y-1">
                                     <p>{address.address}</p>
-                                    {address.apartment && <p>{address.apartment}</p>}
+                                    {address.apartment && (
+                                        <p className="text-dark/80"><span className="text-dark/50">Apt/Suite:</span> {address.apartment}</p>
+                                    )}
                                     <p>{address.city}, {address.postalCode}</p>
                                     <p className="pt-2 text-dark/60">Phone: {address.phone}</p>
                                     <p className="text-dark/60">Email: {address.email}</p>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import AdminSidebar from './Sidebar';
@@ -7,13 +7,15 @@ const AdminLayout = () => {
     const { adminInfo } = useSelector(state => state.adminAuth);
     const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
-    // Debugging/Safety check
-    if (!adminInfo) {
-        return <Navigate to="/admin/login" replace />;
-    }
+    // Authorized if adminInfo has credentials and is not explicitly marked with a non-admin role
+    const isAuthorizedAdmin = Boolean(
+        adminInfo &&
+        (adminInfo.token || adminInfo._id) &&
+        (!adminInfo.role || adminInfo.role.toLowerCase() === 'admin' || adminInfo.role.toLowerCase() === 'superadmin')
+    );
 
-    // Role check redundant since loginAdmin only allows admins, but good for safety
-    if (adminInfo.role !== 'admin') {
+    // Safety check - redirect unauthorized to login
+    if (!isAuthorizedAdmin) {
         return <Navigate to="/admin/login" replace />;
     }
 

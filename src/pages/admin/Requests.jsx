@@ -86,7 +86,7 @@ const AdminRequests = () => {
                     <div className="min-w-[800px]">
                         <div className="grid grid-cols-12 bg-white/5 p-4 text-xs uppercase tracking-wider text-light/40 font-medium border-b border-white/5">
                             <div className="col-span-4">Product</div>
-                            <div className="col-span-3">User Email</div>
+                            <div className="col-span-3">Customer Details</div>
                             <div className="col-span-2">Date</div>
                             <div className="col-span-1">Status</div>
                             <div className="col-span-2 text-right">Actions</div>
@@ -110,8 +110,22 @@ const AdminRequests = () => {
                                                 <div className="text-xs text-light/40">ID: {request.productId}</div>
                                             </div>
                                         </div>
-                                        <div className="col-span-3 text-light/80 truncate pr-2" title={request.userEmail}>
-                                            {request.userEmail}
+                                        <div className="col-span-3 pr-2 space-y-1">
+                                            <div className="text-light/90 font-medium truncate" title={request.userEmail}>
+                                                {request.userEmail}
+                                            </div>
+                                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                                                {request.phone && (
+                                                    <span className="text-light/70 flex items-center gap-1 font-mono">
+                                                        <span className="text-primary text-[11px]">📞</span> {request.phone}
+                                                    </span>
+                                                )}
+                                                {request.pincode && (
+                                                    <span className="text-light/50 flex items-center gap-1">
+                                                        <span className="text-light/40 text-[11px]">📍</span> PIN: {request.pincode}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                         <div className="col-span-2 text-light/60 text-xs">
                                             {request.createdAt

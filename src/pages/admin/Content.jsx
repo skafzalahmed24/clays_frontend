@@ -6,8 +6,11 @@ import {
     useGetSocialFeedQuery, useAddSocialPostMutation, useDeleteSocialPostMutation,
     useGetHeritageQuery, useUpdateHeritageMutation,
     useGetGoldStandardQuery, useUpdateGoldStandardMutation,
+    useGetOurVisionQuery, useUpdateOurVisionMutation,
+    useGetDiscoverSectionQuery, useUpdateDiscoverSectionMutation,
     useGetTrustBadgesQuery, useAddTrustBadgeMutation, useDeleteTrustBadgeMutation,
     useGetFAQsQuery, useAddFAQMutation, useDeleteFAQMutation,
+    useGetSettingsQuery, useUpdateSettingsMutation,
 
     useGetPageQuery, useUpdatePageMutation,
     // useGetMegaMenuListQuery, useGetMegaMenuQuery, useUpdateMegaMenuMutation,
@@ -41,7 +44,10 @@ const AdminContent = () => {
     const { data: socialFeed } = useGetSocialFeedQuery();
     const { data: heritage } = useGetHeritageQuery();
     const { data: goldStandard } = useGetGoldStandardQuery();
+    const { data: ourVision } = useGetOurVisionQuery();
+    const { data: discoverData } = useGetDiscoverSectionQuery();
     const { data: trustBadges } = useGetTrustBadgesQuery();
+    const { data: remoteSettings } = useGetSettingsQuery();
 
 
     // Use attributes for categories (as per user workflow)
@@ -69,12 +75,15 @@ const AdminContent = () => {
     const [deleteSocialPost] = useDeleteSocialPostMutation();
     const [updateHeritage, { isLoading: isUpdatingHeritage }] = useUpdateHeritageMutation();
     const [updateGoldStandard, { isLoading: isUpdatingGoldStandard }] = useUpdateGoldStandardMutation();
+    const [updateOurVision, { isLoading: isUpdatingOurVision }] = useUpdateOurVisionMutation();
+    const [updateDiscoverSection, { isLoading: isUpdatingDiscover }] = useUpdateDiscoverSectionMutation();
     const [addTrustBadge, { isLoading: isAddingTrustBadge }] = useAddTrustBadgeMutation();
     const [deleteTrustBadge] = useDeleteTrustBadgeMutation();
     const [addFAQ, { isLoading: isAddingFAQ }] = useAddFAQMutation();
     const [deleteFAQ] = useDeleteFAQMutation();
 
     const [updatePage, { isLoading: isUpdatingPage }] = useUpdatePageMutation();
+    const [updateSettings, { isLoading: isUpdatingSettings }] = useUpdateSettingsMutation();
     // const [updateMegaMenu] = useUpdateMegaMenuMutation();
     const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation();
 
@@ -88,6 +97,8 @@ const AdminContent = () => {
     const socialListRef = useRef(null);
     const heritageFormRef = useRef(null);
     const goldStandardFormRef = useRef(null);
+    const ourVisionFormRef = useRef(null);
+    const discoverFormRef = useRef(null);
     const trustBadgeListRef = useRef(null);
     const faqListRef = useRef(null);
     const aboutFormRef = useRef(null);
@@ -155,10 +166,148 @@ const AdminContent = () => {
         }
     }, [goldStandard]);
 
+    // --- Our Vision State ---
+    const [ourVisionForm, setOurVisionForm] = useState({
+        title: '',
+        description: '',
+        item1Title: '',
+        item1Description: '',
+        item1Icon: 'sparkles',
+        item2Title: '',
+        item2Description: '',
+        item2Icon: 'heart',
+        item3Title: '',
+        item3Description: '',
+        item3Icon: 'shield'
+    });
+
+    useEffect(() => {
+        if (ourVision) {
+            setOurVisionForm(prev => {
+                if (prev.title === '' && prev.description === '') {
+                    return {
+                        title: ourVision.title || '',
+                        description: ourVision.description || '',
+                        item1Title: ourVision.item1Title || '',
+                        item1Description: ourVision.item1Description || '',
+                        item1Icon: ourVision.item1Icon || 'sparkles',
+                        item2Title: ourVision.item2Title || '',
+                        item2Description: ourVision.item2Description || '',
+                        item2Icon: ourVision.item2Icon || 'heart',
+                        item3Title: ourVision.item3Title || '',
+                        item3Description: ourVision.item3Description || '',
+                        item3Icon: ourVision.item3Icon || 'shield',
+                    };
+                }
+                return prev;
+            });
+        }
+    }, [ourVision]);
+
+    // --- Discover Section State ---
+    const [discoverForm, setDiscoverForm] = useState({
+        badge: '',
+        title: '',
+        highlightText: '',
+        description: '',
+        link: '',
+        linkText: ''
+    });
+
+    useEffect(() => {
+        if (discoverData) {
+            setDiscoverForm(prev => {
+                if (prev.title === '' && prev.highlightText === '') {
+                    return {
+                        badge: discoverData.badge || '',
+                        title: discoverData.title || '',
+                        highlightText: discoverData.highlightText || '',
+                        description: discoverData.description || '',
+                        link: discoverData.link || '',
+                        linkText: discoverData.linkText || ''
+                    };
+                }
+                return prev;
+            });
+        }
+    }, [discoverData]);
+
 
 
     // --- Trust Badge State ---
-    const [newTrustBadge, setNewTrustBadge] = useState({ text: '', icon: '', order: 0 });
+    const [newTrustBadge, setNewTrustBadge] = useState({ text: '', order: 0 });
+
+    // --- Social Links State (Moved from Settings) ---
+    const [socialLinksForm, setSocialLinksForm] = useState({
+        instagram: '',
+        facebook: '',
+        youtube: ''
+    });
+
+    // --- Interface State (Moved from Settings) ---
+    const [interfaceForm, setInterfaceForm] = useState({
+        announcement: { text: '', link: '' },
+        uiLabels: {
+            search: { placeholder: '', noResults: '', popularTerms: [] },
+            cart: { emptyMessage: '', startShoppingBtn: '', disclaimer: '' },
+            auth: { loginTitle: '', registerTitle: '', loginSubtitle: '', registerSubtitle: '' },
+            product: { relatedTitle: '', reviewsTitle: '' }
+        }
+    });
+
+    // --- Policies State (Moved from Settings) ---
+    const [policiesForm, setPoliciesForm] = useState({
+        shipping: '',
+        care: ''
+    });
+
+    useEffect(() => {
+        if (remoteSettings) {
+            if (remoteSettings.socialLinks) {
+                setSocialLinksForm({
+                    instagram: remoteSettings.socialLinks.instagram || '',
+                    facebook: remoteSettings.socialLinks.facebook || '',
+                    youtube: remoteSettings.socialLinks.youtube || ''
+                });
+            }
+            if (remoteSettings.announcement || remoteSettings.uiLabels) {
+                setInterfaceForm({
+                    announcement: {
+                        text: remoteSettings.announcement?.text || '',
+                        link: remoteSettings.announcement?.link || ''
+                    },
+                    uiLabels: {
+                        search: {
+                            placeholder: remoteSettings.uiLabels?.search?.placeholder || '',
+                            noResults: remoteSettings.uiLabels?.search?.noResults || '',
+                            popularTerms: remoteSettings.uiLabels?.search?.popularTerms || []
+                        },
+                        cart: {
+                            emptyMessage: remoteSettings.uiLabels?.cart?.emptyMessage || '',
+                            startShoppingBtn: remoteSettings.uiLabels?.cart?.startShoppingBtn || '',
+                            disclaimer: remoteSettings.uiLabels?.cart?.disclaimer || ''
+                        },
+                        auth: {
+                            loginTitle: remoteSettings.uiLabels?.auth?.loginTitle || '',
+                            registerTitle: remoteSettings.uiLabels?.auth?.registerTitle || '',
+                            loginSubtitle: remoteSettings.uiLabels?.auth?.loginSubtitle || '',
+                            registerSubtitle: remoteSettings.uiLabels?.auth?.registerSubtitle || ''
+                        },
+                        product: {
+                            relatedTitle: remoteSettings.uiLabels?.product?.relatedTitle || '',
+                            reviewsTitle: remoteSettings.uiLabels?.product?.reviewsTitle || ''
+                        }
+                    }
+                });
+            }
+            if (remoteSettings.productPolicies) {
+                setPoliciesForm({
+                    shipping: remoteSettings.productPolicies.shipping || '',
+                    care: remoteSettings.productPolicies.care || ''
+                });
+            }
+        }
+    }, [remoteSettings]);
 
     // --- Handlers ---
     // Helper to check for video extension
@@ -400,24 +549,85 @@ const AdminContent = () => {
             .catch(err => showToast(err?.data?.message || err.message, 'error'));
     };
 
+    const handleUpdateOurVision = async (e) => {
+        e.preventDefault();
+
+        if (!ourVisionForm.title.trim()) {
+            showToast('Title is required', 'error');
+            return;
+        }
+
+        updateOurVision(ourVisionForm)
+            .unwrap()
+            .then(() => {
+                showToast('Our Vision section updated', 'success');
+                scrollToList(ourVisionFormRef);
+            })
+            .catch(err => showToast(err?.data?.message || err.message, 'error'));
+    };
+
+    const handleUpdateDiscover = async (e) => {
+        e.preventDefault();
+
+        if (!discoverForm.title.trim() && !discoverForm.highlightText.trim()) {
+            showToast('Title or Highlight Text is required', 'error');
+            return;
+        }
+
+        updateDiscoverSection(discoverForm)
+            .unwrap()
+            .then(() => {
+                showToast('Discover section updated', 'success');
+                scrollToList(discoverFormRef);
+            })
+            .catch(err => showToast(err?.data?.message || err.message, 'error'));
+    };
+
     const handleAddTrustBadge = (e) => {
         e.preventDefault();
 
         // VALIDATION
-        if (!newTrustBadge.text.trim() || !newTrustBadge.icon.trim()) {
-            showToast('Badge text and Icon name are required', 'error');
+        if (!newTrustBadge.text.trim()) {
+            showToast('Badge text is required', 'error');
             return;
         }
 
         const form = e.target;
-        addTrustBadge(newTrustBadge)
+        addTrustBadge({ text: newTrustBadge.text, icon: '✦', order: newTrustBadge.order || 0 })
             .unwrap()
             .then(() => {
                 showToast('Trust Badge added', 'success');
-                setNewTrustBadge({ text: '', icon: '', order: 0 });
+                setNewTrustBadge({ text: '', order: 0 });
                 form.reset();
                 scrollToList(trustBadgeListRef);
             })
+            .catch(err => showToast(err?.data?.message || err.message, 'error'));
+    };
+
+    const handleSaveSocialLinks = async (e) => {
+        e.preventDefault();
+        updateSettings({ socialLinks: socialLinksForm })
+            .unwrap()
+            .then(() => showToast('Social Links saved successfully', 'success'))
+            .catch(err => showToast(err?.data?.message || err.message, 'error'));
+    };
+
+    const handleSaveInterface = async (e) => {
+        e.preventDefault();
+        updateSettings({
+            announcement: interfaceForm.announcement,
+            uiLabels: interfaceForm.uiLabels
+        })
+            .unwrap()
+            .then(() => showToast('Interface settings saved successfully', 'success'))
+            .catch(err => showToast(err?.data?.message || err.message, 'error'));
+    };
+
+    const handleSavePolicies = async (e) => {
+        e.preventDefault();
+        updateSettings({ productPolicies: policiesForm })
+            .unwrap()
+            .then(() => showToast('Product policies saved successfully', 'success'))
             .catch(err => showToast(err?.data?.message || err.message, 'error'));
     };
 
@@ -880,21 +1090,27 @@ const AdminContent = () => {
 
             {/* Tabs */}
             <div className="flex border-b border-white/10 mb-8 overflow-x-auto whitespace-nowrap no-scrollbar pb-1">
-                {['Hero', 'Testimonials', 'Social Feed', 'Heritage', 'Trust Badges', 'FAQ', 'About', 'Legal Pages', 'System Pages'].map((tab) => (
-                    <button
-                        key={tab}
-                        className={`px-6 py-3 font-medium text-sm transition-all relative shrink-0 ${activeTab === tab.toLowerCase().replace(' ', '')
-                            ? 'text-primary'
-                            : 'text-light/60 hover:text-light'
-                            }`}
-                        onClick={() => setActiveTab(tab.toLowerCase().replace(' ', ''))}
-                    >
-                        {tab}
-                        {activeTab === tab.toLowerCase().replace(' ', '') && (
-                            <span className="absolute bottom-0 left-0 w-full h-[2px] bg-primary"></span>
-                        )}
-                    </button>
-                ))}
+                {['Hero', 'Testimonials', 'Social Feed', 'Home Content', 'Social Links', 'Interface', 'Policies', 'FAQ', 'About', 'Legal Pages', 'System Pages'].map((tab) => {
+                    const tabKey = tab.toLowerCase().replace(' ', '');
+                    const isActive = activeTab === tabKey || 
+                        (tabKey === 'homecontent' && (activeTab === 'heritage' || activeTab === 'trustbadges')) ||
+                        (tabKey === 'sociallinks' && activeTab === 'social');
+                    return (
+                        <button
+                            key={tab}
+                            className={`px-6 py-3 font-medium text-sm transition-all relative shrink-0 ${isActive
+                                ? 'text-primary'
+                                : 'text-light/60 hover:text-light'
+                                }`}
+                            onClick={() => setActiveTab(tabKey)}
+                        >
+                            {tab}
+                            {isActive && (
+                                <span className="absolute bottom-0 left-0 w-full h-[2px] bg-primary"></span>
+                            )}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Content */}
@@ -1148,7 +1364,7 @@ const AdminContent = () => {
                     </>
                 )}
 
-                {activeTab === 'heritage' && (
+                {(activeTab === 'homecontent' || activeTab === 'heritage' || activeTab === 'trustbadges') && (
                     <div className="space-y-8">
                         {/* The Gold Standard Section */}
                         <div ref={goldStandardFormRef} className="bg-dark-paper border border-white/10 rounded-lg p-6">
@@ -1231,13 +1447,13 @@ const AdminContent = () => {
                                         />
                                     </div>
                                 </div>
-                                <button type="submit" disabled={isUpdatingGoldStandard || isUploading} className="bg-primary text-dark font-bold rounded p-3 md:col-span-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <button type="submit" disabled={isUpdatingGoldStandard || isUploading} className="bg-primary text-dark font-bold rounded p-3 md:col-span-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all">
                                     {isUpdatingGoldStandard || isUploading ? 'Updating...' : 'Update The Gold Standard Section'}
                                 </button>
                             </form>
                         </div>
 
-                        {/* Existing Heritage Section */}
+                        {/* Heritage Section (Mastery in Every Cut) */}
                         <div ref={heritageFormRef} className="bg-dark-paper border border-white/10 rounded-lg p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-xl font-heading text-light">Edit Heritage Section</h2>
@@ -1318,62 +1534,689 @@ const AdminContent = () => {
                                         />
                                     </div>
                                 </div>
-                                <button type="submit" disabled={isUpdatingHeritage || isUploading} className="bg-primary text-dark font-bold rounded p-3 md:col-span-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <button type="submit" disabled={isUpdatingHeritage || isUploading} className="bg-primary text-dark font-bold rounded p-3 md:col-span-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all">
                                     {isUpdatingHeritage || isUploading ? 'Updating...' : 'Update Heritage Section'}
                                 </button>
                             </form>
                         </div>
+
+                        {/* Our Vision Section */}
+                        <div ref={ourVisionFormRef} className="bg-dark-paper border border-white/10 rounded-lg p-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-heading text-light">Edit Our Vision Section</h2>
+                                <span className="text-xs uppercase tracking-wider text-primary font-mono bg-primary/10 px-2.5 py-1 rounded">Philosophy</span>
+                            </div>
+                            <form onSubmit={handleUpdateOurVision} className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Section Title *</label>
+                                        <Input
+                                            type="text"
+                                            value={ourVisionForm.title}
+                                            onChange={e => setOurVisionForm({ ...ourVisionForm, title: e.target.value })}
+                                            placeholder="Our Vision"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Section Description</label>
+                                        <Textarea
+                                            rows="2"
+                                            value={ourVisionForm.description}
+                                            onChange={e => setOurVisionForm({ ...ourVisionForm, description: e.target.value })}
+                                            placeholder="Crafted with intention. We believe true luxury lies in the purity of ingredients..."
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Pillars / 3 Cards */}
+                                <div className="border-t border-white/10 pt-4">
+                                    <h3 className="text-sm font-bold uppercase tracking-wider text-primary mb-4">Vision Pillars / Feature Cards (3 Pillars)</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        {/* Pillar 1 */}
+                                        <div className="bg-dark border border-white/10 rounded-lg p-4 space-y-3">
+                                            <span className="text-xs text-primary font-mono uppercase tracking-wider">Pillar 1</span>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Title</label>
+                                                <Input
+                                                    type="text"
+                                                    value={ourVisionForm.item1Title}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item1Title: e.target.value })}
+                                                    placeholder="Clean Ingredients"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Icon (e.g. sparkles, star, leaf)</label>
+                                                <Input
+                                                    type="text"
+                                                    value={ourVisionForm.item1Icon}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item1Icon: e.target.value })}
+                                                    placeholder="sparkles"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Description</label>
+                                                <Textarea
+                                                    rows="3"
+                                                    value={ourVisionForm.item1Description}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item1Description: e.target.value })}
+                                                    placeholder="Formulated without harmful toxins, sulfates, or parabens..."
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Pillar 2 */}
+                                        <div className="bg-dark border border-white/10 rounded-lg p-4 space-y-3">
+                                            <span className="text-xs text-primary font-mono uppercase tracking-wider">Pillar 2</span>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Title</label>
+                                                <Input
+                                                    type="text"
+                                                    value={ourVisionForm.item2Title}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item2Title: e.target.value })}
+                                                    placeholder="Cruelty-Free"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Icon (e.g. heart, eco, nature)</label>
+                                                <Input
+                                                    type="text"
+                                                    value={ourVisionForm.item2Icon}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item2Icon: e.target.value })}
+                                                    placeholder="heart"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Description</label>
+                                                <Textarea
+                                                    rows="3"
+                                                    value={ourVisionForm.item2Description}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item2Description: e.target.value })}
+                                                    placeholder="Never tested on animals. We are committed to ethical beauty..."
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Pillar 3 */}
+                                        <div className="bg-dark border border-white/10 rounded-lg p-4 space-y-3">
+                                            <span className="text-xs text-primary font-mono uppercase tracking-wider">Pillar 3</span>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Title</label>
+                                                <Input
+                                                    type="text"
+                                                    value={ourVisionForm.item3Title}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item3Title: e.target.value })}
+                                                    placeholder="Dermatologist Tested"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Icon (e.g. shield, check, award)</label>
+                                                <Input
+                                                    type="text"
+                                                    value={ourVisionForm.item3Icon}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item3Icon: e.target.value })}
+                                                    placeholder="shield"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Description</label>
+                                                <Textarea
+                                                    rows="3"
+                                                    value={ourVisionForm.item3Description}
+                                                    onChange={e => setOurVisionForm({ ...ourVisionForm, item3Description: e.target.value })}
+                                                    placeholder="Rigorously tested to ensure optimal safety and performance..."
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    disabled={isUpdatingOurVision}
+                                    className="bg-primary text-dark font-bold rounded p-3 w-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all"
+                                >
+                                    {isUpdatingOurVision ? 'Updating...' : 'Update Our Vision Section'}
+                                </button>
+                            </form>
+                        </div>
+
+                        {/* Discover Section (Ritual / Glow) */}
+                        <div ref={discoverFormRef} className="bg-dark-paper border border-white/10 rounded-lg p-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-heading text-light">Edit Discover Section</h2>
+                                <span className="text-xs uppercase tracking-wider text-primary font-mono bg-primary/10 px-2.5 py-1 rounded">Routine / Ritual</span>
+                            </div>
+                            <form onSubmit={handleUpdateDiscover} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Badge / Eyebrow Text</label>
+                                        <Input
+                                            type="text"
+                                            value={discoverForm.badge}
+                                            onChange={e => setDiscoverForm({ ...discoverForm, badge: e.target.value })}
+                                            placeholder="Elevate Your Ritual"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Main Title *</label>
+                                        <Input
+                                            type="text"
+                                            value={discoverForm.title}
+                                            onChange={e => setDiscoverForm({ ...discoverForm, title: e.target.value })}
+                                            placeholder="Discover Your"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Highlighted (Italic) Title</label>
+                                        <Input
+                                            type="text"
+                                            value={discoverForm.highlightText}
+                                            onChange={e => setDiscoverForm({ ...discoverForm, highlightText: e.target.value })}
+                                            placeholder="Ultimate Glow"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Button Text</label>
+                                        <Input
+                                            type="text"
+                                            value={discoverForm.linkText}
+                                            onChange={e => setDiscoverForm({ ...discoverForm, linkText: e.target.value })}
+                                            placeholder="Shop The Ritual"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Button Link</label>
+                                        <Input
+                                            type="text"
+                                            value={discoverForm.link}
+                                            onChange={e => setDiscoverForm({ ...discoverForm, link: e.target.value })}
+                                            placeholder="/shop"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-light/60 text-sm mb-1">Description</label>
+                                        <Textarea
+                                            rows="5"
+                                            value={discoverForm.description}
+                                            onChange={e => setDiscoverForm({ ...discoverForm, description: e.target.value })}
+                                            placeholder="Curate a bespoke skincare routine tailored to your unique needs..."
+                                        />
+                                    </div>
+                                    {/* Text Preview Box */}
+                                    <div className="bg-dark border border-white/10 rounded-lg p-5 text-center">
+                                        <span className="text-[10px] text-light/40 uppercase tracking-widest block mb-2">Live Text Preview</span>
+                                        <span className="inline-block py-0.5 px-3 border border-primary/40 rounded-full text-primary text-[10px] uppercase tracking-widest font-bold mb-2">
+                                            {discoverForm.badge || "Elevate Your Ritual"}
+                                        </span>
+                                        <h3 className="text-xl font-heading font-bold text-light mb-2">
+                                            {discoverForm.title || "Discover Your"} <span className="text-primary italic">{discoverForm.highlightText || "Ultimate Glow"}</span>
+                                        </h3>
+                                        <p className="text-xs text-light/70 max-w-sm mx-auto mb-3">
+                                            {discoverForm.description || "Curate a bespoke skincare routine tailored to your unique needs..."}
+                                        </p>
+                                        <span className="text-[11px] font-heading font-bold uppercase tracking-widest border border-primary text-primary px-4 py-1 rounded inline-block">
+                                            {discoverForm.linkText || "Shop The Ritual"}
+                                        </span>
+                                    </div>
+                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={isUpdatingDiscover}
+                                    className="bg-primary text-dark font-bold rounded p-3 md:col-span-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-all"
+                                >
+                                    {isUpdatingDiscover ? 'Updating...' : 'Update Discover Section'}
+                                </button>
+                            </form>
+                        </div>
+
+                        {/* Trust Badges Section */}
+                        <div ref={trustBadgeListRef} className="bg-dark-paper border border-white/10 rounded-lg p-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-heading text-light">Trust Badges</h2>
+                                <span className="text-xs uppercase tracking-wider text-primary font-mono bg-primary/10 px-2.5 py-1 rounded">
+                                    {trustBadges?.length || 0} Badges
+                                </span>
+                            </div>
+                            <p className="text-sm text-light/60 mb-6">
+                                Add, manage, and scroll through the trust badges displayed in the ribbon across the homepage. The ✦ symbol is automatically prefixed.
+                            </p>
+
+                            {/* Add Form */}
+                            <form onSubmit={handleAddTrustBadge} className="flex flex-col sm:flex-row gap-4 mb-6">
+                                <div className="flex-1">
+                                    <Input
+                                        type="text"
+                                        placeholder="Badge Text * (e.g. Lifetime Warranty)"
+                                        value={newTrustBadge.text}
+                                        onChange={e => setNewTrustBadge({ ...newTrustBadge, text: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    disabled={isAddingTrustBadge}
+                                    className="bg-primary text-dark font-bold rounded px-6 py-2.5 hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                                >
+                                    {isAddingTrustBadge ? 'Adding Badge...' : '+ Add Trust Badge'}
+                                </button>
+                            </form>
+
+                            {/* Horizontal Scrollable Ribbon Preview */}
+                            <div className="mb-6">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-xs font-bold uppercase tracking-wider text-light/70">
+                                        Scroll Trust Badges (Live Ribbon Preview)
+                                    </span>
+                                    <span className="text-xs text-light/40">Scroll horizontally →</span>
+                                </div>
+                                <div className="overflow-x-auto pb-3 pt-1 hide-scrollbar border border-white/10 rounded-lg bg-black/40 p-3">
+                                    <div className="flex items-center gap-4 w-max">
+                                        {(trustBadges && Array.isArray(trustBadges) && trustBadges.length > 0 ? trustBadges : [
+                                            { text: "Ethically Sourced" },
+                                            { text: "Handcrafted Excellence" },
+                                            { text: "Lifetime Warranty" },
+                                            { text: "Secure Shipping" }
+                                        ]).map((badge, idx) => (
+                                            <div key={badge._id || idx} className="flex items-center gap-2 px-4 py-2 bg-black border border-white/20 rounded-full !text-white flex-shrink-0">
+                                                <span className="text-primary text-base">✦</span>
+                                                <span className="font-heading text-xs tracking-wider uppercase !text-white font-medium">{badge.text}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Existing Badges List with Delete Buttons */}
+                            <div>
+                                <h3 className="text-sm font-bold uppercase tracking-wider text-light/80 mb-3">
+                                    Existing Badges ({trustBadges?.length || 0})
+                                </h3>
+                                {trustBadges && trustBadges.length > 0 ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                                        {trustBadges.map((badge) => (
+                                            <div key={badge._id} className="bg-black border border-white/20 rounded-lg p-3.5 flex items-center justify-between group hover:border-primary/40 transition-colors">
+                                                <div className="flex items-center gap-3 overflow-hidden">
+                                                    <span className="text-primary text-lg flex-shrink-0">✦</span>
+                                                    <div className="min-w-0">
+                                                        <p className="font-heading text-sm !text-white font-medium truncate">{badge.text}</p>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDeleteTrustBadge(badge._id)}
+                                                    className="text-red-500/70 hover:text-red-400 p-1.5 transition-colors flex-shrink-0"
+                                                    title="Delete badge"
+                                                >
+                                                    <Icons.Trash className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-light/40 italic">No custom trust badges added yet. Default badges are currently displayed on the homepage.</p>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 )}
 
-                {activeTab === 'trustbadges' && (
-                    <>
-                        <div className="bg-dark-paper border border-white/10 rounded-lg p-6">
-                            <h2 className="text-xl font-heading text-light mb-4">Add Trust Badge</h2>
-                            <form onSubmit={handleAddTrustBadge} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <Input
-                                    type="text"
-                                    placeholder="Badge Text *"
-                                    value={newTrustBadge.text}
-                                    onChange={e => setNewTrustBadge({ ...newTrustBadge, text: e.target.value })}
-                                    required
-                                />
-                                <Input
-                                    type="text"
-                                    placeholder="Icon Name *"
-                                    // In a real app, this might be a dropdown of available icons or an image upload
-                                    value={newTrustBadge.icon}
-                                    onChange={e => setNewTrustBadge({ ...newTrustBadge, icon: e.target.value })}
-                                    required
-                                />
-                                <button type="submit" disabled={isAddingTrustBadge} className="bg-primary text-dark font-bold rounded p-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                                    {isAddingTrustBadge ? 'Adding Badge...' : 'Add Badge'}
-                                </button>
-                            </form>
-                            <p className="text-xs text-light/40 mt-2">Available Icons: Shield, Dollar, Truck, Star, Award, Gift</p>
+                {(activeTab === 'sociallinks' || activeTab === 'social') && (
+                    <div className="bg-dark-paper border border-white/10 rounded-lg p-6 space-y-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <div>
+                                <h2 className="text-xl font-heading text-light">Social Media Links</h2>
+                                <p className="text-sm text-light/60">Configure public social profile links shown in footer and header.</p>
+                            </div>
                         </div>
 
-                        <h3 ref={trustBadgeListRef} className="text-sm font-bold uppercase text-light/80 mb-4">Previously Added Items</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            {(trustBadges && Array.isArray(trustBadges) ? trustBadges : []).map(badge => (
-                                <div key={badge._id} className="bg-dark-paper border border-white/10 rounded-lg p-4 flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-primary text-xl">✦</span>
-                                        <div>
-                                            <p className="font-heading text-sm text-light">{badge.text}</p>
-                                            <p className="text-xs text-light/40">{badge.icon}</p>
+                        <form onSubmit={handleSaveSocialLinks} className="space-y-6 max-w-2xl">
+                            <div>
+                                <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Instagram URL</label>
+                                <Input
+                                    type="text"
+                                    value={socialLinksForm.instagram}
+                                    onChange={(e) => setSocialLinksForm({ ...socialLinksForm, instagram: e.target.value })}
+                                    placeholder="https://instagram.com/..."
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">Facebook URL</label>
+                                <Input
+                                    type="text"
+                                    value={socialLinksForm.facebook}
+                                    onChange={(e) => setSocialLinksForm({ ...socialLinksForm, facebook: e.target.value })}
+                                    placeholder="https://facebook.com/..."
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs uppercase tracking-wider text-light/60 mb-2">YouTube URL</label>
+                                <Input
+                                    type="text"
+                                    value={socialLinksForm.youtube}
+                                    onChange={(e) => setSocialLinksForm({ ...socialLinksForm, youtube: e.target.value })}
+                                    placeholder="https://youtube.com/..."
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={isUpdatingSettings}
+                                className="bg-primary text-dark font-bold rounded px-6 py-2.5 hover:bg-primary/90 transition-all disabled:opacity-50"
+                            >
+                                {isUpdatingSettings ? 'Saving...' : 'Save Social Links'}
+                            </button>
+                        </form>
+                    </div>
+                )}
+
+                {activeTab === 'interface' && (
+                    <div className="bg-dark-paper border border-white/10 rounded-lg p-6 space-y-8">
+                        <div>
+                            <h2 className="text-xl font-heading text-light">Interface & Labels</h2>
+                            <p className="text-sm text-light/60">Manage announcement bar and UI text labels across the store.</p>
+                        </div>
+
+                        <form onSubmit={handleSaveInterface} className="space-y-8">
+                            {/* Announcement Bar */}
+                            <div className="p-4 border border-white/5 rounded-lg bg-black/20">
+                                <h3 className="text-lg font-heading text-primary mb-3">Header Announcement Bar</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-1">
+                                        <label className="text-xs text-light/70 uppercase">Announcement Text</label>
+                                        <Input
+                                            type="text"
+                                            value={interfaceForm.announcement?.text || ''}
+                                            onChange={(e) => setInterfaceForm({
+                                                ...interfaceForm,
+                                                announcement: { ...interfaceForm.announcement, text: e.target.value }
+                                            })}
+                                            placeholder="e.g. Complimentary Shipping on all Orders"
+                                        />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-xs text-light/70 uppercase">Link URL</label>
+                                        <Input
+                                            type="text"
+                                            value={interfaceForm.announcement?.link || ''}
+                                            onChange={(e) => setInterfaceForm({
+                                                ...interfaceForm,
+                                                announcement: { ...interfaceForm.announcement, link: e.target.value }
+                                            })}
+                                            placeholder="/shop or https://..."
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Interface Text Labels */}
+                            <div className="p-4 border border-white/5 rounded-lg bg-black/20">
+                                <h3 className="text-lg font-heading text-primary mb-3">UI & Text Labels</h3>
+                                <div className="space-y-6">
+                                    {/* Search UI */}
+                                    <div className="space-y-3 border-b border-light/5 pb-4">
+                                        <div className="mb-2">
+                                            <h4 className="text-sm font-bold text-light/80">Search Overlay</h4>
+                                            <p className="text-xs text-light/50">Customize text shown in the global search bar and results overlay.</p>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Placeholder Text</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.search?.placeholder || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            search: { ...prev.uiLabels.search, placeholder: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">No Results Message</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.search?.noResults || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            search: { ...prev.uiLabels.search, noResults: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-light/60 text-xs mb-1">Popular Search Terms (comma separated)</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.search?.popularTerms?.join(', ') || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            search: {
+                                                                ...prev.uiLabels.search,
+                                                                popularTerms: e.target.value.split(',').map(s => s.trim())
+                                                            }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={() => handleDeleteTrustBadge(badge._id)}
-                                        className="text-red-500 hover:text-red-400"
-                                    >
-                                        <Icons.Trash />
-                                    </button>
+
+                                    {/* Cart UI */}
+                                    <div className="space-y-3 border-b border-light/5 pb-4">
+                                        <div className="mb-2">
+                                            <h4 className="text-sm font-bold text-light/80">Shopping Cart</h4>
+                                            <p className="text-xs text-light/50">Text displayed in the slide-out cart drawer.</p>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Empty Message</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.cart?.emptyMessage || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            cart: { ...prev.uiLabels.cart, emptyMessage: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Start Shopping Button</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.cart?.startShoppingBtn || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            cart: { ...prev.uiLabels.cart, startShoppingBtn: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Checkout Disclaimer</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.cart?.disclaimer || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            cart: { ...prev.uiLabels.cart, disclaimer: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Auth UI */}
+                                    <div className="space-y-3 border-b border-light/5 pb-4">
+                                        <div className="mb-2">
+                                            <h4 className="text-sm font-bold text-light/80">Authentication</h4>
+                                            <p className="text-xs text-light/50">Headings and subtitles for Login and Register screens.</p>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Login Title</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.auth?.loginTitle || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            auth: { ...prev.uiLabels.auth, loginTitle: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Register Title</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.auth?.registerTitle || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            auth: { ...prev.uiLabels.auth, registerTitle: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-light/60 text-xs mb-1">Login Subtitle</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.auth?.loginSubtitle || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            auth: { ...prev.uiLabels.auth, loginSubtitle: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-light/60 text-xs mb-1">Register Subtitle</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.auth?.registerSubtitle || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            auth: { ...prev.uiLabels.auth, registerSubtitle: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Product UI */}
+                                    <div className="space-y-3">
+                                        <div className="mb-2">
+                                            <h4 className="text-sm font-bold text-light/80">Product Page</h4>
+                                            <p className="text-xs text-light/50">Section titles on the detailed product view.</p>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Related Products Title</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.product?.relatedTitle || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            product: { ...prev.uiLabels.product, relatedTitle: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-light/60 text-xs mb-1">Reviews Title</label>
+                                                <Input
+                                                    type="text"
+                                                    value={interfaceForm.uiLabels?.product?.reviewsTitle || ''}
+                                                    onChange={(e) => setInterfaceForm(prev => ({
+                                                        ...prev,
+                                                        uiLabels: {
+                                                            ...prev.uiLabels,
+                                                            product: { ...prev.uiLabels.product, reviewsTitle: e.target.value }
+                                                        }
+                                                    }))}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            ))}
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={isUpdatingSettings}
+                                className="bg-primary text-dark font-bold rounded px-6 py-2.5 hover:bg-primary/90 transition-all disabled:opacity-50"
+                            >
+                                {isUpdatingSettings ? 'Saving...' : 'Save Interface Settings'}
+                            </button>
+                        </form>
+                    </div>
+                )}
+
+                {activeTab === 'policies' && (
+                    <div className="bg-dark-paper border border-white/10 rounded-lg p-6 space-y-6">
+                        <div>
+                            <h2 className="text-xl font-heading text-light">Product Policies</h2>
+                            <p className="text-sm text-light/60">Configure standard shipping, returns, and care guidelines shown on product pages.</p>
                         </div>
-                    </>
+
+                        <form onSubmit={handleSavePolicies} className="space-y-6 max-w-3xl">
+                            <div className="space-y-2">
+                                <label className="text-xs text-light/70 uppercase">Shipping & Returns Text</label>
+                                <Textarea
+                                    rows="5"
+                                    value={policiesForm.shipping || ''}
+                                    onChange={(e) => setPoliciesForm({ ...policiesForm, shipping: e.target.value })}
+                                    placeholder="Enter standard shipping terms and return policy (supports bullet points on each line)..."
+                                />
+                                <p className="text-[11px] text-light/40">Tip: Enter each point on a new line (e.g. starting with • or -) to show as formatted bullet points on product pages.</p>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs text-light/70 uppercase">Care Instructions (Default)</label>
+                                <Textarea
+                                    rows="5"
+                                    value={policiesForm.care || ''}
+                                    onChange={(e) => setPoliciesForm({ ...policiesForm, care: e.target.value })}
+                                    placeholder="Enter general jewelry care instructions (supports bullet points on each line)..."
+                                />
+                                <p className="text-[11px] text-light/40">Tip: Enter each point on a new line (e.g. starting with • or -) to show as formatted bullet points on product pages.</p>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={isUpdatingSettings}
+                                className="bg-primary text-dark font-bold rounded px-6 py-2.5 hover:bg-primary/90 transition-all disabled:opacity-50"
+                            >
+                                {isUpdatingSettings ? 'Saving...' : 'Save Product Policies'}
+                            </button>
+                        </form>
+                    </div>
                 )}
 
                 {activeTab === 'faq' && (
