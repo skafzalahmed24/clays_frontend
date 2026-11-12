@@ -328,6 +328,9 @@ const Checkout = () => {
             const rzpayOrder = await createRazorpayOrderMutation(localOrder._id).unwrap();
 
             // 3. Open Razorpay checkout
+            if (!razorpayConfig?.keyId) {
+                throw new Error('Razorpay key not loaded. Please refresh and try again.');
+            }
             const options = {
                 key: razorpayConfig?.keyId,
                 amount: rzpayOrder.amount,
@@ -367,7 +370,12 @@ const Checkout = () => {
             rzp1.open();
             setLoading(false);
         } catch (error) {
-            showToast(error?.message || 'Payment initiation failed.', 'error');
+            console.error('Payment initiation error:', error);
+            const detail = typeof error === 'string'
+                ? error
+                : error?.data?.message || error?.data?.error?.description || error?.message || error?.error
+                    || (error?.status ? `status ${error.status}` : '');
+            showToast(detail ? `Payment initiation failed: ${detail}` : 'Payment initiation failed.', 'error');
             setLoading(false);
         }
     };

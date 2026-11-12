@@ -64,7 +64,7 @@ const CartDrawer = () => {
                                 : format(price);
 
                             return (
-                                <div key={item.id || item._id} className="flex gap-4">
+                                <div key={item.id || item._id || product.id || product._id} className="flex gap-4">
                                     <div className="w-20 h-20 bg-white/5 rounded-none overflow-hidden flex-shrink-0">
                                         <img
                                             src={getMediaUrl(img)}
